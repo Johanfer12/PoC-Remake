@@ -8,12 +8,14 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+import uuid
 
 from .__main__ import (GAMES, STARTER_TABLES, _read_va, extract,
                        export_duel_image)
 from .archive import Archive
 from .executable import validate
 from .voices import add_voice
+from .compact import optimize_tree
 
 
 def locate(root: Path, game: str) -> dict[str, Path]:
@@ -130,16 +132,19 @@ def export_audio(src: Path, out: Path, games=None) -> None:
     (out / "common/audio_native.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
 
 
-def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tuple[str, Path]] | None = None, base: Path | None = None) -> None:
+def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tuple[str, Path]] | None = None, base: Path | None = None,
+                 compact: bool = False, replace: bool = False) -> None:
     output = output.resolve()
-    if output.exists():
+    if output.exists() and not replace:
         raise ValueError("La carpeta de destino ya existe; se conserva intacta. Selecciona un destino nuevo.")
-    if (not sources and not (base is not None and extra_voices)) or not set(sources) <= GAMES.keys():
+    if output.is_symlink() or (output.exists() and not (output / "inventory.json").is_file()):
+        raise ValueError("El destino no es una biblioteca de recursos compatible")
+    if (not sources and not (base is not None and (extra_voices or compact))) or not set(sources) <= GAMES.keys():
         raise ValueError("Selecciona al menos un juego compatible")
     previous = None
     if base is not None:
         base = base.resolve()
-        if output.is_relative_to(base):
+        if output.is_relative_to(base) and not (replace and output == base):
             raise ValueError("El destino debe estar fuera de los datos existentes")
         previous = json.loads((base / "inventory.json").read_text(encoding="utf-8"))
         if set(sources) & previous["games"].keys():
@@ -151,11 +156,11 @@ def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tupl
         if not sources:
             converted = work / "converted"
             shutil.copytree(base, converted)
-            for game, voice_path in extra_voices:
+            for game, voice_path in extra_voices or []:
                 if game not in previous["games"]:
                     raise ValueError(f"{game}: prepara el juego antes de añadir voces")
                 add_voice(voice_path, converted, game)
-            converted.rename(output)
+            _publish(converted, output, compact, replace)
             return
         for game in sources:
             print(f"Validando {game}…", flush=True)
@@ -174,7 +179,7 @@ def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tupl
                 raise ValueError(f"Juego no reconocido para voces: {game}")
         export_audio(work / "sources", converted, sources)
         if base is None:
-            converted.rename(output)
+            _publish(converted, output, compact, replace)
         else:
             merged = work / "merged"
             shutil.copytree(base, merged)
@@ -213,8 +218,26 @@ def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tupl
             for game, voice_path in extra_voices or []:
                 if game not in sources:
                     add_voice(voice_path, merged, game)
-            merged.rename(output)
+            _publish(merged, output, compact, replace)
     print("Importación completa.", flush=True)
+
+
+def _publish(staging: Path, output: Path, compact: bool, replace: bool) -> None:
+    if compact:
+        optimize_tree(staging)
+    backup = output.with_name(".poc-previous-" + uuid.uuid4().hex)
+    if output.exists():
+        if not replace:
+            raise ValueError("El destino ya existe")
+        output.rename(backup)
+    try:
+        staging.rename(output)
+    except OSError:
+        if backup.exists():
+            backup.rename(output)
+        raise
+    if backup.exists():
+        shutil.rmtree(backup)
 
 
 def main() -> None:
@@ -223,6 +246,8 @@ def main() -> None:
         parser.add_argument(f"--{game}", type=Path)
     parser.add_argument("--base", type=Path, help="datos existentes que se conservarán")
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--replace", action="store_true", help="actualiza atómicamente una biblioteca existente")
+    parser.add_argument("--no-compact", action="store_true", help="conserva PNG/WAV para herramientas de desarrollo")
     parser.add_argument("--voice", action="append", default=[], metavar="GAME=VOICE.DAT",
                         help="añade otro doblaje; repetible, sin reemplazar idiomas distintos")
     args = parser.parse_args()
@@ -233,8 +258,9 @@ def main() -> None:
                 raise ValueError("Usa --voice juego=ruta/Voice.dat")
             game, path = spec.split("=", 1)
             extra.append((game, Path(path)))
-        import_games({game: getattr(args, game) for game in GAMES if getattr(args, game) is not None}, args.out, extra, args.base)
-    except (OSError, ValueError, KeyError, subprocess.SubprocessError, SystemExit) as error:
+        import_games({game: getattr(args, game) for game in GAMES if getattr(args, game) is not None}, args.out, extra, args.base,
+                     compact=not args.no_compact, replace=args.replace)
+    except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError, SystemExit) as error:
         parser.exit(1, f"No se pudo importar: {error}\n")
 
 

@@ -1,5 +1,17 @@
 # Third-party notices
 
+## Audio conversion
+
+The Windows converter uses SoundFile 0.13.1 (BSD-3-Clause), CFFI (MIT) and
+libsndfile 1.2.2 (LGPL-2.1-or-later), including Vorbis/OGG codec components.
+The packaged launcher's Licenses folder includes their notices, the matching
+libsndfile 1.2.2 source archive and the Xiph codec copyright notices.
+
+Sources: https://github.com/bastibe/python-soundfile/tree/0.13.1,
+https://github.com/libsndfile/libsndfile/tree/1.2.2,
+https://github.com/xiph/vorbis/tree/v1.3.7,
+https://github.com/xiph/ogg/tree/v1.3.5.
+
 ## Feather icons
 
 The SVG icons embedded in game/scenes/launcher/launcher_controls.gd are based on

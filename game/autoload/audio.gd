@@ -172,6 +172,12 @@ func _db(rel_path: String) -> float:
 
 func _load(path: String) -> AudioStream:
 	if not _cache.has(path):
+		if path.get_extension().to_lower() == "ogg":
+			var ogg := AudioStreamOggVorbis.load_from_file(path)
+			if ogg != null:
+				ogg.loop = false
+			_cache[path] = ogg
+			return ogg
 		# install.wav tiene smpl sin bucles (numSampleLoops=0). El lector de Godot4.7
 		# lo trata como bucle0..0: playing=true pero no avanza ni se oye. Los originales
 		# controlan los bucles desde sus tablas/DirectSound, no desde smpl.

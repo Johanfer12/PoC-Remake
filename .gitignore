@@ -24,3 +24,4 @@ __pycache__/
 build/
 dist/
 content.cfg
+PoC Data/

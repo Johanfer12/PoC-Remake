@@ -69,7 +69,7 @@ func system_language(locale: String = OS.get_locale_language()) -> String:
 
 func preferred_language() -> String:
 	var config := ConfigFile.new()
-	config.load("user://content.cfg")
+	config.load(Paths.settings_path())
 	var value := str(config.get_value("preferences", "language", SaveData.data.get("settings", {}).get("language", system_language())))
 	return value if LANGUAGES.has(value) else system_language()
 
@@ -78,9 +78,9 @@ func remember_language(value: String) -> void:
 	if not set_language(value):
 		return
 	var config := ConfigFile.new()
-	config.load("user://content.cfg")
+	config.load(Paths.settings_path())
 	config.set_value("preferences", "language", value)
-	config.save("user://content.cfg")
+	config.save(Paths.settings_path())
 	if Paths.has_data():
 		SaveData.data.get_or_add("settings", {})["language"] = value
 		SaveData.save()
@@ -105,17 +105,27 @@ func resolve(rel_path: String) -> String:
 		choices.append_array(pack.get("languages", []))
 		for language in choices:
 			var localized := "%s/voice/%s/%s/%s" % [parts[0], language, parts[2], parts[3]]
-			if _index.has(localized):
-				return _index[localized]
+			var voice := _lookup(localized)
+			if voice != "":
+				return voice
 	for ext in [".bmp", ".yga"]:
 		if rel.ends_with(ext):
 			rel = rel.trim_suffix(ext) + ".png"
 	if rel.contains("?"):
-		var found: String = _index.get(rel.replace("?", lang), "")
+		var found: String = _lookup(rel.replace("?", lang))
 		if found == "":
-			found = _index.get(rel.replace("?", LANG_FALLBACK), "")
+			found = _lookup(rel.replace("?", LANG_FALLBACK))
 		return found
-	return _index.get(rel, "")
+	return _lookup(rel)
+
+
+func _lookup(rel: String) -> String:
+	var path: String = _index.get(rel, "")
+	if path == "" and rel.ends_with(".wav"):
+		path = _index.get(rel.trim_suffix(".wav") + ".ogg", "")
+	if path == "" and rel.ends_with(".png"):
+		path = _index.get(rel.trim_suffix(".png") + ".webp", "")
+	return path
 
 
 func exists(rel_path: String) -> bool:

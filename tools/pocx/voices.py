@@ -10,6 +10,10 @@ LANGUAGES = {"spanish": "s", "english": "e", "french": "f", "german": "g", "ital
 
 def export_voice(source: Path, output: Path, game: str, manifest: dict) -> int:
     pack = manifest.setdefault("games", {}).setdefault(game, {"languages": [], "sources": []})
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    if digest in pack["sources"]:
+        return 0
+    raw_files = pack.setdefault("raw_files", {})
     languages = set()
     count = 0
     with Archive(source) as archive:
@@ -23,16 +27,23 @@ def export_voice(source: Path, output: Path, game: str, manifest: dict) -> int:
             languages.add(language)
             destination = output / game / "voice" / language / parts[2] / parts[3]
             raw = archive.read(entry)
+            relative = destination.relative_to(output).as_posix()
+            raw_hash = hashlib.sha256(raw).hexdigest()
+            if destination.with_suffix(".ogg").exists():
+                if raw_files.get(relative) != raw_hash:
+                    raise ValueError(f"{game}: dos paquetes distintos para el mismo idioma {language}; no se sobrescriben")
+                count += 1
+                continue
             if destination.exists() and destination.read_bytes() != raw:
                 raise ValueError(f"{game}: dos paquetes distintos para el mismo idioma {language}; no se sobrescriben")
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(raw)
+            raw_files[relative] = raw_hash
             count += 1
     if not languages:
         raise ValueError(f"{game}: el paquete de voces no contiene WAV compatibles")
     pack.setdefault("default", sorted(languages)[0])
     pack["languages"] = sorted(set(pack["languages"]) | languages)
-    digest = hashlib.sha256(source.read_bytes()).hexdigest()
     if digest not in pack["sources"]:
         pack["sources"].append(digest)
     return count

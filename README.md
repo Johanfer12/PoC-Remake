@@ -18,6 +18,8 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 - **One Windows executable.** The packaged launcher includes Godot, the local converter and 7-Zip. Players do not need to install those tools separately.
 - **Start with the game you own.** Import Yugi, Kaiba or Joey independently; the other two are optional.
 - **Use an ISO or an installed game folder.** Supported disc images are read as archives without running their installers or original game executables.
+- **A portable game folder.** Resources, saves, preferences, conversion tools and temporary extraction files stay in **`PoC Data` beside the EXE**. Move the EXE and that folder together.
+- **Smaller resource storage.** Images use pixel-exact lossless WebP when smaller; music and longer voices use OGG Vorbis. Very short effects remain WAV, as in the Android optimization process.
 - **Keep your files local.** Your disc images, extracted resources and saved games are not uploaded to GitHub or a conversion service.
 - **Add games without starting over.** Later imports preserve previously prepared games and existing remake saves.
 - **Choose your language.** The launcher offers English, Spanish, German, French, Italian and Japanese, selects a supported system language on first use and remembers your preference.
@@ -34,7 +36,7 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 4. Select a compatible disc image or installed game folder, then click **Prepare games** and wait for conversion to finish.
 5. Click the prepared game's logo to play. The remaining games can be added later from the same screen.
 
-The download is a single EXE; no installation wizard is required. The first import extracts and verifies the bundled conversion tools in the application's user directory. Opening the menu does not wait for that extraction.
+The download is a single EXE; no installation wizard is required. The first import extracts and verifies the bundled conversion tools in `PoC Data/tools/`. Opening the menu does not wait for that extraction.
 
 GitHub may package Actions artifacts in a ZIP. Release downloads expose the EXE directly.
 
@@ -60,20 +62,24 @@ Your ISO or installed game folder
 
 The distributed EXE contains the launcher, engine code and conversion tools. Original game binaries, card artwork, voices and in-game music are not distributed with it. They are read from the copy you select and converted locally.
 
-Conversion writes to a new output directory. It does not overwrite the selected originals, a previous conversion or an existing save. When adding another game, the importer uses the existing converted library as its base.
+Conversion works in a temporary directory inside `PoC Data`. It validates and compresses the new library before switching it into `PoC Data/resources/`. When adding a game, it uses the existing library as its base and retires the superseded generated copy after a successful switch. Original disc images, installed game folders and saves are not overwritten.
 
 The importer validates supported executable profiles and rejects unsupported revisions. It also rejects damaged or truncated disc images. It does not download missing game resources.
 
 ### Where files are stored
 
-| Files | Location |
+| Files | Location relative to the EXE |
 | --- | --- |
-| Converted resources | `%APPDATA%\PoCRemake\imports\` |
-| Bundled conversion tools | `%APPDATA%\PoCRemake\tools\` |
-| Import location and launcher preferences | `%APPDATA%\PoCRemake\content.cfg` |
-| Remake saves | `saves\` beside the EXE, with a fallback to the application user directory if that folder is not writable |
+| Converted WebP/OGG resources and engine data | `PoC Data/resources/` |
+| Remake saves | `PoC Data/saves/` |
+| Launcher settings | `PoC Data/content.cfg` |
+| Bundled conversion tools and licenses | `PoC Data/tools/` |
+| Temporary extraction files | `PoC Data/temp/` and transient staging directories inside `PoC Data/` |
+| Last import error report | `PoC Data/import-last-error.log` |
 
-The single EXE is portable, but converted resources and tool caches use the application user directory. Keep your original copies and back up your saves.
+Keep **`PowerOfChaos.exe` and `PoC Data` together** when moving or backing up the game. The launcher uses relative resource paths, so moving the pair to another folder or drive does not require importing again. Choose a writable folder; if it is read-only, the launcher asks you to move it instead of silently storing games elsewhere.
+
+When upgrading in the same folder, the launcher copies existing adjacent `saves/` into `PoC Data/saves/` without replacing newer portable saves. It also migrates the older application preferences and prepares a compact local copy of the previous imported library. Migration keeps the old source intact until the new library is verified. If upgrading to a different folder, copy your previous `saves/` beside the new EXE before its first run, or move an existing `PoC Data` folder with it.
 
 ## Compatibility and current limits
 
@@ -105,7 +111,7 @@ Additional voice packs from another compatible copy of the same game can be impo
 python -m pocx.import_games --base "existing-data" --voice "joey=C:\My Joey Copy\Voice.dat" --out "new-data"
 ```
 
-Use a new output directory. Two different voice packs for the same game and language are rejected as a conflict rather than silently replacing one another.
+Use a new output directory for manual imports. The launcher manages its own atomic in-place updates. Two different voice packs for the same game and language are rejected as a conflict rather than silently replacing one another.
 
 ## Run from source
 
@@ -120,7 +126,7 @@ godot --editor --path game
 
 Run `game/project.godot` from the editor. Start with an ISO or installed folder, just as in the packaged launcher. If Python is in a virtual environment, launch Godot from a shell with that environment activated.
 
-Source-based imports need 7-Zip available through `PATH` or its usual Windows installation location. The distributed EXE already includes it.
+Source-based imports need 7-Zip available through `PATH` or its usual Windows installation location. The distributed EXE already includes it and the audio encoder; FFmpeg is not needed for normal imports.
 
 Synthetic importer checks do not require original game resources:
 

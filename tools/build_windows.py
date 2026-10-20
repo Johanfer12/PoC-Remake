@@ -133,7 +133,7 @@ def build(godot: Path, output: Path) -> Path:
             shutil.copyfile(source/name, licenses/name)
         fetch("https://raw.githubusercontent.com/godotengine/godot/" + GODOT_VERSION + "-stable/COPYRIGHT.txt", licenses/"GODOT_COPYRIGHT.txt")
         fetch("https://raw.githubusercontent.com/python/cpython/3.13/LICENSE", licenses/"PYTHON_LICENSE.txt")
-        for package in ("numpy", "pillow", "pyinstaller"):
+        for package in ("numpy", "pillow", "pyinstaller", "soundfile", "cffi"):
             distribution = importlib.metadata.distribution(package)
             for relative in distribution.files or []:
                 if "license" in str(relative).lower() or "copying" in str(relative).lower():
@@ -142,6 +142,15 @@ def build(godot: Path, output: Path) -> Path:
                         destination = licenses/package/str(relative).replace("..", "_")
                         destination.parent.mkdir(parents=True, exist_ok=True)
                         shutil.copyfile(path, destination)
+        import soundfile
+        if soundfile.__libsndfile_version__ != "1.2.2":
+            raise ValueError("Se requiere libsndfile 1.2.2 para las fuentes correspondientes incluidas")
+        snd_source = licenses/"LIBSNDFILE_SOURCE_1.2.2.tar.xz"
+        fetch("https://github.com/libsndfile/libsndfile/releases/download/1.2.2/libsndfile-1.2.2.tar.xz", snd_source)
+        if hashlib.sha256(snd_source.read_bytes()).hexdigest() != "3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e":
+            raise ValueError("No coincide el SHA-256 de las fuentes libsndfile")
+        for codec, version in (("vorbis", "v1.3.7"), ("ogg", "v1.3.5")):
+            fetch(f"https://raw.githubusercontent.com/xiph/{codec}/{version}/COPYING", licenses/(codec.upper()+"_COPYING.txt"))
         bundle_archiver(work, bundled, logs)
         files = {p.relative_to(bundled).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(bundled.rglob("*")) if p.is_file()}
@@ -155,16 +164,18 @@ def build(godot: Path, output: Path) -> Path:
         os.environ["POC_TOOL_CACHE"] = str(work/"tools-cache")
         try:
             command([str(executable), "--headless", "--quit-after", "20", "--",
+                     "--storage=" + str(work/"isolated-store"),
                      "--data=" + str(work/"absent-data"), "--save=" + str(work/"isolated-save")], logs/"boot.log", cwd=output)
             if (work/"tools-cache").exists():
                 raise ValueError("El arranque del menú no debe extraer las herramientas")
             # Exercise the actual packed implementation explicitly; conversion is now lazy.
             probe = work/"verify_tools.gd"
-            probe.write_text('extends SceneTree\nfunc _init() -> void:\n'
-                             '\tvar importer: String = preload("res://core/bundled_tools.gd").prepare()\n'
+            probe.write_text('extends SceneTree\nfunc _init() -> void:\n\t_run.call_deferred()\nfunc _run() -> void:\n'
+                             '\tvar importer: String = load("res://core/bundled_tools.gd").prepare()\n'
                              '\tquit(int(importer == ""))\n', encoding="utf-8")
             command([str(godot), "--headless", "--main-pack", str(executable),
-                     "--script", str(probe)], logs/"prepare-tools.log", cwd=output)
+                     "--script", str(probe), "--quit-after", "30", "--", "--storage=" + str(work/"isolated-store"),
+                     "--data=" + str(work/"absent-data"), "--save=" + str(work/"isolated-save")], logs/"prepare-tools.log", cwd=output)
         finally:
             if previous_cache is None:
                 os.environ.pop("POC_TOOL_CACHE", None)
@@ -178,7 +189,7 @@ def build(godot: Path, output: Path) -> Path:
         command([str(installed/"pocx-import.exe"), "--help"], logs/"embedded-converter.log")
         command([str(installed/"tools/7z.exe"), "i"], logs/"embedded-7zip.log")
         receipt.update({"godot": version, "python": sys.version, "commit": os.environ.get("GITHUB_SHA", "local"),
-                        "dependencies": {p: importlib.metadata.version(p) for p in ("numpy", "pillow", "pyinstaller")},
+                        "dependencies": {p: importlib.metadata.version(p) for p in ("numpy", "pillow", "pyinstaller", "soundfile", "cffi")},
                         "original_game_data_included": False, "converter_help_passed": True, "empty_boot_passed": True,
                         "single_executable": True, "embedded_tools_verified": True, "bundled_7zip": "26.04"})
         receipt["menu_boot_without_tool_extraction"] = True

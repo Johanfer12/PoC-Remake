@@ -4,7 +4,7 @@ extends Node2D
 
 func _ready() -> void:
 	_fit_window()
-	if not Paths.has_data():
+	if not Paths.has_data() or Paths.storage_error:
 		Game.goto(load("res://scenes/launcher/content_setup.gd").new())
 		queue_free()
 		return

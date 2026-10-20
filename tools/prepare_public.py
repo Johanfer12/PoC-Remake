@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TOP = {"README.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md"}
 TOOL_TOP = {"tools/pyproject.toml", "tools/prepare_public.py", "tools/build_windows.py", "tools/importer_entry.py", "tools/trace_logo_contours.py",
             "tools/tests/test_public_import.py", "tools/tests/test_media_import.py",
+            "tools/tests/test_compact_import.py",
             ".github/workflows/build-windows.yml", "game/export_presets.cfg"}
 OWN_ASSETS = {"game/assets/music/launcher_theme.mp3",
               "game/assets/backgrounds/yugi_duel.jpg",
@@ -57,7 +58,7 @@ def prepare(output: Path) -> dict:
               "data/\nextracted/\nsamples/\nsaves/\nimports/\nartifacts/\nre/\n"
               ".godot/\n__pycache__/\n*.pyc\n*.uid\n*.iso\n*.exe\n*.dat\n*.bin\n"
               "*.pck\n*.apk\n*.keystore\n*.jks\n.env*\n.venv/\n*.egg-info/\n"
-              "build/\ndist/\ncontent.cfg\n")
+              "build/\ndist/\ncontent.cfg\nPoC Data/\n")
     (output / ".gitignore").write_text(ignore, encoding="utf-8")
     manifest[".gitignore"] = hashlib.sha256((output / ".gitignore").read_bytes()).hexdigest()
     report = {"format": 1, "files": manifest, "git_history_included": False,

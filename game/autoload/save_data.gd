@@ -1,5 +1,5 @@
 extends Node
-## Partida guardada portable (saves/system.json junto al ejecutable).
+## Partida guardada portable (PoC Data/saves/system.json junto al ejecutable).
 ## Igual que el system.dat de la carpeta "Common" del original: una sola coleccion de cartas
 ## compartida por los tres juegos, y un mazo activo por juego.
 
@@ -11,7 +11,7 @@ var data := {}
 
 
 func _ready() -> void:
-	if not Paths.has_data():
+	if not Paths.has_data() or Paths.storage_error:
 		return # No crear una partida vacia antes de importar las cartas y mazos.
 	load_or_create()
 	var imported := Paths.cmdline_value("import-system-dat")

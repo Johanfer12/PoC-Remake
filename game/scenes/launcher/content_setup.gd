@@ -36,6 +36,7 @@ var _pointer := Vector2(-1000, -1000)
 var _pointer_inside := true
 const LIBRARY := {"s": "TUS JUEGOS", "e": "YOUR GAMES", "g": "DEINE SPIELE", "f": "TES JEUX", "i": "I TUOI GIOCHI", "j": "マイゲーム"}
 const LIBRARY_HINT := {"s": "Elige un juego o añade otro", "e": "Choose a game or add another", "g": "Wähle ein Spiel oder füge ein weiteres hinzu", "f": "Choisis un jeu ou ajoute-en un autre", "i": "Scegli un gioco o aggiungine un altro", "j": "ゲームを選ぶか、新しく追加しましょう"}
+const STORAGE_ERROR := {"s": "Mueve el launcher a una carpeta donde puedas guardar archivos y vuelve a abrirlo.", "e": "Move the launcher to a folder where you can save files, then reopen it.", "g": "Verschiebe den Launcher in einen beschreibbaren Ordner und öffne ihn erneut.", "f": "Déplace le lanceur dans un dossier accessible en écriture, puis rouvre-le.", "i": "Sposta il launcher in una cartella scrivibile e riaprilo.", "j": "書き込み可能なフォルダーにランチャーを移動して、開き直してください。"}
 
 
 func _init() -> void:
@@ -124,6 +125,8 @@ func _ready() -> void:
 	get_tree().root.mouse_entered.connect(_pointer_entered_window)
 	_language_updated()
 	_layout()
+	if Paths.migration_source != "" and not Paths.storage_error:
+		_start.call_deferred(true)
 
 
 func _language_updated() -> void:
@@ -147,6 +150,9 @@ func _language_updated() -> void:
 		_labels[game].visible = not installed
 	if _tools_failed:
 		_status.text = _copy(9)
+	if Paths.storage_error:
+		_status.text = str(STORAGE_ERROR[Assets.lang])
+		_convert.disabled = true
 	_layout.call_deferred()
 
 
@@ -173,7 +179,7 @@ func _layout() -> void:
 
 
 func _choose(index: int) -> void:
-	if _busy:
+	if _busy or Paths.storage_error:
 		return
 	if Paths.has_game(Game.GAMES[index]):
 		super._choose(index)
@@ -245,12 +251,14 @@ func _selected(path: String) -> void:
 	_status.text = "%s: %s" % [_copy(10), _sources.size()]
 
 
-func _start() -> void:
-	if _busy or _tools_failed or not _has_pending():
+func _start(migrate := false) -> void:
+	if _busy or _tools_failed or Paths.storage_error or (not migrate and not _has_pending()):
 		return
-	_target = ProjectSettings.globalize_path("user://imports/" + str(Time.get_unix_time_from_system()).replace(".", "-"))
+	_target = Paths.resources_path()
 	var args := PackedStringArray() if _bundled_importer else PackedStringArray(["-m", "pocx.import_games"])
 	args.append_array(PackedStringArray(["--out", _target]))
+	if FileAccess.file_exists(_target.path_join("inventory.json")):
+		args.append("--replace")
 	if Paths.has_data():
 		args.append_array(PackedStringArray(["--base", Paths.data_dir]))
 	for game in _sources:
@@ -323,18 +331,19 @@ func _finish(result: Dictionary) -> void:
 	_licenses.disabled = false
 	if int(result["code"]) != 0:
 		_status.text = _copy(9)
-		var log_file := FileAccess.open("user://import-last-error.log", FileAccess.WRITE)
+		var log_file := FileAccess.open(Paths.storage_dir.path_join("import-last-error.log"), FileAccess.WRITE)
 		if log_file != null:
 			log_file.store_string(str(result["output"]))
 		return
 	var config := ConfigFile.new()
-	config.load("user://content.cfg")
-	config.set_value("content", "data", _target)
-	var error := config.save("user://content.cfg")
+	config.load(Paths.settings_path())
+	config.set_value("content", "data", "resources")
+	var error := config.save(Paths.settings_path())
 	if error != OK:
 		_status.text = _copy(9)
 		return
 	Paths.data_dir = _target
+	Paths.migration_source = ""
 	Assets.reindex()
 	CardDB.load_db()
 	Audio.reload_native_tables()
