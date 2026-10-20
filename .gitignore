@@ -1,0 +1,26 @@
+# Solo fuentes; los recursos y configuraciones privadas nunca se publican
+data/
+extracted/
+samples/
+saves/
+imports/
+artifacts/
+re/
+.godot/
+__pycache__/
+*.pyc
+*.uid
+*.iso
+*.exe
+*.dat
+*.bin
+*.pck
+*.apk
+*.keystore
+*.jks
+.env*
+.venv/
+*.egg-info/
+build/
+dist/
+content.cfg

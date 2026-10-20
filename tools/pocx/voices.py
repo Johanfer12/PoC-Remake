@@ -1,0 +1,46 @@
+"""Preserve language identity when importing user-supplied Voice.dat packs."""
+from __future__ import annotations
+import hashlib
+import json
+from pathlib import Path
+from .archive import Archive
+
+LANGUAGES = {"spanish": "s", "english": "e", "french": "f", "german": "g", "italian": "i", "japanese": "j"}
+
+
+def export_voice(source: Path, output: Path, game: str, manifest: dict) -> int:
+    pack = manifest.setdefault("games", {}).setdefault(game, {"languages": [], "sources": []})
+    languages = set()
+    count = 0
+    with Archive(source) as archive:
+        for entry in archive.entries:
+            if not entry.name.lower().endswith(".wav"):
+                continue
+            parts = entry.name.lower().split("/")
+            if len(parts) != 4 or parts[0] != game or parts[1] not in LANGUAGES or parts[2] not in ("internal", "stream"):
+                raise ValueError(f"{game}: ruta de voces no compatible: {entry.name}")
+            language = LANGUAGES[parts[1]]
+            languages.add(language)
+            destination = output / game / "voice" / language / parts[2] / parts[3]
+            raw = archive.read(entry)
+            if destination.exists() and destination.read_bytes() != raw:
+                raise ValueError(f"{game}: dos paquetes distintos para el mismo idioma {language}; no se sobrescriben")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(raw)
+            count += 1
+    if not languages:
+        raise ValueError(f"{game}: el paquete de voces no contiene WAV compatibles")
+    pack.setdefault("default", sorted(languages)[0])
+    pack["languages"] = sorted(set(pack["languages"]) | languages)
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    if digest not in pack["sources"]:
+        pack["sources"].append(digest)
+    return count
+
+
+def add_voice(source: Path, output: Path, game: str) -> int:
+    path = output / "voice_manifest.json"
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    count = export_voice(source, output, game, manifest)
+    path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return count

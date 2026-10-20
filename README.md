@@ -1,0 +1,152 @@
+<p align="center">
+  <img src="game/assets/icons/launcher.svg" width="112" height="112" alt="PoC Remake icon">
+</p>
+
+# PoC Remake
+
+**Bring your Power of Chaos games together in one modern Windows launcher.**
+
+PoC Remake is an experimental Godot reimplementation of the engine behind **Yu-Gi-Oh! Power of Chaos: Yugi the Destiny, Kaiba the Revenge, and Joey the Passion**. It aims to preserve the original games' rules, presentation and feel while making them easier to launch and maintain on modern PCs.
+
+You provide a compatible copy of the game you want to play. The launcher reads its resources locally and prepares them for the new engine. **One game is enough to get started.** You can add the other two later.
+
+> **Early preview:** development and compatibility testing are ongoing. This is not a finished, fully faithful replacement for every original release.
+
+## Why use it?
+
+- **One launcher for three games.** Open an imported game by clicking its logo, or add another from the same menu.
+- **One Windows executable.** The packaged launcher includes Godot, the local converter and 7-Zip. Players do not need to install those tools separately.
+- **Start with the game you own.** Import Yugi, Kaiba or Joey independently; the other two are optional.
+- **Use an ISO or an installed game folder.** Supported disc images are read as archives without running their installers or original game executables.
+- **Keep your files local.** Your disc images, extracted resources and saved games are not uploaded to GitHub or a conversion service.
+- **Add games without starting over.** Later imports preserve previously prepared games and existing remake saves.
+- **Choose your language.** The launcher offers English, Spanish, German, French, Italian and Japanese, selects a supported system language on first use and remembers your preference.
+- **A launcher made for this project.** Original launcher music, gold-accented controls, a custom application icon, volume settings and quick access to your games.
+- **A maintainable engine.** Gameplay runs in Godot rather than by patching or launching the original Windows executables. Original resources are supplied separately by each player.
+
+"Remake" refers to the engine reconstruction. It does not mean the original card illustrations, voices or music have been redrawn or re-recorded.
+
+## Get started on Windows
+
+1. Download **`PowerOfChaos.exe`** from [Releases](https://github.com/Johanfer12/PoC-Remake/releases) when a preview is available. Development builds are also available in [Actions](https://github.com/Johanfer12/PoC-Remake/actions/workflows/build-windows.yml).
+2. Put the EXE in a folder where you want to keep the launcher and its saves, then open it.
+3. In **ADD YOUR RESOURCES**, move over the game you want to add and choose **ISO** or **Folder**.
+4. Select a compatible disc image or installed game folder, then click **Prepare games** and wait for conversion to finish.
+5. Click the prepared game's logo to play. The remaining games can be added later from the same screen.
+
+The download is a single EXE; no installation wizard is required. The first import extracts and verifies the bundled conversion tools in the application's user directory. Opening the menu does not wait for that extraction.
+
+GitHub may package Actions artifacts in a ZIP. Release downloads expose the EXE directly.
+
+### What you need
+
+- A Windows PC capable of running Godot's OpenGL compatibility renderer.
+- A compatible copy of at least one original game.
+- Enough free disk space for the converted resources and temporary extraction files.
+
+An installed game folder must contain `Data.dat`, `Voice.dat`, `Region.dat` and the corresponding original executable. The executable is read to obtain supported engine tables; it is not launched.
+
+## How it works
+
+```text
+Your ISO or installed game folder
+                |
+       Local validation and extraction
+                |
+       Converted resources on your PC
+                |
+          Godot game engine
+```
+
+The distributed EXE contains the launcher, engine code and conversion tools. Original game binaries, card artwork, voices and in-game music are not distributed with it. They are read from the copy you select and converted locally.
+
+Conversion writes to a new output directory. It does not overwrite the selected originals, a previous conversion or an existing save. When adding another game, the importer uses the existing converted library as its base.
+
+The importer validates supported executable profiles and rejects unsupported revisions. It also rejects damaged or truncated disc images. It does not download missing game resources.
+
+### Where files are stored
+
+| Files | Location |
+| --- | --- |
+| Converted resources | `%APPDATA%\PoCRemake\imports\` |
+| Bundled conversion tools | `%APPDATA%\PoCRemake\tools\` |
+| Import location and launcher preferences | `%APPDATA%\PoCRemake\content.cfg` |
+| Remake saves | `saves\` beside the EXE, with a fallback to the application user directory if that folder is not writable |
+
+The single EXE is portable, but converted resources and tool caches use the application user directory. Keep your original copies and back up your saves.
+
+## Compatibility and current limits
+
+This preview targets **Windows PC**. Other platforms are not part of this release workflow.
+
+The current development checks cover:
+
+| Game | Import sources checked | Engine checks |
+| --- | --- | --- |
+| Yugi the Destiny | Compatible ISO and installed folder | Independent title and normal-duel startup |
+| Kaiba the Revenge | Compatible ISO and installed folder | Independent title and normal-duel startup; supported executable profiles normalized without requiring Yugi |
+| Joey the Passion | Compatible installed folder | Independent title and normal-duel startup |
+
+A complete Joey ISO still needs end-to-end validation. A truncated image was correctly rejected. Support for other disc revisions and regional releases is still being expanded.
+
+Gameplay, AI, presentation and timing are under active comparison with the originals. Passing these checks does not certify every duel or every card interaction. Please report the game, edition, import source and steps needed to reproduce a problem; do not attach original game files to issues.
+
+Supported original MSI/CAB discs are extracted with bundled 7-Zip. Inno Setup media require `innoextract` on `PATH`; other unsupported installers should be installed separately before selecting their installed folder.
+
+## Languages and voice packs
+
+The language selector controls the launcher and the game's available text resources. Availability depends on the imported edition. `Data.dat` can differ between regions and revisions; the importer does not assume every release has identical data.
+
+Voice packs are detected from the supplied `Voice.dat`. Switching language uses the matching installed dub when available, otherwise the primary imported dub remains in use. Selecting a language does not download its voices.
+
+Additional voice packs from another compatible copy of the same game can be imported from the source tools:
+
+```powershell
+python -m pocx.import_games --base "existing-data" --voice "joey=C:\My Joey Copy\Voice.dat" --out "new-data"
+```
+
+Use a new output directory. Two different voice packs for the same game and language are rejected as a conflict rather than silently replacing one another.
+
+## Run from source
+
+Development requires **Godot 4.7.2** and **Python 3.12 or newer**. The Windows build workflow uses Python 3.13.
+
+```powershell
+git clone https://github.com/Johanfer12/PoC-Remake.git
+cd PoC-Remake
+python -m pip install ./tools
+godot --editor --path game
+```
+
+Run `game/project.godot` from the editor. Start with an ISO or installed folder, just as in the packaged launcher. If Python is in a virtual environment, launch Godot from a shell with that environment activated.
+
+Source-based imports need 7-Zip available through `PATH` or its usual Windows installation location. The distributed EXE already includes it.
+
+Synthetic importer checks do not require original game resources:
+
+```powershell
+$env:PYTHONPATH = "tools"
+python -m unittest discover -s tools/tests -p "test_*import.py" -v
+```
+
+## Automatic Windows builds
+
+[Launcher Windows](https://github.com/Johanfer12/PoC-Remake/actions/workflows/build-windows.yml) builds from the public sources:
+
+- Pushes to `main` and pull requests generate a Windows build.
+- The workflow can also be started manually.
+- Tags beginning with `v` generate a GitHub prerelease containing the EXE, its SHA-256 checksum and a build manifest.
+
+Each build checks the source file policy, runs synthetic importer tests, creates a clean export project, bundles the local converter and verifies the embedded tools. Game resources are not required by the build and are not included in it.
+
+New downloads do not automatically update installed copies.
+
+## Project status and notices
+
+PoC Remake is an independent, unofficial project. It is not affiliated with or endorsed by the original games' publishers or rights holders. Game names identify compatible titles; their assets and trademarks remain with their respective owners.
+
+The launcher theme, the two external duel backgrounds and the custom application icon belong to this project. The pending-game frames include vector outlines derived from the original logos; the original logo images are loaded only after importing a user's copy.
+
+The source includes work derived through reverse engineering. Its provenance and project-wide licensing remain under review; no blanket license for the repository has been assigned. Publishing the sources does not license the original games or grant rights to redistribute their assets.
+
+Third-party components retain their own licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and **Licenses** in the packaged launcher for the bundled engine and tool notices, including the matching 7-Zip source archive.

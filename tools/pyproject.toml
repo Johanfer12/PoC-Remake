@@ -1,0 +1,25 @@
+[project]
+name = "pocx"
+version = "0.1.0"
+description = "Extractor y conversor de assets de Yu-Gi-Oh! Power of Chaos (Yugi, Kaiba, Joey)"
+requires-python = ">=3.12"
+dependencies = [
+    "pillow (>=11.0)",
+    "numpy (>=2.5.3,<3.0.0)",
+]
+
+[tool.poetry]
+packages = [{ include = "pocx" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "capstone (>=5.0.9,<6.0.0)",
+    "pefile (>=2024.8.26,<2025.0.0)",
+    "frida (>=17.23.1,<18.0.0)",
+    "unicorn (>=2.1.4,<3.0.0)",
+    "pycparser (>=3,<4)"
+]
