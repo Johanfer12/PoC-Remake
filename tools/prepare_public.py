@@ -9,7 +9,7 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {"README.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md"}
+TOP = {"README.md", "README.es.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md"}
 TOOL_TOP = {"tools/pyproject.toml", "tools/prepare_public.py", "tools/build_windows.py", "tools/importer_entry.py", "tools/trace_logo_contours.py",
             "tools/tests/test_public_import.py", "tools/tests/test_media_import.py",
             "tools/tests/test_compact_import.py",

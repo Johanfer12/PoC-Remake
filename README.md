@@ -2,17 +2,30 @@
   <img src="game/assets/icons/launcher.svg" width="112" height="112" alt="PoC Remake icon">
 </p>
 
-# PoC Remake
+# Yu-Gi-Oh! Power of Chaos Remake
+
+**English** | [Español](README.es.md)
 
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 
-PoC Remake is an experimental Godot reimplementation of the engine behind **Yu-Gi-Oh! Power of Chaos: Yugi the Destiny, Kaiba the Revenge, and Joey the Passion**. It aims to preserve the original games' rules, presentation and feel while making them easier to launch and maintain on modern PCs.
+## Why use it?
+
+- **Joey network duels without DirectPlay.** Modern LAN networking replaces the legacy Windows component. Testing between two physical PCs is still pending.
+- **Portable.** Keep the EXE and its **`PoC Data`** folder together: your resources, saves and settings travel with them.
+- **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
+- **16:9 decorative side panels.** Widescreen decorations surround the original 4:3 duel area in the supported Yugi and Joey views. The current background images are temporary.
+- **All three games in one place.** Yugi the Destiny, Kaiba the Revenge and Joey the Passion share one launcher. Import just one to start and add the others whenever you want.
+- **Rendering above 30 FPS.** The renderer follows the display refresh rate, with interpolation between the original 30 Hz game ticks. Actual FPS depend on your PC and display; the original gameplay speed is preserved.
+
+## What is this remake?
+
+Yu-Gi-Oh! Power of Chaos Remake is an experimental Godot reimplementation of the engine behind **Yugi the Destiny, Kaiba the Revenge, and Joey the Passion**. It aims to preserve the original games' rules, presentation and feel while making them easier to launch and maintain on modern PCs.
 
 You provide a compatible copy of the game you want to play. The launcher reads its resources locally and prepares them for the new engine. **One game is enough to get started.** You can add the other two later.
 
 > **Early preview:** development and compatibility testing are ongoing. This is not a finished, fully faithful replacement for every original release.
 
-## Why use it?
+### More launcher features
 
 - **One launcher for three games.** Open an imported game by clicking its logo, or add another from the same menu.
 - **One Windows executable.** The packaged launcher includes Godot, the local converter and 7-Zip. Players do not need to install those tools separately.
@@ -30,7 +43,7 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 
 ## Get started on Windows
 
-1. Download **`PowerOfChaos.exe`** from [Releases](https://github.com/Johanfer12/PoC-Remake/releases) when a preview is available. Development builds are also available in [Actions](https://github.com/Johanfer12/PoC-Remake/actions/workflows/build-windows.yml).
+1. Download **`PowerOfChaos.exe`** from [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases) when a preview is available. Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
 2. Put the EXE in a folder where you want to keep the launcher and its saves, then open it.
 3. In **ADD YOUR RESOURCES**, move over the game you want to add and choose **ISO** or **Folder**.
 4. Select a compatible disc image or installed game folder, then click **Prepare games** and wait for conversion to finish.
@@ -118,8 +131,8 @@ Use a new output directory for manual imports. The launcher manages its own atom
 Development requires **Godot 4.7.2** and **Python 3.12 or newer**. The Windows build workflow uses Python 3.13.
 
 ```powershell
-git clone https://github.com/Johanfer12/PoC-Remake.git
-cd PoC-Remake
+git clone https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake.git
+cd Yu-Gi-Oh-Power-of-Chaos-Remake
 python -m pip install ./tools
 godot --editor --path game
 ```
@@ -137,7 +150,7 @@ python -m unittest discover -s tools/tests -p "test_*import.py" -v
 
 ## Automatic Windows builds
 
-[Launcher Windows](https://github.com/Johanfer12/PoC-Remake/actions/workflows/build-windows.yml) builds from the public sources:
+[Launcher Windows](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml) builds from the public sources:
 
 - Pushes to `main` and pull requests generate a Windows build.
 - The workflow can also be started manually.
