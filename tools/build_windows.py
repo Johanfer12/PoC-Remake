@@ -149,8 +149,8 @@ def build(godot: Path, output: Path) -> Path:
         fetch("https://github.com/libsndfile/libsndfile/releases/download/1.2.2/libsndfile-1.2.2.tar.xz", snd_source)
         if hashlib.sha256(snd_source.read_bytes()).hexdigest() != "3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e":
             raise ValueError("No coincide el SHA-256 de las fuentes libsndfile")
-        for codec, version in (("vorbis", "v1.3.7"), ("ogg", "v1.3.5")):
-            fetch(f"https://raw.githubusercontent.com/xiph/{codec}/{version}/COPYING", licenses/(codec.upper()+"_COPYING.txt"))
+        for codec, codec_version in (("vorbis", "v1.3.7"), ("ogg", "v1.3.5")):
+            fetch(f"https://raw.githubusercontent.com/xiph/{codec}/{codec_version}/COPYING", licenses/(codec.upper()+"_COPYING.txt"))
         bundle_archiver(work, bundled, logs)
         files = {p.relative_to(bundled).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(bundled.rglob("*")) if p.is_file()}
@@ -193,6 +193,8 @@ def build(godot: Path, output: Path) -> Path:
                         "original_game_data_included": False, "converter_help_passed": True, "empty_boot_passed": True,
                         "single_executable": True, "embedded_tools_verified": True, "bundled_7zip": "26.04"})
         receipt["menu_boot_without_tool_extraction"] = True
+        if not receipt["godot"].startswith(GODOT_VERSION + ".stable"):
+            raise ValueError("El manifiesto no identifica correctamente la versión del motor")
         (output/"BUILD_MANIFEST.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     executable.with_suffix(".exe.sha256").write_text(hashlib.sha256(executable.read_bytes()).hexdigest() + "  " + executable.name + "\n")
     print(executable)
