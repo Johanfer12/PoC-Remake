@@ -15,7 +15,7 @@ Selecciona los ISO o las carpetas instaladas de tus juegos y elige:
 
 **Crear APK requiere configurar las herramientas Android en tu equipo:** Godot con plantillas Android, JDK, SDK de Android, fuentes Android y tu propia clave de firma. Estas herramientas no vienen dentro del EXE. [Configurar Android](#configurar-la-compilación-android). La extracción para PC funciona con el EXE independiente.
 
-Los nuevos botones están disponibles desde **v0.1.0-alpha.3**. Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye datos originales del juego. La prueba en teléfono o tablet físico sigue pendiente.
+Los nuevos botones están disponibles desde **v0.1.0-alpha.4**. Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye datos originales del juego. La prueba en teléfono o tablet físico sigue pendiente.
 
 **Tus juegos de Power of Chaos reunidos en un launcher moderno para Windows.**
 

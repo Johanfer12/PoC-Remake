@@ -15,7 +15,7 @@ Select your ISO images or installed game folders, then choose:
 
 **APK creation requires a local Android build setup:** Godot with Android templates, JDK, Android SDK, Android sources and your own signing key. These tools are not bundled in the EXE. [Android setup](#android-build-setup). PC extraction works with the standalone EXE.
 
-The new buttons are available starting with **v0.1.0-alpha.3**. Your ISO images and converted resources stay on your computer; no original game data is included in the download. Physical Android device testing remains pending.
+The new buttons are available starting with **v0.1.0-alpha.4**. Your ISO images and converted resources stay on your computer; no original game data is included in the download. Physical Android device testing remains pending.
 
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 

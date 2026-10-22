@@ -19,13 +19,13 @@ class AndroidBuilderTests(unittest.TestCase):
 
     def test_relative_configuration(self):
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             (root / "android-builder.json").write_text(json.dumps({"root": "kit/source"}))
             self.assertEqual(configuration(root)["root"], root / "kit/source")
 
     def _build(self, fail, first=False):
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             original = root / "pc-resources"
             original.mkdir()
             (original / "inventory.json").write_text('{"games":{"yugi":{}}}')
