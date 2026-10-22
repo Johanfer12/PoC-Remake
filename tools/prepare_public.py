@@ -9,7 +9,7 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {"README.md", "README.es.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md"}
+TOP = {"README.md", "README.es.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md", ".gitattributes"}
 TOOL_TOP = {"tools/pyproject.toml", "tools/prepare_public.py", "tools/build_windows.py", "tools/importer_entry.py", "tools/trace_logo_contours.py",
             "tools/tests/test_public_import.py", "tools/tests/test_media_import.py",
             "tools/tests/test_compact_import.py", "tools/configure_android_builder.py", "tools/tests/test_android_builder.py",
@@ -56,21 +56,25 @@ def prepare(output: Path) -> dict:
         dest = output / relative
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, dest)
+        if relative.as_posix() not in OWN_ASSETS | LAUNCHER_ART:
+            dest.write_bytes(dest.read_bytes().replace(b"\r\n", b"\n"))
         manifest[relative.as_posix()] = hashlib.sha256(dest.read_bytes()).hexdigest()
     ignore = ("# Solo fuentes; los recursos y configuraciones privadas nunca se publican\n"
               "data/\nextracted/\nsamples/\nsaves/\nimports/\nartifacts/\nre/\n"
               ".godot/\n__pycache__/\n*.pyc\n*.uid\n*.iso\n*.exe\n*.dat\n*.bin\n"
               "*.pck\n*.apk\n*.keystore\n*.jks\n.env*\n.venv/\n*.egg-info/\n"
               "build/\ndist/\ncontent.cfg\nPoC Data/\nandroid-builder.json\n*.import\n")
-    (output / ".gitignore").write_text(ignore, encoding="utf-8")
+    (output / ".gitignore").write_text(ignore, encoding="utf-8", newline="\n")
     manifest[".gitignore"] = hashlib.sha256((output / ".gitignore").read_bytes()).hexdigest()
+    (output / ".gitattributes").write_bytes(b"* text=auto eol=lf\n")
+    manifest[".gitattributes"] = hashlib.sha256((output / ".gitattributes").read_bytes()).hexdigest()
     report = {"format": 1, "files": manifest, "git_history_included": False,
               "policy": "source allowlist, three user-confirmed remake assets, original launcher icon and user-requested logo outline geometry; no original raster/audio game media or native fixtures",
               "remake_assets_confirmed_by_user": sorted(OWN_ASSETS),
               "original_launcher_art_created_for_project": sorted(LAUNCHER_ART),
               "derived_logo_outline_geometry_requested_by_user": "game/scenes/launcher/logo_contours.gd",
               "legal_clearance": False}
-    (output / "PUBLICATION_MANIFEST.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (output / "PUBLICATION_MANIFEST.json").write_text(json.dumps(report, indent=2), encoding="utf-8", newline="\n")
     return report
 
 

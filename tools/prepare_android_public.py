@@ -47,13 +47,17 @@ def prepare_android(source: Path, output: Path) -> dict:
     (output / ".gitignore").write_text(
         "data/\nartifacts/\nsaves/\n.godot/\n__pycache__/\n*.pyc\n*.uid\n*.import\n"
         "*.apk\n*.pck\n*.iso\n*.exe\n*.dat\n*.bin\n*.keystore\n*.jks\n.env*\n", encoding="utf8")
+    (output / ".gitattributes").write_bytes(b"* text=auto eol=lf\n")
+    for path in output.rglob("*"):
+        if path.is_file() and path.relative_to(output).as_posix() not in OWN_ASSETS | LAUNCHER_ART:
+            path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n"))
     manifest = {path.relative_to(output).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
                 for path in sorted(output.rglob("*")) if path.is_file()}
     report = {"format": 1, "files": manifest, "git_history_included": False,
               "policy": "Android source allowlist; approved remake assets and launcher icon only",
               "original_game_data_included": False, "private_signing_key_included": False,
               "legal_clearance": False}
-    (output / "PUBLICATION_MANIFEST.json").write_text(json.dumps(report, indent=2), encoding="utf8")
+    (output / "PUBLICATION_MANIFEST.json").write_text(json.dumps(report, indent=2), encoding="utf8", newline="\n")
     return report
 
 
