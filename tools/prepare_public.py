@@ -25,6 +25,8 @@ def allowed(relative: Path) -> bool:
     path = relative.as_posix()
     if path in TOP or path in TOOL_TOP or path in OWN_ASSETS or path in LAUNCHER_ART:
         return True
+    if path == "game/share_smoke.gd":
+        return False
     if path.startswith("game/"):
         if any(part in {".godot", "assets", "tests", "artifacts", "temp", "scenarios"} for part in relative.parts):
             return False

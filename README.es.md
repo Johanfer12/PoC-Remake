@@ -161,7 +161,7 @@ Cada componente de terceros conserva su licencia. Consulta [THIRD_PARTY_NOTICES.
 ## Configurar la compilación Android
 
 Crear APK es un flujo local opcional para Windows. Requiere Godot **4.7.2** con
-sus plantillas Android de la misma versión, **JDK 21**, SDK/plataforma Android **35**
+sus plantillas Android de la misma versión, **Python 3.12+** para configurar, **JDK 21**, SDK/plataforma Android **35**
 y build-tools **35.0.1**. En Godot, Ajustes del editor → Exportar → Android, configura
 las rutas del SDK de Java y del SDK de Android. Las herramientas, las plantillas y
 Java deben estar instaladas en el equipo que compila; descargar el launcher no las instala.

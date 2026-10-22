@@ -185,7 +185,7 @@ Third-party components retain their own licenses. See [THIRD_PARTY_NOTICES.md](T
 ## Android build setup
 
 APK creation is an optional local build flow for Windows. It needs Godot **4.7.2**
-with its matching Android export templates, **JDK 21**, Android SDK/platform **35**
+with its matching Android export templates, **Python 3.12+** for configuration, **JDK 21**, Android SDK/platform **35**
 and build-tools **35.0.1**. In Godot's Editor Settings → Export → Android, set the
 Java SDK and Android SDK paths. The SDK tools, templates and Java must be installed
 on the computer doing the build; downloading the launcher alone does not install them.
