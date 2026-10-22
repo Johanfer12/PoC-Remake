@@ -247,6 +247,7 @@ def main() -> None:
     parser.add_argument("--base", type=Path, help="datos existentes que se conservarán")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--replace", action="store_true", help="actualiza atómicamente una biblioteca existente")
+    parser.add_argument("--create-apk", action="store_true", help="compila con la copia Android; --out es la carpeta del launcher")
     parser.add_argument("--no-compact", action="store_true", help="conserva PNG/WAV para herramientas de desarrollo")
     parser.add_argument("--voice", action="append", default=[], metavar="GAME=VOICE.DAT",
                         help="añade otro doblaje; repetible, sin reemplazar idiomas distintos")
@@ -258,8 +259,13 @@ def main() -> None:
                 raise ValueError("Usa --voice juego=ruta/Voice.dat")
             game, path = spec.split("=", 1)
             extra.append((game, Path(path)))
-        import_games({game: getattr(args, game) for game in GAMES if getattr(args, game) is not None}, args.out, extra, args.base,
-                     compact=not args.no_compact, replace=args.replace)
+        sources = {game: getattr(args, game) for game in GAMES if getattr(args, game) is not None}
+        if args.create_apk:
+            from .android_builder import create_apk
+            create_apk(sources, args.out, extra, args.base)
+        else:
+            import_games(sources, args.out, extra, args.base,
+                         compact=not args.no_compact, replace=args.replace)
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError, SystemExit) as error:
         parser.exit(1, f"No se pudo importar: {error}\n")
 

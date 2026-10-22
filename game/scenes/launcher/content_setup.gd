@@ -9,6 +9,9 @@ var _dialog := FileDialog.new()
 var _status := Label.new()
 var _python := LineEdit.new()
 var _convert := Button.new()
+var _apk := Button.new()
+var _building_apk := false
+var _apk_directory := ""
 var _back := Button.new()
 var _thread := Thread.new()
 var _pending_game := ""
@@ -20,8 +23,8 @@ var _tools_failed := false
 
 
 const COPY := {
-	"s": ["SUBE TUS RECURSOS", "Añade un juego y empieza a jugar", "Sin seleccionar", "Voces +", "Preparar juegos", "Pasa el mouse sobre un juego para comenzar.", "Volver", "Licencias", "Preparando tus juegos… Espera a que termine.", "No se pudo importar. Revisa los archivos y vuelve a intentarlo.", "Seleccionado", "Doblajes adicionales"],
-	"e": ["ADD YOUR RESOURCES", "Add a game and start playing", "Not selected", "Voices +", "Prepare games", "Move over a game to get started.", "Back", "Licenses", "Preparing your games… Please wait.", "Could not import. Check your files and try again.", "Selected", "Additional voice packs"],
+	"s": ["SUBE TUS RECURSOS", "Añade un juego y empieza a jugar", "Sin seleccionar", "Voces +", "Extraer para PC", "Pasa el mouse sobre un juego para comenzar.", "Volver", "Licencias", "Preparando tus juegos… Espera a que termine.", "No se pudo importar. Revisa los archivos y vuelve a intentarlo.", "Seleccionado", "Doblajes adicionales"],
+	"e": ["ADD YOUR RESOURCES", "Add a game and start playing", "Not selected", "Voices +", "Extract for PC", "Move over a game to get started.", "Back", "Licenses", "Preparing your games… Please wait.", "Could not import. Check your files and try again.", "Selected", "Additional voice packs"],
 	"g": ["RESSOURCEN HINZUFÜGEN", "Füge ein Spiel hinzu und leg los", "Nicht ausgewählt", "Stimmen +", "Spiele vorbereiten", "Bewege die Maus über ein Spiel.", "Zurück", "Lizenzen", "Spiele werden vorbereitet… Bitte warten.", "Import fehlgeschlagen. Prüfe die Dateien und versuche es erneut.", "Ausgewählt", "Zusätzliche Sprachpakete"],
 	"f": ["AJOUTE TES RESSOURCES", "Ajoute un jeu et commence à jouer", "Non sélectionné", "Voix +", "Préparer les jeux", "Passe la souris sur un jeu pour commencer.", "Retour", "Licences", "Préparation des jeux… Patiente un instant.", "Échec de l’importation. Vérifie les fichiers et réessaie.", "Sélectionné", "Doublages supplémentaires"],
 	"i": ["AGGIUNGI LE TUE RISORSE", "Aggiungi un gioco e inizia a giocare", "Non selezionato", "Voci +", "Prepara i giochi", "Passa il mouse su un gioco per iniziare.", "Indietro", "Licenze", "Preparazione dei giochi… Attendi.", "Importazione non riuscita. Controlla i file e riprova.", "Selezionato", "Doppiaggi aggiuntivi"],
@@ -102,6 +105,9 @@ func _ready() -> void:
 	_convert.disabled = true
 	_convert.pressed.connect(_start)
 	add_child(_convert)
+	_style_control(_apk)
+	_apk.pressed.connect(_start.bind(false, true))
+	add_child(_apk)
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_status.add_theme_color_override("font_color", GOLD_LIGHT.darkened(0.2))
@@ -133,7 +139,9 @@ func _language_updated() -> void:
 	super._language_updated()
 	_subtitle.text = str(LIBRARY_HINT[Assets.lang]) if Paths.has_data() else _copy(1)
 	_convert.text = _copy(4)
-	_convert.visible = _has_pending() or _busy
+	_convert.visible = true
+	_apk.text = {"s": "Crear APK", "e": "Create APK", "g": "APK erstellen", "f": "Créer un APK", "i": "Crea APK", "j": "APKを作成"}.get(Assets.lang, "Create APK")
+	_apk.disabled = _busy or _tools_failed or Paths.storage_error or (not _has_pending() and not Paths.has_data())
 	if not _busy:
 		_status.text = _copy(5)
 	_back.text = _copy(6)
@@ -169,8 +177,10 @@ func _layout() -> void:
 		label.size = Vector2(SLOT.x, 22)
 	_python.position = _origin + Vector2(250, 428)
 	_python.size = Vector2(300, 32)
-	_convert.position = _origin + Vector2(250, 470)
+	_convert.position = _origin + Vector2(90, 470)
 	_convert.size = Vector2(300, 40)
+	_apk.position = _origin + Vector2(410, 470)
+	_apk.size = Vector2(300, 40)
 	_status.position = _origin + Vector2(90, 518)
 	_status.size = Vector2(620, 42)
 	_back.position = Vector2(24, 24)
@@ -241,22 +251,31 @@ func _selected(path: String) -> void:
 			packs.append(path)
 		_status.text = "%s · %s: %s" % [Game.TITLES[_pending_game], _copy(11), packs.size()]
 		_convert.disabled = not _has_pending() or _tools_failed
-		_convert.visible = _has_pending()
+		_convert.visible = true
+		_apk.disabled = _tools_failed or Paths.storage_error or not _has_pending()
 		return
 	_sources[_pending_game] = path
 	_labels[_pending_game].text = path.get_file()
 	_labels[_pending_game].tooltip_text = path
 	_convert.disabled = _tools_failed or not _has_pending()
-	_convert.visible = _has_pending()
+	_convert.visible = true
+	_apk.disabled = _tools_failed or Paths.storage_error or not _has_pending()
 	_status.text = "%s: %s" % [_copy(10), _sources.size()]
 
 
-func _start(migrate := false) -> void:
-	if _busy or _tools_failed or Paths.storage_error or (not migrate and not _has_pending()):
+func _start(migrate := false, build_apk := false) -> void:
+	if _busy or _tools_failed or Paths.storage_error or (not migrate and not _has_pending() and not (build_apk and Paths.has_data())):
 		return
+	_building_apk = build_apk
+	_apk_directory = ProjectSettings.globalize_path("res://").path_join("..").simplify_path() if OS.has_feature("editor") else OS.get_executable_path().get_base_dir()
+	var launcher_override := Paths.cmdline_value("launcher-dir")
+	if launcher_override != "":
+		_apk_directory = launcher_override
 	_target = Paths.resources_path()
 	var args := PackedStringArray() if _bundled_importer else PackedStringArray(["-m", "pocx.import_games"])
-	args.append_array(PackedStringArray(["--out", _target]))
+	args.append_array(PackedStringArray(["--out", _apk_directory if build_apk else _target]))
+	if build_apk:
+		args.append("--create-apk")
 	if FileAccess.file_exists(_target.path_join("inventory.json")):
 		args.append("--replace")
 	if Paths.has_data():
@@ -274,10 +293,11 @@ func _start(migrate := false) -> void:
 	for button in _buttons:
 		button.disabled = true
 	_convert.disabled = true
+	_apk.disabled = true
 	_back.disabled = true
 	_python.editable = false
 	_licenses.disabled = true
-	_status.text = _copy(8)
+	_status.text = ("Creando APK Android… Puede tardar varios minutos." if Assets.lang == "s" else "Building Android APK… This may take several minutes.") if build_apk else _copy(8)
 	_language.disabled = true
 	var executable := _python.text.strip_edges()
 	var error := _thread.start(func() -> Dictionary:
@@ -325,15 +345,22 @@ func _finish(result: Dictionary) -> void:
 	get_tree().auto_accept_quit = true
 	for button in _buttons:
 		button.disabled = false
-	_convert.disabled = false
+	_convert.disabled = not _has_pending() or _tools_failed
+	_apk.disabled = _tools_failed or Paths.storage_error or (not _has_pending() and not Paths.has_data())
 	_back.disabled = false
 	_python.editable = true
 	_licenses.disabled = false
 	if int(result["code"]) != 0:
-		_status.text = _copy(9)
-		var log_file := FileAccess.open(Paths.storage_dir.path_join("import-last-error.log"), FileAccess.WRITE)
+		_status.text = ("No se pudo crear el APK. Revisa apk-last-error.log en PoC Data." if Assets.lang == "s" else "APK build failed. See apk-last-error.log in PoC Data.") if _building_apk else _copy(9)
+		var log_file := FileAccess.open(Paths.storage_dir.path_join("apk-last-error.log" if _building_apk else "import-last-error.log"), FileAccess.WRITE)
 		if log_file != null:
 			log_file.store_string(str(result["output"]))
+		return
+	if _building_apk:
+		_status.text = ("APK creado junto al launcher." if Assets.lang == "s" else "APK created next to the launcher.")
+		_status.tooltip_text = str(result["output"])
+		if DisplayServer.get_name() != "headless":
+			OS.shell_open(_apk_directory)
 		return
 	var config := ConfigFile.new()
 	config.load(Paths.settings_path())
@@ -354,7 +381,8 @@ func _finish(result: Dictionary) -> void:
 
 func _close() -> void:
 	if _busy:
-		_status.text = _copy(8)
+		if not _building_apk:
+			_status.text = _copy(8)
 
 
 func _open_licenses() -> void:

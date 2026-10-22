@@ -102,7 +102,7 @@ def bundle_archiver(work: Path, bundled: Path, logs: Path) -> None:
         "Matching source is included as 7ZIP_SOURCE_26.04.7z.\n", encoding="utf-8")
 
 
-def build(godot: Path, output: Path) -> Path:
+def build(godot: Path, output: Path, with_android: bool = False) -> Path:
     output = output.resolve()
     if output.exists():
         raise ValueError("El destino debe ser nuevo")
@@ -196,6 +196,12 @@ def build(godot: Path, output: Path) -> Path:
         if not receipt["godot"].startswith(GODOT_VERSION + ".stable"):
             raise ValueError("El manifiesto no identifica correctamente la versión del motor")
         (output/"BUILD_MANIFEST.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
+    if with_android:
+        from configure_android_builder import configure
+        configure(output)
+        receipt["android_builder_configured"] = True
+        receipt["android_builder_requires_local_toolchain"] = True
+        (output/"BUILD_MANIFEST.json").write_text(json.dumps(receipt, indent=2), encoding="utf8")
     executable.with_suffix(".exe.sha256").write_text(hashlib.sha256(executable.read_bytes()).hexdigest() + "  " + executable.name + "\n")
     print(executable)
     return executable
@@ -203,6 +209,7 @@ def build(godot: Path, output: Path) -> Path:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--with-android", action="store_true", help="conecta la copia Android y SDK/JDK locales")
     parser.add_argument("--audit", action="store_true")
     parser.add_argument("--engine-cache", type=Path)
     parser.add_argument("--godot", type=Path)
@@ -214,4 +221,4 @@ if __name__ == "__main__":
         engine = install_engine(args.engine_cache) if args.engine_cache else args.godot
         if not engine:
             parser.error("Usa --godot o --engine-cache")
-        build(engine.resolve(), args.out)
+        build(engine.resolve(), args.out, args.with_android)

@@ -77,6 +77,8 @@ func reset(duel: Duel) -> void:
 	_shade_on = false
 	_shade_c = 0
 	_start_banner_shade = false
+	_shade_draw_c = 0
+	_start_banner_last_draw = false
 	end_banner = ""
 	_finish_music()
 	pending.clear()
@@ -91,7 +93,11 @@ func reset(duel: Duel) -> void:
 	visual_tick = 0
 	_visual_clock = 0
 	PortraitEffects.reset_duel_state(duel)
-	for p in 2: displayed_lp[p] = duel.m.u16(DuelMem.pl(p))
+	for p in 2:
+		# Ka45fa40 inicializa +24 del objeto visual en8000 antes del comando10.
+		# El motor sigue en cero; se respetan LP explicitos de escenarios/reanudacion.
+		var core_lp := duel.m.u16(DuelMem.pl(p))
+		displayed_lp[p] = 8000 if game == "kaiba" and duel.executed == 0 and core_lp == 0 else core_lp
 	_clear()
 
 ## Indice +0x10 que consulta el nucleo; no confundir imagen retenida y zona logica.
@@ -145,7 +151,15 @@ func hand(p: int, i: int, count: int) -> Vector2:
 
 func packed_position(value: int, duel: Duel) -> Vector2:
 	if ((value >> 1) & 15) == 11: return hand(value & 1, (value >> 5) & 511, duel.m.u8(DuelMem.pl(value & 1) + 2))
+	var loc := (value >> 1) & 15
+	if loc in [12, 13, 14]:
+		return pile_object_position(value & 1, loc, (value >> 5) & 511)
 	return DuelGeometry.packed(value, duel)
+
+func pile_object_position(p: int, loc: int, index: int) -> Vector2:
+	var count := int(table.piles[p][loc]["count"])
+	if game == "joey": return preload("res://scenes/duel/joey_pile.gd").object_position(p, loc, index, count)
+	return preload("res://scenes/duel/classic_pile.gd").object_position(p, loc, index, count)
 
 func enqueue(e: Dictionary, duel: Duel) -> void:
 	var kind: String = e.get("kind", "")
@@ -821,12 +835,16 @@ var _shade_on := false
 ## Cartel de fin que queda fijo tras su animacion (la escena de resultado lo retoma).
 var end_banner := ""
 var _shade_c := 0
+## 486290 dibuja el contador de entrada y despues lo incrementa/decrementa.
+var _shade_draw_c := 0
+var _start_banner_last_draw := false
 ## Jo44dd00: los objetos de mascara2 solo avanzan con el fundido completamente opaco.
 var _start_banner_shade := false
 var _start_shade_material := ShaderMaterial.new()
 
 
 func _tick_shade() -> void:
+	_shade_draw_c = _shade_c
 	if _shade_on:
 		if _shade_c < 0x100: _shade_c = mini(0x100, _shade_c + (0x10 if _shade_c == 0 else 0x20))
 	elif _shade_c > 0:
@@ -969,6 +987,7 @@ func _render_sacrifice(s: Dictionary) -> void:
 func advance(delta: float) -> void:
 	_visual_clock += NativeClock.ticks(maxf(delta, 0))
 	var elapsed := int(_visual_clock)
+	if elapsed > 0: _start_banner_last_draw = false
 	_visual_clock -= elapsed
 	visual_tick += elapsed
 	var field_tick := visual_tick - elapsed
@@ -981,9 +1000,13 @@ func advance(delta: float) -> void:
 		_tick_sacrifice()
 		_tick_battle()
 		var start_shade_moving := _start_banner_shade and _shade_moving()
-		_tick_shade()
+		# 44dd00 actualiza/dibuja la mascara2 antes de486290. En T320 el
+		# objeto apaga el sombreado y el mismo tick inicia su cierre256->240.
+		var shade_after_object := _start_banner_shade and not start_shade_moving
+		if not shade_after_object: _tick_shade()
 		if _start_banner_shade and not _shade_on and _shade_c == 0:
 			_start_banner_shade = false
+			_start_banner_last_draw = true
 		if active.get("mode", "") == "sacrifice_release":
 			# 464ae0 libera la espera al llegar a248; 464b00 conserva el dibujo hasta384.
 			var mark: Dictionary = _sacrifice.get(active["key"], {})
@@ -1006,6 +1029,7 @@ func advance(delta: float) -> void:
 		# 0x439a70: el rotulo de inicio apaga el sombreado cuando su contador (+8) pasa de 0x13f.
 		if active.get("mode", "") == "banner" and int(active.get("op", 0)) == 0x14 and frame * 8 > 0x13f:
 			_shade_on = false
+		if shade_after_object: _tick_shade()
 		if active.get("mode", "") == "lp_total" and frame > int(active.get("count_delay", 32)):
 			var p: int = active["p"]
 			var left := int(active["remaining_amount"])
@@ -1100,6 +1124,11 @@ func _begin_objects() -> void:
 	if mode in ["move", "exclusion"] and active.has("src"):
 		var src: Array = active["src"]
 		var dst: Array = active["dst"]
+		# Las referencias del buzon consultan45c140 antes de sacar el objeto.
+		# Resolver al comenzar, no al encolar: otros vuelos pueden cambiar la pila.
+		if src[1] in [12, 13, 14]: active["from_pos"] = pile_object_position(src[0], src[1], src[2])
+		if dst[1] in [12, 13, 14]: active["to_pos"] = pile_object_position(dst[0], dst[1], dst[2])
+		if active.get("instant", false): active["from_pos"] = active["to_pos"]
 		_field_detached.erase("%d:%d" % [src[0], src[1] + (src[2] if src[1] in [0, 5] else 0)])
 		var obj := table.take(_duel_ref, src[0], src[1], src[2])
 		if obj.is_empty() or int(obj.get("card", -1)) < 0:
@@ -1210,6 +1239,11 @@ func _begin() -> void:
 	if active["mode"] == "sacrifice_release":
 		if _sacrifice.has(active["key"]): _sacrifice[active["key"]]["release"] = true
 	var mode: String = active["mode"]
+	# 5bc700 consume el buzon antes de44dd00->45d040. La carta creada por
+	# 40cdb0 recibe418b60 (+32) en esa misma vuelta, antes del primer dibujo.
+	# Los eventos del adaptador ya llegan despues de avanzar el reloj visual.
+	if game == "joey" and mode == "move" and active.get("native_silent", false) and not active.get("instant", false):
+		frame = 1
 	if mode == "joey_summon" and DisplayServer.get_name() != "headless":
 		var snapshot: Texture2D = preload("res://core/native_snapshot.gd").capture(get_viewport())
 		if snapshot != null: active["snapshot"] = snapshot
@@ -1416,13 +1450,15 @@ static func _pairs(prev: Array, cur: Array) -> Array:
 
 func _render() -> void:
 	_clear()
-	if _shade_c > 0:
+	var start_shade_draw := _start_banner_shade or _start_banner_last_draw
+	var shade_progress := _shade_draw_c if start_shade_draw else _shade_c
+	if shade_progress > 0:
 		var shade := ColorRect.new()
 		shade.size = Vector2(800, 600)
-		shade.color = Color(0, 0, 0, 0.5 * _shade_c / 256.0)
-		if _start_banner_shade:
+		shade.color = Color(0, 0, 0, 0.5 * shade_progress / 256.0)
+		if start_shade_draw:
 			_start_shade_material.shader = StartShade.SHADER
-			_start_shade_material.set_shader_parameter("progress", _shade_c)
+			_start_shade_material.set_shader_parameter("progress", shade_progress)
 			shade.material = _start_shade_material
 		shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(shade)

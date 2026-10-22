@@ -261,6 +261,13 @@ func _port_frame_for(t: int, n: int) -> int:
 
 const REPLAY_DEVICE := 31 # Marca de sondas; las sesiones normales no filtran por device.
 
+## Una escena nueva hereda el punto nativo de la repetición. Input global puede
+## contener la posición física aunque ReplayOnly haya descartado ese evento.
+func replay_pointer_position(fallback: Vector2) -> Vector2:
+	if _replay_at <= 0 or _replay.is_empty(): return fallback
+	var entry: Array = _replay[_replay_at - 1]
+	return Vector2(entry[1], entry[2])
+
 func _apply_input(e: Array) -> void:
 	var pos := Vector2(e[1], e[2])
 	# ui_frame graba coordenadas nativas800x600; parse_input_event recibe el root.

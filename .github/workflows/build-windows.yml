@@ -32,7 +32,9 @@ jobs:
       - name: Probar importador sin recursos originales
         env:
           PYTHONPATH: tools
-        run: python -m unittest discover -s tools/tests -p 'test_*import.py' -v
+        run: |
+          python -m unittest discover -s tools/tests -p 'test_*import.py' -v
+          python -m unittest discover -s tools/tests -p test_android_builder.py -v
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ runner.tool_cache }}/poc-godot-4.7.2

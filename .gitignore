@@ -25,3 +25,5 @@ build/
 dist/
 content.cfg
 PoC Data/
+android-builder.json
+*.import

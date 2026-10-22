@@ -6,10 +6,22 @@
 
 **English** | [Español](README.es.md)
 
+## Your ISO → PC or Android APK
+
+Select your ISO images or installed game folders, then choose:
+
+- **Extract for PC** to prepare the games for Windows.
+- **Create APK** to build an Android APK with the Android branch's touch controls, scrolling and dragging. The APK and its validation receipt are saved **beside the launcher**. Already prepared games can also be reused.
+
+**APK creation requires a local Android build setup:** Godot with Android templates, JDK, Android SDK, Android sources and your own signing key. These tools are not bundled in the EXE. [Android setup](#android-build-setup). PC extraction works with the standalone EXE.
+
+The new buttons are available starting with **v0.1.0-alpha.3**. Your ISO images and converted resources stay on your computer; no original game data is included in the download. Physical Android device testing remains pending.
+
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 
 ## Why use it?
 
+- **PC extraction or Android APK from the same launcher.** Reuse your compatible games and choose the output you need; APK creation requires the local Android build setup.
 - **Joey network duels without DirectPlay.** Modern LAN networking replaces the legacy Windows component. Testing between two physical PCs is still pending.
 - **Portable.** Keep the EXE and its **`PoC Data`** folder together: your resources, saves and settings travel with them.
 - **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
@@ -46,7 +58,7 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 1. Download **`PowerOfChaos.exe`** from [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases) when a preview is available. Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
 2. Put the EXE in a folder where you want to keep the launcher and its saves, then open it.
 3. In **ADD YOUR RESOURCES**, move over the game you want to add and choose **ISO** or **Folder**.
-4. Select a compatible disc image or installed game folder, then click **Prepare games** and wait for conversion to finish.
+4. Select a compatible disc image or installed game folder, then click **Extract for PC** and wait for conversion to finish.
 5. Click the prepared game's logo to play. The remaining games can be added later from the same screen.
 
 The download is a single EXE; no installation wizard is required. The first import extracts and verifies the bundled conversion tools in `PoC Data/tools/`. Opening the menu does not wait for that extraction.
@@ -169,3 +181,43 @@ The launcher theme, the two external duel backgrounds and the custom application
 The source includes work derived through reverse engineering. Its provenance and project-wide licensing remain under review; no blanket license for the repository has been assigned. Publishing the sources does not license the original games or grant rights to redistribute their assets.
 
 Third-party components retain their own licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and **Licenses** in the packaged launcher for the bundled engine and tool notices, including the matching 7-Zip source archive.
+
+## Android build setup
+
+APK creation is an optional local build flow for Windows. It needs Godot **4.7.2**
+with its matching Android export templates, **JDK 21**, Android SDK/platform **35**
+and build-tools **35.0.1**. In Godot's Editor Settings → Export → Android, set the
+Java SDK and Android SDK paths. The SDK tools, templates and Java must be installed
+on the computer doing the build; downloading the launcher alone does not install them.
+
+Clone the [public Android source branch](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/android-tablet)
+next to your main source checkout:
+
+```powershell
+git clone --branch android-tablet --single-branch https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake.git ../PortTesting-Android
+```
+
+Create your own persistent **debug** signing key once, if you do not already have one:
+
+```powershell
+& "$env:JAVA_HOME/bin/keytool.exe" -genkeypair -keystore "C:/Tools/poc-debug.keystore" -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Power of Chaos local build"
+```
+
+From the main source checkout, configure the folder containing your downloaded EXE
+(replace the example paths with your installed tools):
+
+```powershell
+python tools/configure_android_builder.py --launcher-dir "C:/Games/PoC" --android-root "../PortTesting-Android" --godot "C:/Tools/Godot/godot_console.exe" --sdk "C:/Tools/AndroidSdk" --java "C:/Tools/jdk-21" --keystore "C:/Tools/poc-debug.keystore"
+```
+
+This creates `android-builder.json` beside the EXE. For updates, add
+`--previous-apk "C:/Games/PoC/your-previous.apk"` to check that the existing
+certificate matches. Keep your key: a different key cannot update your installed app.
+The first build verifies the output against your configured key without requiring
+a previous APK. The project never distributes its private signing key.
+
+Open the launcher, select your ISO/folders or use your prepared library, then click
+**Create APK**. The dated APK and JSON receipt appear beside the EXE after signature,
+16 KB alignment, bundled-data integrity and game-startup checks pass. Build logs
+are kept in `PoC Data/android-builds/`; failures use `PoC Data/apk-last-error.log`.
+The temporary data and export project are removed without changing your PC resources.
