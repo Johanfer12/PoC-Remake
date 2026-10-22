@@ -1,0 +1,17 @@
+data/
+artifacts/
+saves/
+.godot/
+__pycache__/
+*.pyc
+*.uid
+*.import
+*.apk
+*.pck
+*.iso
+*.exe
+*.dat
+*.bin
+*.keystore
+*.jks
+.env*

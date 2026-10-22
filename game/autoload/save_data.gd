@@ -1,0 +1,401 @@
+extends Node
+## Partida guardada portable (saves/system.json junto al ejecutable).
+## Igual que el system.dat de la carpeta "Common" del original: una sola coleccion de cartas
+## compartida por los tres juegos, y un mazo activo por juego.
+
+const FILE_NAME := "system.json"
+const VERSION := 2
+const GAMES := ["yugi", "kaiba", "joey"]
+
+var data := {}
+
+
+func _ready() -> void:
+	load_or_create()
+	var imported := Paths.cmdline_value("import-system-dat")
+	if imported != "":
+		if import_system_dat(imported):
+			_undo_last_duel()
+		else:
+			push_error("No se pudo importar %s" % imported)
+	if "--unlock-all" in OS.get_cmdline_user_args():
+		unlock_all()
+	var exported := Paths.cmdline_value("export-system-dat")
+	if exported != "":
+		var key := Paths.cmdline_value("system-dat-key")
+		var header_key := -1 if key == "" else (key.hex_to_int() if key.begins_with("0x") else key.to_int())
+		if not export_system_dat(exported, Paths.cmdline_value("start"), header_key):
+			push_error("No se pudo exportar %s (cabecera importada o --system-dat-key requerida)" % exported)
+
+
+func path() -> String:
+	return Paths.save_dir.path_join(FILE_NAME)
+
+
+func load_or_create() -> void:
+	if FileAccess.file_exists(path()):
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path()))
+		if parsed is Dictionary and int(parsed.get("version", 0)) in [1, VERSION]:
+			data = parsed
+			data.get_or_add("seen", {})
+			if int(data.get("version", 0)) == 1:
+				_migrate_shared_stats()
+				data["version"] = VERSION
+				save()
+			return
+		push_warning("Partida no valida, se crea una nueva: %s" % path())
+	data = _new_game()
+	save()
+
+
+func save() -> void:
+	DirAccess.make_dir_recursive_absolute(Paths.save_dir)
+	var tmp := path() + ".tmp"
+	var f := FileAccess.open(tmp, FileAccess.WRITE)
+	if f == null:
+		push_error("No se pudo guardar en %s" % Paths.save_dir)
+		return
+	f.store_string(JSON.stringify(data, "\t"))
+	f.close()
+	# escritura atomica: si se corta a mitad no se pierde la partida anterior
+	DirAccess.rename_absolute(tmp, path())
+
+
+## Coleccion compartida: id interno (como texto, por JSON) -> copias.
+func card_count(internal_id: int) -> int:
+	return int(data["collection"].get(str(internal_id), 0))
+
+
+func add_card(internal_id: int, copies := 1) -> void:
+	data.erase("starter_pending")
+	var key := str(internal_id)
+	data["collection"][key] = card_count(internal_id) + copies
+
+
+## Cartas ya vistas en la lista: las que se tienen y no se han visto llevan el "NEW".
+func is_seen(internal_id: int) -> bool:
+	return data["seen"].has(str(internal_id))
+
+## 442900: flcrc se conserva por coleccion; al crearlo usa time32, no una clave RNG.
+## 436ce0(0) exporta esta cabecera, y436bf0/442750 la comprueban al importar.
+func deck_file_header() -> PackedByteArray:
+	var imported := Marshalls.base64_to_raw(str(data.get("native_system", {}).get("header", "")))
+	if imported.size() == 8: return imported
+	var head := Marshalls.base64_to_raw(str(data.get("deck_header", "")))
+	if head.size() != 8:
+		head.resize(8)
+		head.encode_u32(0, 1)
+		head.encode_u32(4, int(Time.get_unix_time_from_system()) & 0xffffffff)
+		data["deck_header"] = Marshalls.raw_to_base64(head)
+		save()
+	return head
+
+
+func mark_seen(internal_id: int) -> void:
+	data["seen"][str(internal_id)] = true
+
+
+## Equivalente al parche "Desbloquear todas las cartas": 3 copias de cada carta con arte.
+func unlock_all() -> void:
+	data.erase("starter_pending")
+	for card in CardDB.cards:
+		if card["image"] != null and int(card["pack"]) != 0:
+			var key := str(int(card["internal_id"]))
+			data["collection"][key] = maxi(3, card_count(int(card["internal_id"])))
+	save()
+
+
+## Sustituye la partida por la del original: system.dat (coleccion, vistas, estadisticas,
+## progreso de Joey y opciones) y el Deck.ydc de cada juego instalado junto a la carpeta
+## Common; si falta uno, el mazo inicial. Yugi y Kaiba lo validan como al arrancar
+## (_startup_decks). Conserva las preferencias propias del port (launcher, settings).
+## Solo lee los archivos del original.
+func import_system_dat(system_dat: String) -> bool:
+	var raw := FileAccess.get_file_as_bytes(system_dat)
+	var block := SystemDat.decode(raw)
+	if block.is_empty():
+		return false
+	var by_index := {}
+	for card in CardDB.cards:
+		by_index[int(card["index"])] = int(card["internal_id"])
+	var head := SystemDat.header(raw)
+	var startup := _startup_decks(block, head, SystemDat.find_decks(system_dat))
+	block = startup["block"]
+	var fresh := _new_game()
+	fresh.merge(SystemDat.to_save(block, by_index), true)
+	fresh.erase("starter_pending")
+	fresh["native_system"]["header"] = Marshalls.raw_to_base64(head)
+	for game in startup["decks"]:
+		fresh["decks"][game] = startup["decks"][game]
+	for key in ["launcher", "settings"]:
+		if data.has(key):
+			fresh[key] = data[key]
+	data = fresh
+	save()
+	return true
+
+
+## Carga de Deck.ydc al arrancar (Yugi 436e80 -> 436db0 -> 436bf0; Kaiba 437430, mismas
+## rutinas desplazadas). Si el archivo no se lee, su cabecera no es la del system.dat
+## (442750 -> 10), 540450 quita alguna carta (fuera de la mascara del juego, ilegal o sin
+## copias; -> 0xb) o el principal no esta en 40..80, o fusion o side pasan de 15, se usa el
+## mazo inicial: 53f8b0 (que sube las copias de la coleccion y las marca vistas) y 540450.
+## Se ejecutan las rutinas portadas sobre la memoria modelada con el bloque importado; la
+## coleccion resultante vuelve al bloque. 436ce0 reescribiria Deck.ydc: el port guarda el
+## mazo en su partida y no toca los archivos del original.
+## Joey (44aa00) no se valida aqui: ante 0xb o tamanos fuera de rango conserva el mazo ya
+## podado por su 5bea80, que usa su propia lista de limites (5be190), y el Deck.ydc de Joey
+## instalado no lleva la cabecera del system.dat (la compara 45cd20 con su propio objeto);
+## f540450 no lo reproduce.
+## Devuelve {block, decks}: el bloque (actualizado si cambio) y el mazo de cada juego.
+func _startup_decks(block: PackedByteArray, head: PackedByteArray, paths: Dictionary) -> Dictionary:
+	var decks := {}
+	var duel: Duel = null
+	if paths.has("yugi") or paths.has("kaiba"):
+		duel = Duel.create(Paths.data_dir)
+		if duel == null:
+			push_warning("Sin imagen del motor de duelo: Deck.ydc se importa sin validar")
+		else:
+			for i in block.size():
+				duel.m.set_u8(0xa10120 + i, block[i])
+	for game in GAMES:
+		if not paths.has(game):
+			continue
+		var loaded := Ydc.load(paths[game])
+		if game == "joey" or duel == null:
+			if not loaded.is_empty():
+				decks[game] = loaded
+			continue
+		var game_index := GAMES.find(game)
+		var deck_head := Ydc.header(paths[game])
+		var ok := not loaded.is_empty() and deck_head.size() == 8 and head.size() == 8 \
+				and deck_head[0] == head[0] and deck_head.decode_u32(4) == head.decode_u32(4)
+		# Con tamanos fuera de rango 436900 desborda las listas, pero el resultado de
+		# 540450 ya no decide nada: se cae al mazo inicial y 540450 lo recalcula todo.
+		ok = ok and loaded["main"].size() >= 40 and loaded["main"].size() <= 80 \
+				and loaded["fusion"].size() <= 15 and loaded["side"].size() <= 15
+		if ok:
+			_write_startup_deck(duel, loaded)
+			ok = duel.f540450(game_index) == 0
+		if not ok:
+			if game == "yugi":
+				duel.f53f8b0()
+			else:
+				_kaiba_starter(duel, Assets.read_json("kaiba/file/starter_deck.json"))
+			duel.f540450(game_index)
+		decks[game] = loaded if ok else _read_startup_deck(duel)
+	if duel != null:
+		var updated := block.duplicate()
+		for index in range(1, SystemDat.CARD_SLOTS):
+			var at := 0xc + index * 2
+			# bits 8-13 (copias en el mazo) se quedan como se importaron
+			updated.encode_u16(at, (duel.m.u16(0xa10120 + at) & 0xc0ff) | (block.decode_u16(at) & 0x3f00))
+		updated.encode_u16(0xa, duel.m.u16(0xa1012a))
+		if updated != block:
+			SystemDat.seal(updated)
+			block = updated
+	return {"block": block, "decks": decks}
+
+
+## 436900: lee las tres listas en 0xa112c0 (principal +0x00, side +0xa0, fusion +0xbe;
+## contadores +0xdc, +0xde, +0xe0) como indices de carta (401ad0) y rellena con ceros.
+func _write_startup_deck(duel: Duel, deck_data: Dictionary) -> void:
+	for zone in [["main", 0x00, 0xdc, 80], ["side", 0xa0, 0xde, 15], ["fusion", 0xbe, 0xe0, 15]]:
+		var ids: Array = deck_data[zone[0]]
+		duel.m.set_u16(0xa112c0 + int(zone[2]), ids.size())
+		for i in int(zone[3]):
+			duel.m.set_u16(0xa112c0 + int(zone[1]) + i * 2, duel.f401ad0(int(ids[i])) if i < ids.size() else 0)
+
+
+func _read_startup_deck(duel: Duel) -> Dictionary:
+	var result := {}
+	for zone in [["main", 0x00, 0xdc], ["side", 0xa0, 0xde], ["fusion", 0xbe, 0xe0]]:
+		var ids: Array = []
+		for i in duel.m.u16(0xa112c0 + int(zone[2])):
+			ids.append(duel.f401a70(duel.m.u16(0xa112c0 + int(zone[1]) + i * 2)))
+		result[zone[0]] = ids
+	return result
+
+
+## Kaiba 541f80: el mismo bucle que 53f8b0 sobre su tabla 0x5a1030, que no esta en la imagen
+## modelada (la de Yugi); el mazo inicial del port ocupa su lugar.
+func _kaiba_starter(duel: Duel, starter: Dictionary) -> void:
+	for count_addr in [0xa1139e, 0xa113a0, 0xa1139c]:
+		duel.m.set_u16(count_addr, 0)
+	for zone in [["main", 0xa112c0, 0xa1139c], ["fusion", 0xa1137e, 0xa113a0]]:
+		for id in starter.get(zone[0], []):
+			var index := duel.f401ad0(int(id))
+			var count := duel.m.u16(int(zone[2]))
+			duel.m.set_u16(int(zone[1]) + count * 2, index)
+			duel.m.set_u16(int(zone[2]), count + 1)
+			duel.f540270(index, duel.f53f860(index))
+			var at := 0xa1012c + index * 2
+			duel.m.set_u16(at, duel.m.u16(at) | 0x4000)
+
+
+## system.dat solo guarda el estado posterior a la ultima partida. Para reproducir una traza
+## del original hace falta el de antes: --import-minus-card=id[,id...] quita esos premios
+## (ids internos) y --import-minus-win resta la victoria (SystemDat.undo_duel).
+func _undo_last_duel() -> void:
+	var ids: Array[int] = []
+	for part in Paths.cmdline_value("import-minus-card").split(",", false):
+		ids.append(part.to_int())
+	var wins := int("--import-minus-win" in OS.get_cmdline_user_args())
+	if ids.is_empty() and wins == 0:
+		return
+	for warning in SystemDat.undo_duel(data, ids, wins):
+		push_warning(warning)
+	save()
+
+
+func deck(game: String) -> Dictionary:
+	ensure_game(game)
+	return data["decks"][game]
+
+
+func set_deck(game: String, deck_data: Dictionary) -> void:
+	data["decks"][game] = deck_data
+
+
+func _new_game(initial_game := "") -> Dictionary:
+	var fresh := {"version": VERSION, "collection": {}, "decks": {}, "stats": {}, "seen": {}}
+	# Solo el primer juego elegido aporta su mazo a la coleccion (53f8b0).
+	# Los Deck.ydc de las demas instalaciones existen, pero no regalan sus cartas.
+	for game in GAMES:
+		var starter: Variant = Assets.read_json("%s/file/starter_deck.json" % game)
+		if starter == null:
+			continue
+		fresh["decks"][game] = starter
+		fresh["stats"][game] = {"wins": 0, "losses": 0, "draws": 0}
+		if game != initial_game:
+			continue
+		for part in ["main", "fusion", "side"]:
+			for id in starter[part]:
+				var key := str(int(id))
+				fresh["collection"][key] = maxi(int(fresh["collection"].get(key, 0)),
+						_copies_in(starter, int(id)))
+	if initial_game == "":
+		fresh["starter_pending"] = true
+	# las cartas iniciales no cuentan como nuevas
+	for key in fresh["collection"]:
+		fresh["seen"][key] = true
+	return fresh
+
+
+func ensure_game(game: String) -> void:
+	if game not in GAMES:
+		return
+	var changed := false
+	if data.get("starter_pending", false):
+		var fresh := _new_game(game)
+		data["collection"] = fresh["collection"]
+		data["seen"] = fresh["seen"]
+		data.erase("starter_pending")
+		changed = true
+	var stats: Dictionary = data.get_or_add("stats", {})
+	for key in GAMES:
+		stats.get_or_add(key, {"wins": 0, "losses": 0, "draws": 0})
+	var joey: Dictionary = stats["joey"]
+	if game == "joey" and not joey.get("started", joey.has("level")):
+		var previous := false
+		for key in data["collection"]:
+			var card := CardDB.by_id(int(key))
+			if int(data["collection"][key]) > 0 and (int(card.get("pack", 0)) & 3) != 0 \
+					and (int(card.get("pack", 0)) & 4) == 0:
+				previous = true
+				break
+		# 5bee30 escribe un byte; consumidores 489784/44bc15 extienden sin signo.
+		joey["level"] = (1 - 2 * int(previous)) & 0xff
+		joey["shown_level"] = joey["level"]
+		joey["started"] = true
+		var options: Dictionary = data.get_or_add("options", {})
+		var own: Dictionary = options.get_or_add("joey", {})
+		own["card_set_full"] = previous
+		own["limited"] = false
+		changed = true
+	if changed:
+		save()
+
+
+## Conserva la ranura comun del original. Version 1 separaba totales por juego:
+## se suman partidas propias; si hubo importacion, la base duplicada se cuenta una vez.
+func _migrate_shared_stats() -> void:
+	var stats: Dictionary = data.get_or_add("stats", {})
+	var native: Dictionary = data.get("native_system", {})
+	var block := Marshalls.base64_to_raw(str(native.get("block", "")))
+	var imported := block.decode_u32(0x10f8) if block.size() == SystemDat.BLOCK_SIZE else 0
+	for pair in [["wins", 0x7ff, imported & 0x7ff], ["losses", 0x7ff, (imported >> 11) & 0x7ff], ["draws", 0x3ff, imported >> 22]]:
+		var total := int(pair[2])
+		for game in GAMES:
+			var row: Dictionary = stats.get_or_add(game, {})
+			total += maxi(0, int(row.get(pair[0], 0)) - int(pair[2]))
+		for game in GAMES:
+			stats[game][pair[0]] = mini(int(pair[1]), total)
+
+
+## 5406f0/540720/540760: todos los juegos actualizan la misma ranura +10f8.
+func record_result(game: String, result: int) -> Dictionary:
+	ensure_game(game)
+	var stats: Dictionary = data["stats"][game]
+	var key := {1: "wins", 2: "losses", 3: "draws"}.get(result, "") as String
+	if key != "":
+		var count := mini(0x3ff if result == 3 else 0x7ff, int(stats.get(key, 0)) + 1)
+		for id in GAMES:
+			data["stats"][id][key] = count
+	return stats
+
+
+func native_option_byte(offset: int) -> int:
+	var block := Marshalls.base64_to_raw(str(data.get("native_system", {}).get("block", "")))
+	return block[offset] if offset >= 0 and offset < block.size() else 0
+
+func set_native_option_byte(offset: int, value: int) -> void:
+	if offset < 0 or offset >= SystemDat.BLOCK_SIZE:
+		return
+	var native: Dictionary = data.get_or_add("native_system", {})
+	var block := Marshalls.base64_to_raw(str(native.get("block", "")))
+	if block.size() != SystemDat.BLOCK_SIZE:
+		block.resize(SystemDat.BLOCK_SIZE)
+		for i in 8:
+			block[0x117a + i] = "YUGIOH01".unicode_at(i)
+	block[offset] = value & 0xff
+	SystemDat.seal(block)
+	native["block"] = Marshalls.raw_to_base64(block)
+
+
+## Exporta en ruta explicita. La cabecera requiere el flcrc de la instalacion original;
+## se conserva al importar o se aporta como --system-dat-key, nunca se inventa.
+func export_system_dat(destination: String, game := "", header_key := -1) -> bool:
+	if game not in GAMES:
+		game = "yugi"
+	ensure_game(game)
+	var head := Marshalls.base64_to_raw(str(data.get("native_system", {}).get("header", "")))
+	if header_key >= 0:
+		head.resize(8)
+		head[0] = 1
+		head.encode_u32(4, header_key & 0xffffffff)
+	if head.size() != 8:
+		return false
+	var by_index := {}
+	for card in CardDB.cards:
+		by_index[int(card["index"])] = int(card["internal_id"])
+	var block := SystemDat.from_save(data, by_index, game)
+	var raw := SystemDat.encode(block, head)
+	if raw.is_empty():
+		return false
+	DirAccess.make_dir_recursive_absolute(destination.get_base_dir())
+	var file := FileAccess.open(destination + ".tmp", FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_buffer(raw)
+	file.close()
+	return DirAccess.rename_absolute(destination + ".tmp", destination) == OK
+
+
+static func _copies_in(deck_data: Dictionary, id: int) -> int:
+	var n := 0
+	for part in ["main", "fusion", "side"]:
+		for x in deck_data[part]:
+			if int(x) == id:
+				n += 1
+	return n
