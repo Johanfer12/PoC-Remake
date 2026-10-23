@@ -32,7 +32,6 @@ const COPY := {
 }
 var _subtitle := Label.new()
 var _rows: Array[VBoxContainer] = []
-var _licenses := Button.new()
 var _revealed := {}
 var _keyboard_reveal := false
 var _pointer := Vector2(-1000, -1000)
@@ -117,10 +116,6 @@ func _ready() -> void:
 	_back.visible = false
 	_back.pressed.connect(Game.open_launcher)
 	add_child(_back)
-	_style_control(_licenses)
-	_licenses.visible = FileAccess.file_exists(BundledTools.MANIFEST)
-	_licenses.pressed.connect(_open_licenses)
-	add_child(_licenses)
 	_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	_dialog.use_native_dialog = true
 	_dialog.file_selected.connect(_selected)
@@ -145,7 +140,6 @@ func _language_updated() -> void:
 	if not _busy:
 		_status.text = _copy(5)
 	_back.text = _copy(6)
-	_licenses.text = _copy(7)
 	for i in _rows.size():
 		var game: String = Game.GAMES[i]
 		var buttons := _rows[i].get_child(0)
@@ -181,11 +175,9 @@ func _layout() -> void:
 	_convert.size = Vector2(300, 40)
 	_apk.position = _origin + Vector2(410, 470)
 	_apk.size = Vector2(300, 40)
-	_status.position = _origin + Vector2(90, 518)
-	_status.size = Vector2(620, 42)
+	_status.position = _origin + Vector2(90, 513)
+	_status.size = Vector2(620, 28)
 	_back.position = Vector2(24, 24)
-	_licenses.position = Vector2(_screen.x / 2.0 - 55, _screen.y - 43)
-	_licenses.size = Vector2(110, 30)
 
 
 func _choose(index: int) -> void:
@@ -296,7 +288,6 @@ func _start(migrate := false, build_apk := false) -> void:
 	_apk.disabled = true
 	_back.disabled = true
 	_python.editable = false
-	_licenses.disabled = true
 	_status.text = ("Creando APK Android… Puede tardar varios minutos." if Assets.lang == "s" else "Building Android APK… This may take several minutes.") if build_apk else _copy(8)
 	_language.disabled = true
 	var executable := _python.text.strip_edges()
@@ -349,7 +340,6 @@ func _finish(result: Dictionary) -> void:
 	_apk.disabled = _tools_failed or Paths.storage_error or (not _has_pending() and not Paths.has_data())
 	_back.disabled = false
 	_python.editable = true
-	_licenses.disabled = false
 	if int(result["code"]) != 0:
 		_status.text = ("No se pudo crear el APK. Revisa apk-last-error.log en PoC Data." if Assets.lang == "s" else "APK build failed. See apk-last-error.log in PoC Data.") if _building_apk else _copy(9)
 		var log_file := FileAccess.open(Paths.storage_dir.path_join("apk-last-error.log" if _building_apk else "import-last-error.log"), FileAccess.WRITE)
@@ -398,6 +388,11 @@ func _request_exit() -> void:
 		_close()
 	else:
 		super._request_exit()
+
+
+func _request_update() -> void:
+	if not _busy:
+		super._request_update()
 
 
 func _exit_tree() -> void:

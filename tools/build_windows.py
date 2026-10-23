@@ -118,6 +118,13 @@ def build(godot: Path, output: Path, with_android: bool = False) -> Path:
         source = work / "source"
         receipt = prepare(source) # Never export the private working project's res://.
         project = source / "game"
+        # Tagged builds identify themselves exactly, including alpha/beta releases.
+        ref = os.environ.get("GITHUB_REF_NAME", "")
+        import re
+        configured = re.search(r'config/version="([^"]+)"', (project/"project.godot").read_text(encoding="utf-8"))
+        release_version = ref if re.fullmatch(r"v\d+\.\d+\.\d+(?:-(?:alpha|beta|rc)\.\d+)?", ref) else "v" + configured.group(1)
+        (project/"build_info.json").write_text(json.dumps({"version": release_version}), encoding="utf-8")
+        receipt["version"] = release_version
         bundled = project/"bundled"
         bundled.mkdir()
         # Only source code and the small color-key configuration are visible to PyInstaller.

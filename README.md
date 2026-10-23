@@ -108,6 +108,8 @@ When upgrading in the same folder, the launcher copies existing adjacent `saves/
 
 ## Compatibility and current limits
 
+The launcher checks GitHub releases on startup. The circular **update** button next to the power button appears only when a newer version is detected. The footer shows your version, update status, GitHub and license links. You can download an update and restart from the launcher: SHA-256 is verified before replacing only the EXE, preserving `PoC Data`. Downloads can be canceled. If replacement or process launch fails, the helper attempts to restore the previous EXE; diagnostics are saved in `PoC Data/updates/last-update.log`. Alpha/beta builds also follow previews; stable builds stay on stable releases. Windows, an internet connection and a writable EXE folder are required.
+
 This preview targets **Windows PC**. Other platforms are not part of this release workflow.
 
 The current development checks cover:
@@ -170,7 +172,7 @@ python -m unittest discover -s tools/tests -p "test_*import.py" -v
 
 Each build checks the source file policy, runs synthetic importer tests, creates a clean export project, bundles the local converter and verifies the embedded tools. Game resources are not required by the build and are not included in it.
 
-New downloads do not automatically update installed copies.
+Installed copies can check and download new releases with the update button; replacement and restart require confirming the update.
 
 ## Project status and notices
 

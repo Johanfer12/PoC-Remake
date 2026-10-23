@@ -46,6 +46,7 @@ var logo_y := LOGO_Y
 var heading_y := TITLE_Y
 var _language := OptionButton.new()
 var _setup_button := Button.new()
+var _release_footer := preload("res://scenes/launcher/release_footer.gd").new()
 
 
 func _enter_tree() -> void:
@@ -85,6 +86,10 @@ func _ready() -> void:
 	_apply()
 	add_child(_controls)
 	_controls.exit_requested.connect(_request_exit)
+	_controls.update_requested.connect(_request_update)
+	add_child(_release_footer)
+	Updates.changed.connect(_update_badge)
+	_update_badge()
 	Audio.stop_music()
 	_music.stream = MUSIC
 	_music.finished.connect(_start_music)
@@ -113,6 +118,15 @@ func _request_exit() -> void:
 	get_tree().quit()
 
 
+func _request_update() -> void:
+	if not _leaving:
+		_release_footer.open_update()
+
+
+func _update_badge() -> void:
+	_controls.update_available = Updates.state == "available"
+
+
 func _style_control(control: Control) -> void:
 	control.add_theme_color_override("font_color", GOLD_LIGHT)
 	control.add_theme_font_size_override("font_size", 14)
@@ -138,6 +152,8 @@ func _language_updated() -> void:
 	_language.select(Assets.LANGUAGES.keys().find(Assets.lang))
 	_language.tooltip_text = Assets.port_label(4)
 	_setup_button.text = "ISO / " + _folder_label()
+	if _release_footer.is_node_ready():
+		_release_footer.refresh()
 	queue_redraw()
 
 

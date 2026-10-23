@@ -6,6 +6,8 @@ extends Node2D
 
 signal changed
 signal exit_requested
+signal update_requested
+var update_available := false
 
 const RADIUS := 24.0
 const MARGIN := 18.0
@@ -28,6 +30,7 @@ const SVG_GEAR := SVG_HEAD + "<circle cx='12' cy='12' r='3'/><path d='M19.4 15a1
 const SVG_CLOSE := SVG_HEAD + "<line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg>"
 const SVG_CHECK := SVG_HEAD + "<polyline points='20 6 9 17 4 12'/></svg>"
 const SVG_EXIT := SVG_HEAD + "<path d='M18.36 6.64a9 9 0 1 1-12.73 0'/><line x1='12' y1='2' x2='12' y2='12'/></svg>"
+const SVG_UPDATE := SVG_HEAD + "<path d='M20 7a9 9 0 1 0 1 9'/><polyline points='20 2 20 8 14 8'/></svg>"
 
 const DEFAULT_VOLUME := 0.5
 var volume := DEFAULT_VOLUME
@@ -47,7 +50,7 @@ func _ready() -> void:
 	volume = clampf(float(saved.get("music_volume", DEFAULT_VOLUME)), 0.0, 1.0)
 	muted = bool(saved.get("music_muted", false))
 	for pair in [["sound", SVG_SOUND], ["muted", SVG_MUTED], ["gear", SVG_GEAR],
-			["close", SVG_CLOSE], ["check", SVG_CHECK], ["exit", SVG_EXIT]]:
+			["close", SVG_CLOSE], ["check", SVG_CHECK], ["exit", SVG_EXIT], ["update", SVG_UPDATE]]:
 		_icons[pair[0]] = _rasterize(pair[1])
 
 
@@ -75,6 +78,10 @@ func _sound_center() -> Vector2:
 
 func _exit_center() -> Vector2:
 	return Vector2(_screen().x - MARGIN - RADIUS, _screen().y - MARGIN - RADIUS)
+
+
+func _update_center() -> Vector2:
+	return _exit_center() - Vector2(RADIUS * 2.0 + 14.0, 0)
 
 
 func _settings_center() -> Vector2:
@@ -122,6 +129,8 @@ func _hit(pos: Vector2) -> String:
 		return "settings"
 	if pos.distance_to(_exit_center()) <= RADIUS:
 		return "exit"
+	if update_available and pos.distance_to(_update_center()) <= RADIUS:
+		return "update"
 	return ""
 
 
@@ -155,6 +164,8 @@ func _input(event: InputEvent) -> void:
 				_open_panel(true)
 			"exit":
 				exit_requested.emit()
+			"update":
+				update_requested.emit()
 			"close", "outside":
 				_open_panel(false)
 			"slider":
@@ -231,6 +242,19 @@ func _draw() -> void:
 	_medallion(_settings_center(), RADIUS, "gear", _hover == "settings" or panel_open)
 	_medallion(_sound_center(), RADIUS, "muted" if muted else "sound", _hover == "sound")
 	_medallion(_exit_center(), RADIUS, "exit", _hover == "exit")
+	if update_available:
+		_medallion(_update_center(), RADIUS, "update", _hover == "update")
+		draw_circle(_update_center() + Vector2(17, -17), 5, GOLD_LIGHT)
+	if update_available and _hover == "update" and not panel_open:
+		var text := ("Actualizar desde GitHub" if Assets.lang == "s" else "Update from GitHub")
+		if update_available:
+			text += " · " + Updates.available
+		var width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
+		var pos := Vector2(_screen().x - MARGIN - width, _update_center().y - RADIUS - 12)
+		var bubble := Rect2(pos - Vector2(7, 20), Vector2(width + 14, 28))
+		draw_rect(bubble, Color(0.04, 0.03, 0.05, 0.97))
+		draw_rect(bubble, Color(GOLD, 0.45), false, 1.0)
+		_label(text, pos)
 	if _hover == "exit" and not panel_open:
 		var text: String = {"s": "Salir", "e": "Exit", "g": "Beenden", "f": "Quitter", "i": "Esci", "j": "終了"}.get(Assets.lang, "Exit")
 		var width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
