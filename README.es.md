@@ -6,9 +6,9 @@
 
 [English](README.md) | **Español**
 
-[![Descargar EXE para Windows](https://img.shields.io/badge/Descargar_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.10/PowerOfChaos.exe)
+[![Descargar EXE para Windows](https://img.shields.io/badge/Descargar_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.12/PowerOfChaos.exe)
 
-**Descarga directa · Windows · Preliminar v0.1.0-alpha.10 · Sin ZIP**
+**Descarga directa · Windows · Preliminar v0.1.0-alpha.12 · Sin ZIP**
 
 **Tus juegos de Power of Chaos reunidos en un launcher moderno para Windows.**
 
@@ -49,7 +49,7 @@ Abre el **engranaje** del launcher para elegir cómo jugar:
 | FPS | **30**, **60** o **Display**, que sigue la frecuencia del monitor actual. |
 | Simulación | **Normal** o **2×**. La velocidad de simulación es independiente del límite de FPS. |
 | Juego rápido | Omite las escenas de entrada y salida, reacciones con retrato, voces y barridos entre escenas en **Yugi, Kaiba y Joey**. Conserva la música y los efectos de sonido. |
-| Traducciones mejoradas | Mejoras iniciales y parciales de nombres y descripciones en español desde la base oficial de Yu-Gi-Oh! Descarga los textos disponibles al activarlo y consérvalos localmente. |
+| Traducciones mejoradas | **Originales** o **Mejoradas (ES)**: nombres y descripciones en español para las **771 cartas**, con fuentes comunitarias públicas y adaptaciones que conservan los efectos originales. |
 
 **Valores por defecto:** FPS del display, velocidad normal y juego rápido desactivado.
 
@@ -58,7 +58,9 @@ y viene **desactivado**; desactívalo para recuperar la presentación original. 
 se abre maximizado desde el principio y puedes redimensionar la ventana o usar
 **F11 / Alt+Enter** para alternar la pantalla completa.
 
-**Traducciones mejoradas** viene desactivado y ofrece, por ahora, cobertura parcial en español para nombres y descripciones de cartas. Las cartas y los campos pendientes de revisión o descarga conservan su texto importado. Las descripciones solo cambian cuando el texto inglés oficial actual coincide con el del juego original; los menús y las reglas se conservan. La descarga comienza al activar la opción expresamente. Los textos guardados funcionan sin conexión y abrir de nuevo el launcher no inicia otra descarga. Si el servidor limita el acceso, se detiene la descarga y se conserva lo guardado; puedes reintentar más tarde desactivando y activando la opción. Desactívala cuando quieras para recuperar los textos importados.
+**Traducciones mejoradas** es opcional y viene **desactivado**. Cubre los nombres y las descripciones en español de las **771 cartas** de los tres juegos, con bases comunitarias públicas y adaptaciones revisadas para conservar los efectos del inglés original. Los menús y las reglas del juego se conservan; es una mejora comunitaria, no un paquete de traducción oficial.
+
+Actívalo con conexión para preparar el paquete local. La primera descarga es de aproximadamente **110 MB**; después, los textos funcionan sin conexión. Abrir el launcher no inicia descargas. Si la preparación falla, siguen disponibles los textos importados. Puedes desactivar la opción cuando quieras para recuperarlos.
 
 ## Tus ISO → PC o APK para Android
 
@@ -105,7 +107,7 @@ Tú aportas una copia compatible del juego que quieras usar. El launcher lee sus
 
 ## Empezar en Windows
 
-1. [Descarga **`PowerOfChaos.exe`** directamente](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.10/PowerOfChaos.exe). También hay compilaciones de desarrollo en [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
+1. [Descarga **`PowerOfChaos.exe`** directamente](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.12/PowerOfChaos.exe). También hay compilaciones de desarrollo en [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
 2. Pon el EXE en una carpeta donde quieras guardar el launcher y tus partidas, y ábrelo.
 3. En **SUBE TUS RECURSOS**, pasa el cursor por el juego que quieras añadir y elige **ISO** o **Carpeta**.
 4. Selecciona una imagen de disco o carpeta instalada compatible, pulsa **Extraer para PC** y espera a que termine.

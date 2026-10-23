@@ -261,6 +261,7 @@ var _font_level: DigitFont
 var _text_font := SystemFont.new()
 var _trunk_name_font := SystemFont.new()
 var _detail := RichTextLabel.new()
+var _detail_reveal := preload("res://core/card_detail_reveal.gd").new()
 var _stats := Label.new()
 var _detail_clip: Control
 var _detail_scroll: NativeScrollBar
@@ -592,6 +593,7 @@ func _build_detail() -> void:
 	_detail.position = box.position
 	_detail.size = box.size - Vector2(0, 16)
 	_detail.bbcode_enabled = true
+	_detail.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	_detail.scroll_active = false
 	_detail.clip_contents = true
 	_detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -642,6 +644,7 @@ func _update_detail_scroll() -> void:
 
 
 func _show_detail(card: Dictionary) -> void:
+	if card == _detail_card: return
 	if _detail_scroll != null and card != _detail_card:
 		_detail_scroll.set_value(0)
 		_detail_height = -1
@@ -652,6 +655,8 @@ func _show_detail(card: Dictionary) -> void:
 	_detail_card = card
 	if card.is_empty():
 		_detail.text = ""
+		_detail_reveal.reset("", false)
+		_detail.visible_characters = 0
 		_stats.text = ""
 		queue_redraw()
 		return
@@ -661,6 +666,8 @@ func _show_detail(card: Dictionary) -> void:
 	if card["category"] == "monster":
 		_detail.text += "[color=%s]%s[/color]\n" % [c["type"], CardDB.type_text(card)]
 	_detail.text += "[color=%s]%s[/color]" % [c["body"], CardDB.text(card, "descriptions")]
+	_detail_reveal.reset(_detail.get_parsed_text(), Assets.lang == "j")
+	_detail.visible_characters = 0
 	_stats.text = "ATK/%4d DEF/%4d" % [card["atk"], card["defense"]] \
 			if card["category"] == "monster" else ""
 	SaveData.mark_seen(int(card["internal_id"]))
@@ -1292,6 +1299,7 @@ func _process(delta: float) -> void:
 	_clock += NativeClock.ticks(delta)
 	while _clock >= 1.0:
 		_clock -= 1.0
+		_detail.visible_characters = _detail_reveal.step()
 		_blend.tick()
 		_native_tick()
 	_blend.fraction = _clock

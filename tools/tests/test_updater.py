@@ -26,6 +26,21 @@ class UpdaterTests(unittest.TestCase):
         self.script = self.updates / "apply-update.ps1"
         self.script.write_text((ROOT / "game/core/update_helper.gd").read_text(encoding="utf-8").split('"""')[1], encoding="utf-8-sig")
         (self.base / "PoC Data" / "preserve.txt").write_text("resources and saves")
+        # Real updater invocations must preserve portable state byte-for-byte,
+        # including a downloaded translation pack and all three game saves.
+        self.preserved = {
+            "saves/yugi/player.json": b'{"duels":7,"deck":[1,2,3]}',
+            "saves/kaiba/player.json": b'{"duels":11,"deck":[4,5,6]}',
+            "saves/joey/player.json": b'{"duels":19,"deck":[7,8,9]}',
+            "content.cfg": b'[launcher]\naspect="overlay"\nimproved_card_texts=true\nfast_play=true\n',
+            "translations/cards-spa.json": '{"format":1,"locale":"spa","cards":{"7":{"name":"Carta de prueba","description":"Efecto sintético."}}}'.encode("utf-8"),
+            "resources/common/db/sentinel.bin": bytes(range(256)),
+        }
+        for relative, payload in self.preserved.items():
+            path = self.base / "PoC Data" / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(payload)
+
 
     def compile_stub(self, destination, marker):
         code = 'public class Program { public static void Main() { System.IO.File.WriteAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "started.txt"), "' + marker + '"); } }'
@@ -43,6 +58,10 @@ class UpdaterTests(unittest.TestCase):
         result = subprocess.run([SHELL, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", str(self.script)], capture_output=True, text=True, timeout=30)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual((self.base / "PoC Data" / "preserve.txt").read_text(), "resources and saves")
+        for relative, payload in self.preserved.items():
+            with self.subTest(preserved=relative):
+                self.assertEqual((self.base / "PoC Data" / relative).read_bytes(), payload)
+
 
     def marker(self):
         path = self.base / "started.txt"

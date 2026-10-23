@@ -19,9 +19,14 @@ esquina superior; el selector redundante del panel se ha retirado.
   Conserva música, efectos, janken, reglas y resultados. La presentación original
   se recupera al desactivarlo.
 
-- **Traducciones:** Originales o Mejoradas (ES), solo para nombres y descripciones
-  de cartas. La base española inicial es parcial; conserva cada texto original que
-  no tenga una mejora comprobada. Ver [fuentes y cobertura](CARD_TRANSLATIONS.md).
+- **Traducciones:** Originales o Mejoradas (ES), sólo para nombres y descripciones
+  de las 771 cartas de los tres juegos. Parte de fuentes comunitarias públicas
+  (YAML Yugi y CDBEsp) y adaptaciones revisadas para conservar los efectos del
+  inglés histórico; no se presenta como traducción oficial. La primera activación
+  prepara el paquete con una descarga aproximada de 110 MB. Los textos guardados
+  funcionan sin conexión y el arranque no inicia descargas. Si la preparación
+  falla, se usan los textos importados. Desactivarlo restaura esos textos.
+  Ver [fuentes y cobertura](CARD_TRANSLATIONS.md).
 
 Las preferencias se guardan en la sección `launcher` de `PoC Data/content.cfg`,
 conservando los otros ajustes, incluso antes de importar recursos. Valores iniciales:

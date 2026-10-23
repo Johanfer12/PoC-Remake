@@ -51,6 +51,7 @@ var _visual_event_pos := 0
 var _preview := Sprite2D.new()
 ## Texto del panel de detalle (FUN_00412410): nombre, [tipo] y descripcion con sus colores.
 var _description := RichTextLabel.new()
+var _detail_reveal := preload("res://core/card_detail_reveal.gd").new()
 ## "ATK/%4d DEF/%4d" de los monstruos, aparte y abajo a la derecha (0x412410, tamano 0xd).
 var _detail_stats := Label.new()
 var _detail_icons: Node2D
@@ -209,6 +210,8 @@ func _setup_detail() -> void:
 	_description.custom_minimum_size.x = 174
 	_description.fit_content = true
 	_description.bbcode_enabled = true
+	# Componer el parrafo completo evita que las palabras cambien de linea al revelarse.
+	_description.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	_description.scroll_active = false
 	_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_description.add_theme_font_size_override("normal_font_size", 12)
@@ -237,6 +240,10 @@ func _set_preview(id: int) -> void:
 	var card := CardDB.by_id(id)
 	if _detail_icons != null: _detail_icons.show_card(card if id >= 0 else {})
 	_description.text = _detail_text(card) if id >= 0 and not card.is_empty() else ""
+	_detail_reveal.reset(_description.get_parsed_text(), Assets.lang == "j")
+	_description.visible_characters = 0
+	if _description.get_parent() is ScrollContainer:
+		_description.get_parent().scroll_vertical = 0
 	_detail_stats.text = ""
 	if id >= 0 and card.get("category", "") == "monster":
 		_detail_stats.text = "ATK/%4d DEF/%4d" % [int(card.get("atk", 0)), int(card.get("defense", 0))]
@@ -331,6 +338,7 @@ func _advance_hands(delta: float) -> bool:
 	_hand_clock += NativeClock.ticks(delta)
 	while _hand_clock >= 1:
 		_hand_clock -= 1
+		_description.visible_characters = _detail_reveal.step()
 		_tick_preview_hover()
 		_hand_blend.tick()
 		for p in 2:

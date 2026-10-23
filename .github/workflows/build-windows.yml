@@ -38,6 +38,7 @@ jobs:
           python -m unittest discover -s tools/tests -p test_android_toolchain.py -v
           python -m unittest discover -s tools/tests -p test_updater.py -v
           python -m unittest discover -s tools/tests -p test_card_translations.py -v
+          python -m unittest discover -s tools/tests -p test_reviewed_card_pack.py -v
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ runner.tool_cache }}/poc-godot-4.7.2

@@ -1,8 +1,8 @@
-"""Fetch a resumable, local Spanish card-text pack from Konami's public database.
+"""Preparar un paquete español local desde la fuente comunitaria revisada.
 
-Downloaded card texts are user-local content: never add the resulting pack/cache
-to the public source export. Effect text is accepted only when the current
-English source still matches the game's legacy English rules text.
+Los textos descargados permanecen locales. El catálogo fija sus hashes y adapta
+las reglas modernas al inglés histórico. Se conserva el lector antiguo para
+catálogos anteriores y pruebas, sin usarlo para el catálogo comunitario actual.
 """
 from __future__ import annotations
 
@@ -140,8 +140,51 @@ class Fetcher:
                 time.sleep(2 ** attempt)
 
 
+def build_bulk(source: dict, output: Path, cache: Path, offline: bool):
+    """Una descarga comunitaria; aceptar solo los textos previamente revisados."""
+    url = source["bulk_source"]
+    if url != "https://dawnbrandbots.github.io/yaml-yugi/cards.json":
+        raise ValueError("Unrecognized community source")
+    cache.mkdir(parents=True, exist_ok=True)
+    local = cache / "yaml-yugi-cards.json"
+    if not local.exists():
+        if offline:
+            raise FileNotFoundError(local)
+        request = Request(url, headers={"User-Agent": "PowerOfChaos-CardTranslations/2.0", "Accept": "application/json"})
+        with urlopen(request, timeout=120) as response:
+            payload = response.read(160 * 1024 * 1024 + 1)
+        if len(payload) > 160 * 1024 * 1024:
+            raise ValueError("Community database exceeds size limit")
+        local.write_bytes(payload)
+    rows = json.loads(local.read_text(encoding="utf-8"))
+    if not isinstance(rows, list):
+        raise ValueError("Invalid community database")
+    wanted = {int(meta["cid"]) for meta in source["cards"].values()}
+    by_cid = {int(row["konami_id"]): row for row in rows if row.get("konami_id") in wanted}
+    entries = {}
+    for card_id, metadata in source["cards"].items():
+        row = by_cid.get(int(metadata["cid"]), {})
+        name = metadata.get("name_override") or (row.get("name") or {}).get("es") or ""
+        description = metadata.get("description_override") or (row.get("text") or {}).get("es") or ""
+        for field, value in (("name", name), ("description", description)):
+            if not value or hashlib.sha256(value.encode("utf-8")).hexdigest() != metadata.get(f"approved_{field}_sha256"):
+                raise ValueError(f"Community text differs from reviewed catalog: {card_id} {field}")
+        entry = {key: metadata[key] for key in ("cid", "password", "english_name", "legacy_description_sha256")}
+        entry.update(name=name, description=description, description_verified=True, source_url=url, english_source_url="")
+        entries[card_id] = entry
+    pack = {"format": 1, "locale": "spa", "cards": entries}
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_name(output.name + ".tmp")
+    temporary.write_bytes((json.dumps(pack, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+    temporary.replace(output)
+    print(f"Reviewed Spanish pack: {len(entries)} names and descriptions")
+    return 0
+
+
 def build(catalog: Path, output: Path, cache: Path, workers: int = 4, offline: bool = False):
     source = json.loads(catalog.read_text(encoding="utf-8"))
+    if source.get("bulk_source"):
+        return build_bulk(source, output, cache, offline)
     fetcher = Fetcher(cache, offline)
     entries, failures = {}, {}
 
@@ -197,7 +240,7 @@ def main():
     parser.add_argument("--catalog", type=Path, default=Path("game/translations/spanish-card-catalog.json"))
     parser.add_argument("--output", type=Path, default=Path("artifacts/card-translations/cards-spa.json"))
     parser.add_argument("--cache", type=Path, default=Path("artifacts/card-translations/cache"))
-    parser.add_argument("--offline", action="store_true", help="Build a partial pack using only cached official pages")
+    parser.add_argument("--offline", action="store_true", help="Usar solo la base ya descargada, sin solicitudes de red")
     args = parser.parse_args()
     return build(args.catalog, args.output, args.cache, offline=args.offline)
 

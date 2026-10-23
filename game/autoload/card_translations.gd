@@ -1,5 +1,5 @@
 extends Node
-## Optional, local card text downloaded directly from Konami. Original data stays intact.
+## Optional, reviewed Spanish card text from community sources. Original data stays intact.
 signal changed
 
 const CATALOG_PATH := "res://translations/spanish-card-catalog.json"
@@ -11,11 +11,13 @@ var completed := 0
 var total := 0
 var description_count := 0
 var _catalog: Dictionary = {}
+var _bulk_source := ""
 var _cards: Dictionary = {}
 var _http := HTTPRequest.new()
 var _last_request_msec := -500
 var _network_blocked := false
 var _network_failed := false
+var _bulk_thread: Thread
 
 
 func _ready() -> void:
@@ -34,9 +36,11 @@ func cache_path() -> String:
 func load_cache() -> void:
 	_cards.clear()
 	_catalog.clear()
+	_bulk_source = ""
 	var catalog: Variant = _read_json(CATALOG_PATH)
 	if catalog is Dictionary and catalog.get("format") == 1 and catalog.get("locale") == "spa" and catalog.get("cards") is Dictionary:
 		_catalog = catalog.cards
+		_bulk_source = str(catalog.get("bulk_source", ""))
 	total = _catalog.size()
 	if FileAccess.file_exists(cache_path()):
 		var pack: Variant = _read_json(cache_path())
@@ -48,6 +52,11 @@ func load_cache() -> void:
 	_recount()
 	status = "ready" if _all_complete() else ("partial" if completed > 0 else "idle")
 	changed.emit()
+
+
+func _exit_tree() -> void:
+	if _bulk_thread != null and _bulk_thread.is_started():
+		_bulk_thread.wait_to_finish()
 
 
 func _read_json(path: String) -> Variant:
@@ -68,6 +77,13 @@ func _valid_entry(id: String, entry: Dictionary) -> bool:
 			return false
 	if str(entry.name).strip_edges().is_empty() or str(entry.name).length() > 200:
 		return false
+	if expected.has("approved_name_sha256") or expected.has("approved_description_sha256"):
+		var approved_description: Variant = entry.get("description", "")
+		return not _bulk_source.is_empty() and entry.get("source_url") == _bulk_source \
+			and approved_description is String and not approved_description.is_empty() and approved_description.length() <= 10000 \
+			and str(entry.name).sha256_text() == expected.get("approved_name_sha256", "") \
+			and approved_description.sha256_text() == expected.get("approved_description_sha256", "") \
+			and entry.get("description_verified") == true and entry.get("english_source_url", "") == ""
 	if entry.get("source_url") != source_url(expected.cid, "es"):
 		return false
 	if not str(entry.get("english_source_url", "")).is_empty() and entry.english_source_url != source_url(expected.cid, "en"):
@@ -94,6 +110,8 @@ func _recount() -> void:
 func _entry_complete(id: String) -> bool:
 	if not _cards.has(id):
 		return false
+	if _catalog[id].has("approved_name_sha256") or _catalog[id].has("approved_description_sha256"):
+		return _valid_entry(id, _cards[id])
 	return not _catalog[id].get("review_description", false) or not str(_cards[id].get("english_source_url", "")).is_empty()
 
 
@@ -104,6 +122,15 @@ func _all_complete() -> bool:
 		if not _entry_complete(id):
 			return false
 	return true
+
+
+func _uses_bulk_catalog() -> bool:
+	if _bulk_source.is_empty():
+		return false
+	for expected: Dictionary in _catalog.values():
+		if expected.has("approved_name_sha256") or expected.has("approved_description_sha256"):
+			return true
+	return false
 
 
 func text(card: Dictionary, field: String, language: String) -> String:
@@ -137,6 +164,9 @@ func ensure_spanish_pack() -> void:
 	_network_blocked = false
 	_network_failed = false
 	_set_status("downloading")
+	if _uses_bulk_catalog():
+		await _ensure_bulk_pack()
+		return
 	for id: String in _catalog:
 		if _network_blocked or _network_failed:
 			break
@@ -186,6 +216,134 @@ func ensure_spanish_pack() -> void:
 	_set_status("rate_limited" if _network_blocked else ("error" if _network_failed else ("ready" if _all_complete() else "partial")))
 
 
+func _ensure_bulk_pack() -> void:
+	if not LauncherSettings.improved_card_texts:
+		busy = false
+		_set_status("paused")
+		return
+	var download := await _download_bulk()
+	if not LauncherSettings.improved_card_texts:
+		busy = false
+		_set_status("paused")
+		return
+	if not download.has("body"):
+		busy = false
+		_set_status(str(download.get("error", "error")))
+		return
+	_set_status("reviewing")
+	_bulk_thread = Thread.new()
+	var started := _bulk_thread.start(parse_bulk_payload.bind(download.body, _catalog.duplicate(true), _bulk_source))
+	if started != OK:
+		_bulk_thread = null
+		busy = false
+		_set_status("error")
+		return
+	while _bulk_thread.is_alive():
+		await get_tree().process_frame
+	var parsed: Variant = _bulk_thread.wait_to_finish()
+	_bulk_thread = null
+	if not LauncherSettings.improved_card_texts:
+		busy = false
+		_set_status("paused")
+		return
+	if not parsed is Dictionary or not parsed.get("ok", false):
+		busy = false
+		_set_status("error")
+		return
+	var previous := _cards
+	var merged := _cards.duplicate(true)
+	for id: String in parsed.cards:
+		if _valid_entry(id, parsed.cards[id]):
+			merged[id] = parsed.cards[id]
+	_cards = merged
+	_recount()
+	if not _save_cache():
+		_cards = previous
+		_recount()
+		busy = false
+		_set_status("storage_error")
+		return
+	busy = false
+	_set_status("ready" if _all_complete() else "partial")
+
+
+func _download_bulk() -> Dictionary:
+	_http.timeout = 180
+	_http.body_size_limit = 160 * 1024 * 1024
+	var replies: Array = []
+	var completion := func(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+		replies.append([result, response_code, headers, body])
+	_http.request_completed.connect(completion, CONNECT_ONE_SHOT)
+	var requested := _http.request(_bulk_source, ["User-Agent: PowerOfChaos-CardTranslations/1.0", "Accept: application/json"])
+	if requested != OK:
+		_http.request_completed.disconnect(completion)
+		_http.timeout = 30
+		_http.body_size_limit = 2 * 1024 * 1024
+		return {"error": "error"}
+	while replies.is_empty():
+		if not LauncherSettings.improved_card_texts:
+			_http.cancel_request()
+			if _http.request_completed.is_connected(completion):
+				_http.request_completed.disconnect(completion)
+			_http.timeout = 30
+			_http.body_size_limit = 2 * 1024 * 1024
+			return {"error": "paused"}
+		await get_tree().process_frame
+	var response: Array = replies[0]
+	_http.timeout = 30
+	_http.body_size_limit = 2 * 1024 * 1024
+	if response[1] in [403, 429]:
+		return {"error": "rate_limited"}
+	if response[0] != HTTPRequest.RESULT_SUCCESS or response[1] != 200:
+		return {"error": "error"}
+	return {"body": response[3]}
+
+
+static func parse_bulk_payload(body: PackedByteArray, catalog: Dictionary, bulk_source: String) -> Dictionary:
+	# Runs in a worker: no scene access, signal emission or shared mutable state.
+	var parser := JSON.new()
+	if parser.parse(body.get_string_from_utf8()) != OK or not parser.data is Array:
+		return {"ok": false, "cards": {}}
+	var by_cid: Dictionary = {}
+	for id: String in catalog:
+		var cid := int(catalog[id].get("cid", -1))
+		if not by_cid.has(cid):
+			by_cid[cid] = []
+		by_cid[cid].append(id)
+	var cards: Dictionary = {}
+	for candidate: Variant in parser.data:
+		if not candidate is Dictionary:
+			continue
+		var raw_cid: Variant = candidate.get("konami_id")
+		if not raw_cid is int and not raw_cid is float:
+			continue
+		var cid := int(raw_cid)
+		if not by_cid.has(cid):
+			continue
+		var names: Dictionary = candidate.get("name", {}) if candidate.get("name") is Dictionary else {}
+		var descriptions: Dictionary = candidate.get("text", {}) if candidate.get("text") is Dictionary else {}
+		for id: String in by_cid[cid]:
+			var expected: Dictionary = catalog[id]
+			var name: Variant = expected.get("name_override", names.get("es", ""))
+			var description: Variant = expected.get("description_override", descriptions.get("es", ""))
+			if not name is String or not description is String or name.is_empty() or description.is_empty():
+				continue
+			if name.length() > 200 or description.length() > 10000:
+				continue
+			if name.sha256_text() != expected.get("approved_name_sha256", "") or description.sha256_text() != expected.get("approved_description_sha256", ""):
+				continue
+			var entry := expected.duplicate(true)
+			entry.erase("name_override")
+			entry.erase("description_override")
+			entry["name"] = name
+			entry["description"] = description
+			entry["source_url"] = bulk_source
+			entry["english_source_url"] = ""
+			entry["description_verified"] = true
+			cards[id] = entry
+	return {"ok": true, "cards": cards}
+
+
 func _fetch(url: String) -> Dictionary:
 	var remaining := 500 - (Time.get_ticks_msec() - _last_request_msec)
 	if remaining > 0:
@@ -230,6 +388,8 @@ func status_text(spanish: bool) -> String:
 	match status:
 		"downloading":
 			return ("ES: %d/%d cartas · %d descripciones · descargando…" if spanish else "ES: %d/%d cards · %d descriptions · downloading…") % [completed, total, description_count]
+		"reviewing":
+			return "Preparando el paquete de cartas revisadas…" if spanish else "Preparing reviewed card text pack…"
 		"error":
 			return ("ES: %d/%d · interrupción. Desactiva y activa para reintentar." if spanish else "ES: %d/%d · interrupted. Toggle off and on to retry.") % [completed, total]
 		"partial":
@@ -239,9 +399,9 @@ func status_text(spanish: bool) -> String:
 		"storage_error":
 			return "No se pudo guardar el paquete de cartas." if spanish else "Could not save the card text pack."
 		"ready":
-			return ("ES: %d nombres · %d descripciones verificadas." if spanish else "ES: %d names · %d verified descriptions.") % [completed, description_count]
+			return ("ES: %d nombres · %d descripciones revisadas." if spanish else "ES: %d names · %d reviewed descriptions.") % [completed, description_count]
 		_:
-			return ("Español · descarga oficial opcional (%d/%d)." if spanish else "Spanish · optional official download (%d/%d).") % [completed, total]
+			return ("Español · fuentes comunitarias (%d/%d)." if spanish else "Spanish · community sources (%d/%d).") % [completed, total]
 
 
 static func source_url(cid: Variant, locale: String) -> String:

@@ -6,9 +6,9 @@
 
 **English** | [Español](README.es.md)
 
-[![Download EXE for Windows](https://img.shields.io/badge/Download_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.10/PowerOfChaos.exe)
+[![Download EXE for Windows](https://img.shields.io/badge/Download_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.12/PowerOfChaos.exe)
 
-**Direct download · Windows · v0.1.0-alpha.10 preview · No ZIP required**
+**Direct download · Windows · v0.1.0-alpha.12 preview · No ZIP required**
 
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 
@@ -49,7 +49,7 @@ Open the **gear** in the launcher to choose how you play:
 | FPS | **30**, **60**, or **Display**, which follows the current monitor's refresh rate. |
 | Simulation | **Normal** or **2×**. Simulation speed is independent of the FPS limit. |
 | Quick play | Skip character introductions, outros, portrait reactions, spoken lines and scene wipes in **Yugi, Kaiba and Joey**. Music and sound effects remain enabled. |
-| Improved card translations | Initial, partial improvements to Spanish card names and descriptions from the official Yu-Gi-Oh! Card Database. Download available texts explicitly and keep them locally. |
+| Improved card translations | **Original** or **Improved (ES)**: Spanish names and descriptions for all **771 cards**, using public community sources and adaptations that preserve the original effects. |
 
 **Default settings:** display refresh rate, normal simulation speed and quick play off.
 
@@ -57,7 +57,9 @@ Preferences are remembered between launches. Quick play is optional and starts *
 turn it off to restore the original presentation. The launcher opens maximized from
 the start, and you can still resize the window or use **F11 / Alt+Enter** for fullscreen.
 
-**Improved card translations** starts off and currently offers partial Spanish coverage for card names and descriptions. Cards and fields awaiting review or download retain their imported text. Descriptions change only when the current official English text matches the original game's wording; menus and rules stay as they are. Enabling the option explicitly starts the download. Cached texts work offline, and reopening the launcher does not start another download. If the server limits access, the download stops and preserves what is already cached; try again later by toggling the option off and on. Turn it off at any time to restore imported wording.
+**Improved card translations** is optional and starts **off**. It covers Spanish names and descriptions for all **771 cards** across the three games, using public community databases with reviewed adaptations for the original English effects. Menus and game rules stay as they are; this is a community improvement, not an official translation pack.
+
+Enable it with an internet connection to prepare the local pack. The first download is approximately **110 MB**; afterward the texts work offline. Opening the launcher does not start downloads. If preparation fails, imported texts remain available. Turn the option off at any time to restore them.
 
 ## Your ISO → PC or Android APK
 
@@ -108,7 +110,7 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 
 ## Get started on Windows
 
-1. [Download **`PowerOfChaos.exe`** directly](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.10/PowerOfChaos.exe). Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
+1. [Download **`PowerOfChaos.exe`** directly](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.12/PowerOfChaos.exe). Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
 2. Put the EXE in a folder where you want to keep the launcher and its saves, then open it.
 3. In **ADD YOUR RESOURCES**, move over the game you want to add and choose **ISO** or **Folder**.
 4. Select a compatible disc image or installed game folder, then click **Extract for PC** and wait for conversion to finish.
