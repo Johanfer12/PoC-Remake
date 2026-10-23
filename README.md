@@ -2,22 +2,17 @@
 
 **English** | [Español](README.es.md) | [Windows launcher](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main)
 
-The Windows launcher now offers **Extract for PC** and **Create APK**. An APK
-built with these Android sources retains the mobile touch controls, scrolling,
-dragging and native tribute selection. The APK is saved beside the launcher.
+The Windows launcher offers **Extract for PC** and **Create APK**. It includes the Android sources and prepares the tools automatically, without installing Python or configuring SDK/JDK separately. APKs retain touch controls, scrolling, dragging and native tribute selection, with the same icon as PC.
 
-This branch supplies the Android engine and build scripts. **Original game data,
-SDK/JDK, signing keys and a prebuilt game APK are not included.** Set up the local
-tools and supply your compatible games. Physical device testing is still pending.
+Everything stays in **`PoC Data/android/`**: reusable tools, signing key, build logs and APKs. Joey connections have been tested between **PC and PC**, and between **PC and Android**. This is still an alpha; feedback and bug reports are welcome.
+
+This branch contains sources, without original game resources or private signing keys.
 
 ## Use with the Windows launcher
 
-Follow [Android build setup in the main README](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main#android-build-setup).
-Clone this branch into a separate directory; do not copy it over the Windows source.
-Your own persistent debug keystore identifies your locally built APKs. For an
-update, also configure your previous APK so the builder checks its certificate.
-A first installation accepts `--first-build`; the output certificate must still
-match the configured key. Never publish the key or converted game resources.
+Download the EXE from [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases), select your games or reuse your prepared library, then click **Create APK**. On first use accept the SDK license; the launcher downloads and verifies the official tools. Cloning this branch is not required.
+
+The APK appears in `PoC Data/android/apks/`. Keep and back up `PoC Data`, including your local signing key, to update your APKs. See [Build your Android APK](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main#build-your-android-apk).
 
 ## Direct build
 
