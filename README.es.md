@@ -11,23 +11,23 @@
 Selecciona los ISO o las carpetas instaladas de tus juegos y elige:
 
 - **Extraer para PC** para preparar los juegos en Windows.
-- **Crear APK** para generar un APK con los controles táctiles, el scroll y el arrastre de la rama Android. El APK y su informe de validación quedan **en la misma carpeta que el launcher**. También puedes reutilizar los juegos ya preparados.
+- **Crear APK** para generar un APK con los controles táctiles, el scroll y el arrastre de la rama Android. El APK y su informe de validación quedan en **`PoC Data/android/apks/`**. También puedes reutilizar los juegos ya preparados.
 
-**Crear APK requiere configurar las herramientas Android en tu equipo:** Godot con plantillas Android, JDK, SDK de Android, fuentes Android y tu propia clave de firma. Estas herramientas no vienen dentro del EXE. [Configurar Android](#configurar-la-compilación-android). La extracción para PC funciona con el EXE independiente.
+**Android se prepara desde el launcher.** La primera vez que pulses **Crear APK**, acepta la licencia del SDK y el launcher descargará, verificará y configurará las herramientas oficiales automáticamente. No necesitas instalar Python, Android Studio, Java ni configurar rutas. Todo queda dentro de **`PoC Data/android/`** y se reutiliza en las siguientes compilaciones. [Crear tu APK](#crear-tu-apk-android).
 
-Los nuevos botones están disponibles desde **v0.1.0-alpha.4**. Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye datos originales del juego. La prueba en teléfono o tablet físico sigue pendiente.
+Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye datos originales del juego. La conexión de Joey ya se probó entre **PC y PC**, y entre **PC y Android**. El proyecto continúa en alfa: agradecemos comentarios, errores y pruebas con otras ediciones y equipos.
 
 **Tus juegos de Power of Chaos reunidos en un launcher moderno para Windows.**
 
 ## Ventajas
 
-- **Extraer para PC o crear un APK desde el mismo launcher.** Reutiliza tus juegos compatibles y elige el destino; crear APK requiere configurar las herramientas Android locales.
-- **Duelos en red en Joey sin DirectPlay.** La conexión moderna por red local sustituye ese componente antiguo de Windows. Queda pendiente completar la prueba entre dos PC físicos.
+- **Extraer para PC o crear un APK desde el mismo launcher.** Reutiliza tus juegos compatibles y elige el destino; el launcher prepara las herramientas Android automáticamente.
+- **Duelos en red en Joey sin DirectPlay.** La conexión moderna por red local sustituye ese componente antiguo de Windows. Conexión probada entre PC y PC, y entre PC y Android.
 - **Portable.** Lleva juntos el EXE y su carpeta **`PoC Data`**: ahí viajan tus recursos, partidas y ajustes.
 - **Recursos más livianos.** Las imágenes WebP sin pérdida y el audio OGG reducen el espacio ocupado. La biblioteca de Yugi probada ocupa aproximadamente **un 44% menos** que su versión convertida sin comprimir. El ahorro depende del juego y la edición.
 - **Decoraciones para 16:9.** Los laterales decorados rodean el área de duelo original de 4:3 en las vistas compatibles de Yugi y Joey. Las imágenes actuales son temporales.
 - **Todo en uno.** Yugi the Destiny, Kaiba the Revenge y Joey the Passion comparten un launcher. Puedes empezar con uno y añadir los demás cuando quieras.
-- **Dibujo a más de 30 FPS.** El renderizado sigue la frecuencia de la pantalla e interpola entre los pasos originales del juego a 30 Hz. Los FPS efectivos dependen del equipo y la pantalla; se conserva la velocidad original de juego.
+- **Renderizado a 60 FPS y más, según la pantalla.** El renderizado sigue la frecuencia de la pantalla e interpola entre los pasos originales del juego a 30 Hz. Los FPS efectivos dependen del equipo y la pantalla; se conserva la velocidad original de juego.
 
 ## ¿Qué es este remake?
 
@@ -104,9 +104,9 @@ Esta versión pública está orientada a **Windows PC**.
 | --- | --- | --- |
 | Yugi the Destiny | ISO y carpeta compatibles | Inicio independiente del título y duelo normal |
 | Kaiba the Revenge | ISO y carpeta compatibles | Inicio independiente del título y duelo normal; perfiles compatibles sin necesitar Yugi |
-| Joey the Passion | Carpeta compatible | Inicio independiente del título y duelo normal |
+| Joey the Passion | ISO y carpeta compatibles | Inicio independiente del título y duelo normal |
 
-Falta validar de principio a fin una ISO completa de Joey; una imagen truncada se rechazó correctamente. La compatibilidad con otras revisiones y regiones sigue ampliándose.
+Se han importado ISO compatibles de los tres juegos; las imágenes truncadas se rechazan con detalles del juego afectado. La compatibilidad con otras revisiones y regiones sigue ampliándose.
 
 Las reglas, la IA, la presentación y los tiempos siguen comparándose con los originales. Estas pruebas no certifican todos los duelos ni todas las cartas. Al informar de un fallo, indica juego, edición, origen de importación y pasos para reproducirlo; no adjuntes archivos originales del juego.
 
@@ -162,43 +162,28 @@ El código incluye trabajo derivado de ingeniería inversa. Su procedencia y la 
 
 Cada componente de terceros conserva su licencia. Consulta [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) y **Licencias** en el launcher, incluidas las fuentes correspondientes de 7-Zip.
 
-## Configurar la compilación Android
+## Crear tu APK Android
 
-Crear APK es un flujo local opcional para Windows. Requiere Godot **4.7.2** con
-sus plantillas Android de la misma versión, **Python 3.12+** para configurar, **JDK 21**, SDK/plataforma Android **35**
-y build-tools **35.0.1**. En Godot, Ajustes del editor → Exportar → Android, configura
-las rutas del SDK de Java y del SDK de Android. Las herramientas, las plantillas y
-Java deben estar instaladas en el equipo que compila; descargar el launcher no las instala.
+1. Selecciona tus ISO/carpetas o reutiliza la biblioteca preparada para PC.
+2. Pulsa **Crear APK**. En la primera preparación, el launcher ofrece leer y aceptar la [licencia del SDK Android](https://developer.android.com/studio/terms).
+3. Espera la descarga verificada y la compilación. La pantalla muestra el componente y el porcentaje de descarga. Se necesita Internet para preparar las herramientas por primera vez y espacio para las herramientas y los temporales.
+4. El launcher abre **`PoC Data/android/apks/`**, donde quedan tu APK y su informe de validación. Copia el APK a tu Android para instalarlo.
 
-Clona la [rama pública de fuentes Android](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/android-tablet)
-junto a la copia de fuentes principal:
+El EXE incluye una revisión fija del motor Android con controles táctiles y el mismo icono de PC. El propio launcher descarga Godot 4.7.2 con sus plantillas Android, OpenJDK 21 y las herramientas oficiales del SDK; verifica SHA-256 antes de usarlas y configura un entorno portable. No descarga recursos de los juegos.
 
-```powershell
-git clone --branch android-tablet --single-branch https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake.git ../PortTesting-Android
-```
+Todo se guarda dentro de la carpeta de datos:
 
-Si no tienes una clave propia, crea una sola vez tu firma de **depuración**:
+| Contenido Android | Ruta |
+| --- | --- |
+| Herramientas reutilizables y fuentes incluidas | `PoC Data/android/tools/` |
+| Firma local persistente | `PoC Data/android/signing/debug.keystore` |
+| APK e informe JSON | `PoC Data/android/apks/` |
+| Registros e informes de cada intento | `PoC Data/android/builds/` |
 
-```powershell
-& "$env:JAVA_HOME/bin/keytool.exe" -genkeypair -keystore "C:/Tools/poc-debug.keystore" -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Power of Chaos local build"
-```
+El launcher crea una firma de depuración propia una sola vez y la conserva. **Respalda `PoC Data` junto al EXE**, incluida esa firma, para poder actualizar tus APK sin desinstalar. La clave privada del desarrollador no se distribuye. Los APK locales no están destinados a publicar en Google Play.
 
-Desde la copia principal de fuentes, configura la carpeta del EXE descargado
-(sustituye estas rutas de ejemplo por las de tus herramientas):
+Antes de entregar el APK se comprueban firma, alineación de 16 KB, integridad de los recursos y arranque de los juegos incluidos. Los datos y el proyecto temporal se retiran al terminar sin cambiar tu biblioteca PC. Un fallo muestra detalles y conserva el registro en `PoC Data/apk-last-error.log`.
 
-```powershell
-python tools/configure_android_builder.py --launcher-dir "C:/Games/PoC" --android-root "../PortTesting-Android" --godot "C:/Tools/Godot/godot_console.exe" --sdk "C:/Tools/AndroidSdk" --java "C:/Tools/jdk-21" --keystore "C:/Tools/poc-debug.keystore"
-```
+La conexión de Joey se ha probado entre PC↔PC y PC↔Android. Esto no garantiza compatibilidad con todas las redes ni todos los dispositivos. La fidelidad del motor y el soporte de otras configuraciones siguen en desarrollo.
 
-Se crea `android-builder.json` junto al EXE. Para actualizar una instalación, añade
-`--previous-apk "C:/Games/PoC/tu-anterior.apk"` y se comprobará la continuidad del
-certificado. Conserva tu clave: una firma distinta no puede actualizar tu app instalada.
-La primera compilación verifica el certificado contra tu clave sin exigir un APK
-anterior. El proyecto no distribuye su clave privada.
-
-Abre el launcher, selecciona tus ISO/carpetas o usa la biblioteca ya preparada y pulsa
-**Crear APK**. El APK fechado y su informe JSON aparecen junto al EXE al superar las
-pruebas de firma, alineación de 16 KB, integridad de recursos y arranque de los juegos.
-Los registros quedan en `PoC Data/android-builds/`; los fallos, en
-`PoC Data/apk-last-error.log`. Se retiran los datos y el proyecto exportable temporales
-sin cambiar tus recursos PC.
+Para desarrolladores, `tools/configure_android_builder.py --help` permite usar herramientas y una copia Android propias mediante `android-builder.json`. Es una configuración avanzada opcional; el EXE distribuido prepara su entorno desde el launcher.

@@ -2,23 +2,17 @@
 
 [English](README.md) | **Español** | [Launcher Windows](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main)
 
-El launcher Windows ofrece **Extraer para PC** y **Crear APK**. Al compilar con
-estas fuentes Android conserva el táctil, el scroll, el arrastre y la selección
-nativa de sacrificios. El APK queda junto al launcher.
+El launcher Windows ofrece **Extraer para PC** y **Crear APK**. Incluye las fuentes Android y prepara las herramientas automáticamente, sin instalar Python ni configurar SDK/JDK por separado. Conserva los controles táctiles, scroll, arrastre y selección nativa de sacrificios, con el mismo icono de PC.
 
-Esta rama contiene el motor Android y el compilador. **No incluye datos de los
-juegos originales, SDK/JDK, claves de firma ni un APK con los juegos.** Configura
-las herramientas locales y aporta tus copias compatibles. La prueba física en
-teléfono o tablet sigue pendiente.
+Todo queda en **`PoC Data/android/`**: herramientas reutilizables, firma, registros y APK. La conexión de Joey ya se probó entre **PC y PC**, y entre **PC y Android**. Seguimos en alfa y agradecemos comentarios y reportes.
+
+Esta rama contiene fuentes, sin recursos de los juegos originales ni claves privadas.
 
 ## Usar desde el launcher Windows
 
-Sigue [la configuración Android del README principal](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/blob/main/README.es.md#configurar-la-compilación-android).
-Clona esta rama en una carpeta separada; no la copies encima del código PC.
-Conserva tu propia clave de depuración para actualizar tus APK. Al configurar una
-actualización, indica también tu APK anterior para verificar su certificado.
-La primera instalación admite `--first-build`; el certificado resultante también
-debe coincidir con la clave configurada. No publiques la clave ni los recursos.
+Descarga el EXE de [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases), selecciona tus juegos o reutiliza tu biblioteca y pulsa **Crear APK**. La primera vez acepta la licencia del SDK; el launcher descarga y verifica las herramientas oficiales. No hace falta clonar esta rama.
+
+El APK aparece en `PoC Data/android/apks/`. Conserva y respalda `PoC Data`, incluida tu firma local, para actualizar tus APK. Consulta [Crear tu APK Android](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/blob/main/README.es.md#crear-tu-apk-android).
 
 ## Compilar directamente
 

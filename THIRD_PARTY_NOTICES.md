@@ -12,6 +12,24 @@ https://github.com/libsndfile/libsndfile/tree/1.2.2,
 https://github.com/xiph/vorbis/tree/v1.3.7,
 https://github.com/xiph/ogg/tree/v1.3.5.
 
+## Android tools downloaded by the launcher
+
+The optional APK builder prepares tools in `PoC Data/android/tools/`, separate
+from game resources. Downloads are from the official upstream releases and
+verified against pinned SHA-256 hashes. Tool archives are removed after extraction;
+their bundled notices and license files remain with the installed tools.
+
+- Godot 4.7.2 and matching export templates: MIT and upstream third-party notices.
+  https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable
+- Eclipse Temurin OpenJDK 21: GPLv2 with Classpath Exception and bundled notices.
+  https://adoptium.net/about/ and https://openjdk.org/legal/gplv2+ce.html
+- Google Android SDK Build Tools 35.0.1 and Platform Tools 37.0.1: Android SDK
+  license and included notices. The launcher links the terms and requires acceptance
+  before initial setup: https://developer.android.com/studio/terms
+
+No developer signing key is distributed. A persistent debug key is generated
+locally in `PoC Data/android/signing/` for the user's own builds.
+
 ## Feather icons
 
 The SVG icons embedded in game/scenes/launcher/launcher_controls.gd are based on

@@ -26,6 +26,7 @@ var _error_link := LinkButton.new()
 var _error_log_button: Button
 var _error_copy_button: Button
 var _error_log_path := ""
+var _android_license := ConfirmationDialog.new()
 
 
 const COPY := {
@@ -111,6 +112,7 @@ func _ready() -> void:
 	_convert.pressed.connect(_start)
 	add_child(_convert)
 	_style_control(_apk)
+	_apk.tooltip_text = "Prepara Android automáticamente en PoC Data y crea tu APK." if Assets.lang == "s" else "Prepares Android tools in PoC Data and builds your APK."
 	_apk.pressed.connect(_start.bind(false, true))
 	add_child(_apk)
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -143,6 +145,24 @@ func _ready() -> void:
 	_error_link.visible = false
 	_error_link.pressed.connect(func() -> void: _error_dialog.popup_centered(Vector2i(650, 400)))
 	add_child(_error_link)
+	_android_license.title = "Android SDK"
+	_android_license.dialog_text = ("El launcher descargará las herramientas Android verificadas en PoC Data.\nAl continuar aceptas la licencia del SDK de Google.\nSolo se necesita Internet la primera vez; los juegos se procesan en tu PC." if Assets.lang == "s" else "The launcher will download verified Android tools into PoC Data.\nBy continuing you accept Google's Android SDK license.\nInternet is needed for initial setup; game files are processed on your PC.")
+	_android_license.ok_button_text = "Aceptar y crear APK" if Assets.lang == "s" else "Accept and build APK"
+	_android_license.add_button("Leer licencia" if Assets.lang == "s" else "Read license", false, "license")
+	_android_license.custom_action.connect(func(_action: StringName) -> void: OS.shell_open("https://developer.android.com/studio/terms"))
+	_android_license.confirmed.connect(func() -> void:
+		var path := _apk_directory.path_join("PoC Data/android/sdk-license.accepted")
+		if DirAccess.make_dir_recursive_absolute(path.get_base_dir()) != OK:
+			_show_import_error({"code": -1, "output": "Cannot create Android storage: " + path})
+			return
+		var accepted := FileAccess.open(path, FileAccess.WRITE)
+		if accepted == null:
+			_show_import_error({"code": -1, "output": "Cannot save Android SDK license acceptance: " + path})
+			return
+		accepted.store_string("https://developer.android.com/studio/terms\n" + Time.get_datetime_string_from_system())
+		accepted.close()
+		_start(false, true))
+	add_child(_android_license)
 	get_tree().root.close_requested.connect(_close)
 	get_tree().root.mouse_exited.connect(_pointer_left_window)
 	get_tree().root.mouse_entered.connect(_pointer_entered_window)
@@ -291,6 +311,9 @@ func _start(migrate := false, build_apk := false) -> void:
 	var launcher_override := Paths.cmdline_value("launcher-dir")
 	if launcher_override != "":
 		_apk_directory = launcher_override
+	if build_apk and not FileAccess.file_exists(_apk_directory.path_join("PoC Data/android/sdk-license.accepted")):
+		_android_license.popup_centered()
+		return
 	_target = Paths.resources_path()
 	var args := PackedStringArray() if _bundled_importer else PackedStringArray(["-m", "pocx.import_games"])
 	args.append_array(PackedStringArray(["--out", _apk_directory if build_apk else _target]))
@@ -356,6 +379,12 @@ func _process(_delta: float) -> void:
 			_logos[i].material.set_shader_parameter("reveal", 1.0 if reveal else 0.0)
 	if _busy and _thread.is_started() and not _thread.is_alive():
 		_finish(_thread.wait_to_finish())
+	elif _busy and _building_apk:
+		var progress := _apk_directory.path_join("PoC Data/android/progress.json")
+		if FileAccess.file_exists(progress):
+			var parser := JSON.new()
+			if parser.parse(FileAccess.get_file_as_string(progress)) == OK and parser.data is Dictionary:
+				_status.text = str(parser.data.get("message", _status.text))
 
 
 func _finish(result: Dictionary) -> void:
@@ -372,10 +401,10 @@ func _finish(result: Dictionary) -> void:
 		_show_import_error(result)
 		return
 	if _building_apk:
-		_status.text = ("APK creado junto al launcher." if Assets.lang == "s" else "APK created next to the launcher.")
+		_status.text = ("APK creado en PoC Data/android/apks." if Assets.lang == "s" else "APK created in PoC Data/android/apks.")
 		_status.tooltip_text = str(result["output"])
 		if DisplayServer.get_name() != "headless":
-			OS.shell_open(_apk_directory)
+			OS.shell_open(_apk_directory.path_join("PoC Data/android/apks"))
 		return
 	var config := ConfigFile.new()
 	config.load(Paths.settings_path())

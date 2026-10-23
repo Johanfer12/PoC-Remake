@@ -16,6 +16,9 @@ def configuration(launcher: Path) -> dict:
     if config.is_file():
         values = json.loads(config.read_text(encoding="utf8"))
         return {key: (launcher / value).resolve() for key, value in values.items()}
+    if getattr(sys, "frozen", False):
+        from .android_toolchain import prepare
+        return prepare(launcher)
     # Desarrollo: buscar la copia hermana, incluso desde artifacts/.../windows.
     for parent in (launcher, *launcher.parents):
         root = parent / "PortTesting-Android"
@@ -24,8 +27,8 @@ def configuration(launcher: Path) -> dict:
                         sdk=parent / "Herramientas/AndroidSdk", java=parent / "Herramientas/JDK21",
                         keystore=parent / "FirmaAndroid/debug.keystore",
                         previous=root / "artifacts/android/PowerOfChaos-tablet-v17.apk")
-    raise ValueError("Falta el kit Android junto al launcher (android-builder.json). "
-                     "Prepara el launcher con tools/configure_android_builder.py.")
+    from .android_toolchain import prepare
+    return prepare(launcher)
 
 
 def preflight(config: dict) -> None:
@@ -48,9 +51,10 @@ def create_apk(sources: dict, launcher: Path, extra_voices=None, base: Path | No
     config = configuration(launcher)
     preflight(config)  # Fallar antes de extraer ISO grandes.
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
-    evidence = launcher / "PoC Data/android-builds" / stamp
+    evidence = launcher / "PoC Data/android/builds" / stamp
     evidence.mkdir(parents=True, exist_ok=False)
-    target = launcher / f"PowerOfChaos-Android-{stamp}.apk"
+    target = launcher / "PoC Data/android/apks" / f"PowerOfChaos-Android-{stamp}.apk"
+    target.parent.mkdir(parents=True, exist_ok=True)
     # Publicar solo el APK completamente verificado. Un fallo no deja un APK instalable.
     staged_apk = evidence / target.name
     old_env = {key: os.environ.get(key) for key in ("JAVA_HOME", "ANDROID_HOME", "ANDROID_SDK_ROOT", "PATH")}
@@ -78,13 +82,16 @@ def create_apk(sources: dict, launcher: Path, extra_voices=None, base: Path | No
                 sys.argv += ["--first-build"]
             print("Compilando con los controles de la copia Android…", flush=True)
             runpy.run_path(sys.argv[0], run_name="__main__")
-        staged_apk.rename(target)
-        manifest = evidence / "build/v17-build-manifest.json"
+        manifests = list((evidence / "build").glob("*-build-manifest.json"))
+        if len(manifests) != 1:
+            raise ValueError("La compilación no generó un único informe de validación")
+        manifest = manifests[0]
         report = json.loads(manifest.read_text(encoding="utf8"))
         report["apk"] = str(target)
         report["android_source"] = str(config["root"])
         manifest.write_text(json.dumps(report, indent=2), encoding="utf8")
         shutil.copyfile(manifest, target.with_suffix(".json"))
+        staged_apk.rename(target)
         print(f"APK creado: {target}", flush=True)
         return target
     finally:
@@ -100,8 +107,8 @@ def create_apk(sources: dict, launcher: Path, extra_voices=None, base: Path | No
         project = evidence / "build/project"
         if project.is_dir() and project.resolve().parent == (evidence / "build").resolve():
             shutil.rmtree(project)
-        validation = evidence / "build/v17-validation"
-        for name in ("pack-save", "bundle-save"):
-            save = validation / name
-            if save.is_dir() and save.resolve().parent == validation.resolve():
-                shutil.rmtree(save)
+        for validation in (evidence / "build").glob("*-validation"):
+            for name in ("pack-save", "bundle-save"):
+                save = validation / name
+                if save.is_dir() and save.resolve().parent == validation.resolve():
+                    shutil.rmtree(save)

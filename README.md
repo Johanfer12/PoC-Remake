@@ -11,23 +11,23 @@
 Select your ISO images or installed game folders, then choose:
 
 - **Extract for PC** to prepare the games for Windows.
-- **Create APK** to build an Android APK with the Android branch's touch controls, scrolling and dragging. The APK and its validation receipt are saved **beside the launcher**. Already prepared games can also be reused.
+- **Create APK** to build an Android APK with the Android branch's touch controls, scrolling and dragging. The APK and its validation receipt are saved in **`PoC Data/android/apks/`**. Already prepared games can also be reused.
 
-**APK creation requires a local Android build setup:** Godot with Android templates, JDK, Android SDK, Android sources and your own signing key. These tools are not bundled in the EXE. [Android setup](#android-build-setup). PC extraction works with the standalone EXE.
+**Android setup is handled by the launcher.** The first time you click **Create APK**, accept the SDK license and the launcher downloads, verifies and configures the official tools automatically. No Python, Android Studio, Java installation or manual path setup is needed. Everything stays in **`PoC Data/android/`** and is reused for later builds. [Build your APK](#build-your-android-apk).
 
-The new buttons are available starting with **v0.1.0-alpha.4**. Your ISO images and converted resources stay on your computer; no original game data is included in the download. Physical Android device testing remains pending.
+Your ISO images and converted resources stay on your computer; no original game data is included in the download. Joey's networking has been tested between **PC and PC**, and between **PC and Android**. This is still an alpha: feedback, bug reports and testing on other editions and devices are welcome.
 
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 
 ## Why use it?
 
-- **PC extraction or Android APK from the same launcher.** Reuse your compatible games and choose the output you need; APK creation requires the local Android build setup.
-- **Joey network duels without DirectPlay.** Modern LAN networking replaces the legacy Windows component. Testing between two physical PCs is still pending.
+- **PC extraction or Android APK from the same launcher.** Reuse your compatible games and choose the output you need; the launcher prepares the Android tools automatically.
+- **Joey network duels without DirectPlay.** Modern LAN networking replaces the legacy Windows component. Connections have been tested between PC and PC, and between PC and Android.
 - **Portable.** Keep the EXE and its **`PoC Data`** folder together: your resources, saves and settings travel with them.
 - **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
 - **16:9 decorative side panels.** Widescreen decorations surround the original 4:3 duel area in the supported Yugi and Joey views. The current background images are temporary.
 - **All three games in one place.** Yugi the Destiny, Kaiba the Revenge and Joey the Passion share one launcher. Import just one to start and add the others whenever you want.
-- **Rendering above 30 FPS.** The renderer follows the display refresh rate, with interpolation between the original 30 Hz game ticks. Actual FPS depend on your PC and display; the original gameplay speed is preserved.
+- **60 FPS rendering and higher, depending on your display.** The renderer follows the display refresh rate, with interpolation between the original 30 Hz game ticks. Actual FPS depend on your PC and display; the original gameplay speed is preserved.
 
 ## What is this remake?
 
@@ -120,9 +120,9 @@ The current development checks cover:
 | --- | --- | --- |
 | Yugi the Destiny | Compatible ISO and installed folder | Independent title and normal-duel startup |
 | Kaiba the Revenge | Compatible ISO and installed folder | Independent title and normal-duel startup; supported executable profiles normalized without requiring Yugi |
-| Joey the Passion | Compatible installed folder | Independent title and normal-duel startup |
+| Joey the Passion | Compatible ISO and installed folder | Independent title and normal-duel startup |
 
-A complete Joey ISO still needs end-to-end validation. A truncated image was correctly rejected. Support for other disc revisions and regional releases is still being expanded.
+Compatible ISO images of all three games have been imported; truncated images are rejected with details identifying the affected game. Support for other revisions and regions is still expanding.
 
 Gameplay, AI, presentation and timing are under active comparison with the originals. Passing these checks does not certify every duel or every card interaction. Please report the game, edition, import source and steps needed to reproduce a problem; do not attach original game files to issues.
 
@@ -186,42 +186,28 @@ The source includes work derived through reverse engineering. Its provenance and
 
 Third-party components retain their own licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and **Licenses** in the packaged launcher for the bundled engine and tool notices, including the matching 7-Zip source archive.
 
-## Android build setup
+## Build your Android APK
 
-APK creation is an optional local build flow for Windows. It needs Godot **4.7.2**
-with its matching Android export templates, **Python 3.12+** for configuration, **JDK 21**, Android SDK/platform **35**
-and build-tools **35.0.1**. In Godot's Editor Settings → Export → Android, set the
-Java SDK and Android SDK paths. The SDK tools, templates and Java must be installed
-on the computer doing the build; downloading the launcher alone does not install them.
+1. Select your ISO images/folders or reuse the library already prepared for PC.
+2. Click **Create APK**. On first setup, the launcher lets you read and accept the [Android SDK license](https://developer.android.com/studio/terms).
+3. Wait for verified downloads and the build. The launcher shows the component and download percentage. Internet is required for initial tool setup, along with free space for the tools and temporary build files.
+4. The launcher opens **`PoC Data/android/apks/`**, containing your APK and validation receipt. Copy the APK to your Android device to install it.
 
-Clone the [public Android source branch](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/android-tablet)
-next to your main source checkout:
+The EXE includes a pinned Android engine revision with touch controls and the same icon as PC. The launcher downloads Godot 4.7.2 and its Android templates, OpenJDK 21 and official SDK tools, verifies SHA-256 before use, and configures a portable environment. It does not download game resources.
 
-```powershell
-git clone --branch android-tablet --single-branch https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake.git ../PortTesting-Android
-```
+Everything stays inside the data folder:
 
-Create your own persistent **debug** signing key once, if you do not already have one:
+| Android content | Location |
+| --- | --- |
+| Reusable tools and bundled sources | `PoC Data/android/tools/` |
+| Persistent local signing key | `PoC Data/android/signing/debug.keystore` |
+| APK and JSON validation receipt | `PoC Data/android/apks/` |
+| Build logs and validation reports | `PoC Data/android/builds/` |
 
-```powershell
-& "$env:JAVA_HOME/bin/keytool.exe" -genkeypair -keystore "C:/Tools/poc-debug.keystore" -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Power of Chaos local build"
-```
+The launcher generates your own debug signing key once and preserves it. **Back up `PoC Data` with the EXE**, including that key, to update your locally built APKs without uninstalling. The developer's private key is never distributed. These local APKs are not intended for publishing on Google Play.
 
-From the main source checkout, configure the folder containing your downloaded EXE
-(replace the example paths with your installed tools):
+The builder verifies the signature, 16 KB alignment, resource integrity and startup of the included games before delivering an APK. Temporary resources and the export project are removed after each attempt without modifying your PC library. Failures show details and retain `PoC Data/apk-last-error.log`.
 
-```powershell
-python tools/configure_android_builder.py --launcher-dir "C:/Games/PoC" --android-root "../PortTesting-Android" --godot "C:/Tools/Godot/godot_console.exe" --sdk "C:/Tools/AndroidSdk" --java "C:/Tools/jdk-21" --keystore "C:/Tools/poc-debug.keystore"
-```
+Joey connections have been tested PC↔PC and PC↔Android. This does not guarantee compatibility with every network or device. Engine fidelity and support for other configurations are still in development.
 
-This creates `android-builder.json` beside the EXE. For updates, add
-`--previous-apk "C:/Games/PoC/your-previous.apk"` to check that the existing
-certificate matches. Keep your key: a different key cannot update your installed app.
-The first build verifies the output against your configured key without requiring
-a previous APK. The project never distributes its private signing key.
-
-Open the launcher, select your ISO/folders or use your prepared library, then click
-**Create APK**. The dated APK and JSON receipt appear beside the EXE after signature,
-16 KB alignment, bundled-data integrity and game-startup checks pass. Build logs
-are kept in `PoC Data/android-builds/`; failures use `PoC Data/apk-last-error.log`.
-The temporary data and export project are removed without changing your PC resources.
+For developers, `tools/configure_android_builder.py --help` allows an optional custom toolchain and Android checkout through `android-builder.json`. The distributed EXE handles its normal setup inside the launcher.

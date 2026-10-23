@@ -45,12 +45,12 @@ class AndroidBuilderTests(unittest.TestCase):
                 apk.write_bytes(b"validated-apk")
                 self.assertFalse(list(root.glob("*.apk")))
                 work = Path(args[args.index("--work") + 1])
-                (work / "v17-validation/bundle-save").mkdir(parents=True)
+                (work / "v18-validation/bundle-save").mkdir(parents=True)
                 if fail:
                     raise RuntimeError("firma rechazada")
                 work = Path(args[args.index("--work") + 1])
                 (work / "project").mkdir(parents=True)
-                (work / "v17-build-manifest.json").write_text('{"signature_verified":true}')
+                (work / "v18-build-manifest.json").write_text('{"signature_verified":true}')
 
             with patch("pocx.android_builder.configuration", return_value=config), \
                  patch("pocx.android_builder.preflight"), \
@@ -62,7 +62,7 @@ class AndroidBuilderTests(unittest.TestCase):
                     self.assertFalse(list(root.glob("*.apk")))
                 else:
                     output = create_apk({}, root, base=original)
-                    self.assertEqual(output.parent, root)
+                    self.assertEqual(output.parent, root / "PoC Data/android/apks")
                     self.assertEqual(output.read_bytes(), b"validated-apk")
                     self.assertTrue(output.with_suffix(".json").is_file())
             self.assertEqual((original / "inventory.json").read_bytes(), before)

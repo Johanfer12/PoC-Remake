@@ -127,11 +127,15 @@ def build(godot: Path, output: Path, with_android: bool = False) -> Path:
         receipt["version"] = release_version
         bundled = project/"bundled"
         bundled.mkdir()
+        from pocx.android_toolchain import bundle_source
+        android_source = work / "android-source.zip"
+        bundle_source(android_source)
         # Only source code and the small color-key configuration are visible to PyInstaller.
         command([sys.executable, "-m", "PyInstaller", "--onefile", "--noupx", "--name", "pocx-import",
                  "--distpath", str(bundled), "--workpath", str(work/"pyinstaller"), "--specpath", str(work),
                  "--paths", str(source/"tools"), "--add-data",
                  str(source/"tools/pocx/color_key_overrides.json") + os.pathsep + "pocx",
+                 "--add-data", str(android_source) + os.pathsep + "pocx",
                  str(source/"tools/importer_entry.py")], logs/"converter.log", cwd=work)
         command([str(bundled/"pocx-import.exe"), "--help"], logs/"converter-help.log")
         licenses = bundled / "licenses"
@@ -200,6 +204,8 @@ def build(godot: Path, output: Path, with_android: bool = False) -> Path:
                         "original_game_data_included": False, "converter_help_passed": True, "empty_boot_passed": True,
                         "single_executable": True, "embedded_tools_verified": True, "bundled_7zip": "26.04"})
         receipt["menu_boot_without_tool_extraction"] = True
+        receipt["android_tools_prepared_by_launcher"] = True
+        receipt["android_source_commit"] = __import__("pocx.android_toolchain", fromlist=["SOURCE_COMMIT"]).SOURCE_COMMIT
         if not receipt["godot"].startswith(GODOT_VERSION + ".stable"):
             raise ValueError("El manifiesto no identifica correctamente la versión del motor")
         (output/"BUILD_MANIFEST.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
