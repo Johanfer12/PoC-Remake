@@ -1344,6 +1344,9 @@ func _asset(name: String, center: Vector2, scale_factor: float = 1.0, alpha: flo
 	if texture == null: return null
 	var sprite := Sprite2D.new()
 	sprite.texture = texture
+	# Las espadas nativas impares evitan suavizar texeles vecinos al centrarse.
+	if name in ["atk_icon", "atk_icon2"]:
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.position = center
 	sprite.scale = Vector2.ONE * maxf(0.001, scale_factor)
 	sprite.modulate.a = clampf(alpha, 0, 1)
