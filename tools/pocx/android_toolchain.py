@@ -12,8 +12,8 @@ import urllib.request
 import zipfile
 
 VERSION = "4.7.2"
-SOURCE_COMMIT = "0bae59c3894b17934d146813bbcfdff80b7d720d"
-SOURCE_MANIFEST_SHA256 = "064cadb7a4a159f2beef0cbde5610c9ba1cb42c8e3082f6d2c2413871f1990bc"
+SOURCE_COMMIT = "beabbe76da567252b63a3645163da98df8ce536e"
+SOURCE_MANIFEST_SHA256 = "19e9f898ec2e27dfbda1f65d259420406d31702e9d5e2dbe75ee8de374d35019"
 SDK_LICENSE_URL = "https://developer.android.com/studio/terms"
 GODOT_BASE = f"https://github.com/godotengine/godot-builds/releases/download/{VERSION}-stable/"
 PACKAGES = {

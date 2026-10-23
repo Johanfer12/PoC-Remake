@@ -131,7 +131,7 @@ func goto(screen: Node) -> void:
 	elif is_instance_valid(_screen):
 		_screen.queue_free()
 	_screen = screen
-	if _is_duel_viewer(screen) and screen.game in ["yugi", "joey"]:
+	if _is_duel_viewer(screen) and screen.game in ["yugi", "kaiba", "joey"]:
 		_screen_host = load("res://scenes/duel/duel_margins.gd").new(screen)
 		get_tree().root.add_child.call_deferred(_screen_host)
 	else:

@@ -17,7 +17,8 @@ TOOL_TOP = {"tools/pyproject.toml", "tools/prepare_public.py", "tools/build_wind
             ".github/workflows/build-windows.yml", "game/export_presets.cfg"}
 OWN_ASSETS = {"game/assets/music/launcher_theme.mp3",
               "game/assets/backgrounds/yugi_duel.jpg",
-              "game/assets/backgrounds/joey_duel.png"}
+              "game/assets/backgrounds/joey_duel.png",
+              "game/assets/backgrounds/kaiba_duel.png"}
 LAUNCHER_ART = {"game/assets/icons/launcher.svg", "game/assets/icons/launcher.ico"}
 
 

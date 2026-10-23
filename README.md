@@ -25,7 +25,7 @@ Your ISO images and converted resources stay on your computer; no original game 
 - **Joey network duels without DirectPlay.** Modern LAN networking replaces the legacy Windows component. Connections have been tested between PC and PC, and between PC and Android.
 - **Portable.** Keep the EXE and its **`PoC Data`** folder together: your resources, saves and settings travel with them.
 - **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
-- **16:9 decorative side panels.** Widescreen decorations surround the original 4:3 duel area in the supported Yugi and Joey views. The current background images are temporary.
+- **16:9 decorative side panels.** Widescreen decorations surround the original 4:3 duel area in the supported Yugi, Kaiba and Joey views, each with its own background.
 - **All three games in one place.** Yugi the Destiny, Kaiba the Revenge and Joey the Passion share one launcher. Import just one to start and add the others whenever you want.
 - **60 FPS rendering and higher, depending on your display.** The renderer follows the display refresh rate, with interpolation between the original 30 Hz game ticks. Actual FPS depend on your PC and display; the original gameplay speed is preserved.
 
@@ -180,7 +180,7 @@ Installed copies can check and download new releases with the update button; rep
 
 PoC Remake is an independent, unofficial project. It is not affiliated with or endorsed by the original games' publishers or rights holders. Game names identify compatible titles; their assets and trademarks remain with their respective owners.
 
-The launcher theme, the two external duel backgrounds and the custom application icon belong to this project. The pending-game frames include vector outlines derived from the original logos; the original logo images are loaded only after importing a user's copy.
+The launcher theme, the three external duel backgrounds and the custom application icon belong to this project. The pending-game frames include vector outlines derived from the original logos; the original logo images are loaded only after importing a user's copy.
 
 The source includes work derived through reverse engineering. Its provenance and project-wide licensing remain under review; no blanket license for the repository has been assigned. Publishing the sources does not license the original games or grant rights to redistribute their assets.
 
