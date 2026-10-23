@@ -1,17 +1,74 @@
 """Synthetic checks only: no original game resources embedded here."""
 import importlib.util
+from contextlib import redirect_stderr
+import io
 import json
 from pathlib import Path
 import struct
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
 
 from pocx.archive import Archive
-from pocx.import_games import import_games, locate
+from pocx.import_games import import_games, locate, ImportFailure, _publish, main, unpack
 
 
 class ImportTests(unittest.TestCase):
+    def test_failure_identifies_each_game_and_original_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for game in ("yugi", "kaiba", "joey"):
+                with self.subTest(game=game):
+                    source = root / (game + ".iso")
+                    with patch("pocx.import_games.unpack", side_effect=ValueError("ISO truncada")):
+                        with self.assertRaises(ImportFailure) as caught:
+                            import_games({game: source}, root / "out")
+                    self.assertEqual(caught.exception.game, game)
+                    self.assertEqual(caught.exception.source, str(source))
+                    self.assertEqual(caught.exception.stage, "iso")
+                    self.assertFalse((root / "out").exists())
+
+    def test_sevenzip_failure_keeps_diagnostics_and_does_not_assume_corruption(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "Joey.iso"
+            source.write_bytes(b"synthetic")
+            with patch("pocx.import_games.find_sevenzip", return_value="7z"), patch(
+                    "pocx.import_games.subprocess.run", return_value=subprocess.CompletedProcess([], 2, b"ERROR: Access is denied")):
+                with self.assertRaises(ImportFailure) as caught:
+                    unpack(source, Path(directory) / "media")
+            self.assertIn("Access is denied", caught.exception.diagnostics)
+            self.assertNotIn("truncada", caught.exception.reason)
+
+    def test_compaction_and_write_failures_do_not_blame_an_iso(self):
+        with tempfile.TemporaryDirectory() as directory:
+            staging = Path(directory) / "staging"
+            staging.mkdir()
+            output = Path(directory) / "out"
+            with patch("pocx.import_games.optimize_tree", side_effect=OSError("No space left")):
+                with self.assertRaises(ImportFailure) as caught:
+                    _publish(staging, output, compact=True, replace=False)
+            self.assertEqual(caught.exception.stage, "compact")
+            self.assertIsNone(caught.exception.game)
+            with patch("pocx.import_games.Path.rename", side_effect=PermissionError("Access denied")):
+                with self.assertRaises(ImportFailure) as caught:
+                    _publish(staging, output, compact=False, replace=False)
+            self.assertEqual(caught.exception.stage, "write")
+            self.assertIsNone(caught.exception.game)
+            self.assertTrue(staging.exists())
+
+    def test_cli_emits_structured_error_for_launcher(self):
+        failure = ImportFailure("iso", "ISO truncada", "joey", "C:/Mis juegos/Joey.iso", "Unexpected end of archive")
+        stderr = io.StringIO()
+        with patch("sys.argv", ["importer", "--joey", "Joey.iso", "--out", "new-output"]), patch(
+                "pocx.import_games.import_games", side_effect=failure), redirect_stderr(stderr):
+            with self.assertRaises(SystemExit) as caught:
+                main()
+        self.assertEqual(caught.exception.code, 1)
+        marker = next(line for line in stderr.getvalue().splitlines() if line.startswith("POC_IMPORT_ERROR "))
+        payload = json.loads(marker.removeprefix("POC_IMPORT_ERROR "))
+        self.assertEqual(payload, failure.payload())
+
     def _synthetic_import(self, root, game, output, base=None):
         from pocx.__main__ import GAMES, STARTER_TABLES
         installation = root / (game + "-source")

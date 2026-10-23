@@ -20,6 +20,12 @@ var _target := ""
 var _busy := false
 var _bundled_importer := false
 var _tools_failed := false
+var _error_dialog := AcceptDialog.new()
+var _error_details := TextEdit.new()
+var _error_link := LinkButton.new()
+var _error_log_button: Button
+var _error_copy_button: Button
+var _error_log_path := ""
 
 
 const COPY := {
@@ -121,6 +127,22 @@ func _ready() -> void:
 	_dialog.file_selected.connect(_selected)
 	_dialog.dir_selected.connect(_selected)
 	add_child(_dialog)
+	_error_details.editable = false
+	_error_details.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	_error_details.custom_minimum_size = Vector2(590, 300)
+	_error_details.add_theme_font_size_override("font_size", 14)
+	_error_dialog.add_child(_error_details)
+	_error_copy_button = _error_dialog.add_button("Copiar detalles", false, "copy")
+	_error_log_button = _error_dialog.add_button("Abrir registro", false, "log")
+	_error_dialog.custom_action.connect(func(action: StringName) -> void:
+		if action == "copy":
+			DisplayServer.clipboard_set(_error_details.text)
+		elif action == "log":
+			OS.shell_open(_error_log_path))
+	add_child(_error_dialog)
+	_error_link.visible = false
+	_error_link.pressed.connect(func() -> void: _error_dialog.popup_centered(Vector2i(650, 400)))
+	add_child(_error_link)
 	get_tree().root.close_requested.connect(_close)
 	get_tree().root.mouse_exited.connect(_pointer_left_window)
 	get_tree().root.mouse_entered.connect(_pointer_entered_window)
@@ -177,6 +199,9 @@ func _layout() -> void:
 	_apk.size = Vector2(300, 40)
 	_status.position = _origin + Vector2(90, 513)
 	_status.size = Vector2(620, 28)
+	if _error_link.visible:
+		_status.size.x = 510
+	_error_link.position = _origin + Vector2(622, 518)
 	_back.position = Vector2(24, 24)
 
 
@@ -259,6 +284,9 @@ func _start(migrate := false, build_apk := false) -> void:
 	if _busy or _tools_failed or Paths.storage_error or (not migrate and not _has_pending() and not (build_apk and Paths.has_data())):
 		return
 	_building_apk = build_apk
+	_error_dialog.hide()
+	_error_link.hide()
+	_status.tooltip_text = ""
 	_apk_directory = ProjectSettings.globalize_path("res://").path_join("..").simplify_path() if OS.has_feature("editor") else OS.get_executable_path().get_base_dir()
 	var launcher_override := Paths.cmdline_value("launcher-dir")
 	if launcher_override != "":
@@ -341,10 +369,7 @@ func _finish(result: Dictionary) -> void:
 	_back.disabled = false
 	_python.editable = true
 	if int(result["code"]) != 0:
-		_status.text = ("No se pudo crear el APK. Revisa apk-last-error.log en PoC Data." if Assets.lang == "s" else "APK build failed. See apk-last-error.log in PoC Data.") if _building_apk else _copy(9)
-		var log_file := FileAccess.open(Paths.storage_dir.path_join("apk-last-error.log" if _building_apk else "import-last-error.log"), FileAccess.WRITE)
-		if log_file != null:
-			log_file.store_string(str(result["output"]))
+		_show_import_error(result)
 		return
 	if _building_apk:
 		_status.text = ("APK creado junto al launcher." if Assets.lang == "s" else "APK created next to the launcher.")
@@ -357,7 +382,8 @@ func _finish(result: Dictionary) -> void:
 	config.set_value("content", "data", "resources")
 	var error := config.save(Paths.settings_path())
 	if error != OK:
-		_status.text = _copy(9)
+		var reason := ("Los recursos se prepararon, pero no se pudieron guardar los ajustes: " if Assets.lang == "s" else "Resources were prepared, but settings could not be saved: ") + error_string(error)
+		_show_import_error({"code": error, "output": "POC_IMPORT_ERROR " + JSON.stringify({"stage": "write", "source": Paths.settings_path(), "reason": reason})})
 		return
 	Paths.data_dir = _target
 	Paths.migration_source = ""
@@ -367,6 +393,62 @@ func _finish(result: Dictionary) -> void:
 	SaveData.load_or_create()
 	Assets.remember_language(Assets.lang)
 	Game.open_launcher()
+
+
+func _show_import_error(result: Dictionary) -> void:
+	var spanish := Assets.lang == "s"
+	var output := str(result.get("output", ""))
+	var failure := {}
+	for line: String in output.split("\n"):
+		var marker := line.find("POC_IMPORT_ERROR ")
+		if marker >= 0:
+			var parser := JSON.new()
+			if parser.parse(line.substr(marker + 17).strip_edges()) == OK and parser.data is Dictionary:
+				failure = parser.data
+	var title := ("No se pudo crear el APK" if spanish else "APK build failed") if _building_apk else ("No se pudo importar" if spanish else "Import failed")
+	var game := str(failure.get("game", "")) if failure.get("game") != null else ""
+	var game_label := game.capitalize() if game in Game.GAMES else ""
+	var stages := {
+		"iso": ["ISO / extracción", "ISO / extraction"], "installation": ["Archivos del juego", "Game files"],
+		"write": ["Escritura de archivos", "Writing files"], "conversion": ["Conversión", "Conversion"],
+		"audio": ["Conversión de audio", "Audio conversion"], "compact": ["Compresión", "Compression"],
+		"voices": ["Voces adicionales", "Additional voices"], "setup": ["Preparación", "Setup"]}
+	var stage: Array = stages.get(str(failure.get("stage", "")), ["Proceso", "Process"])
+	var heading := title + (" · " + game_label if game_label != "" else "")
+	var reason := str(failure.get("reason", ""))
+	if reason == "":
+		reason = ("El proceso no se pudo iniciar o terminó con código %s." if spanish else "The process could not start or exited with code %s.") % str(result.get("code", -1))
+	var source := str(failure.get("source", "")) if failure.get("source") != null else ""
+	_error_log_path = Paths.storage_dir.path_join("apk-last-error.log" if _building_apk else "import-last-error.log")
+	var log_file := FileAccess.open(_error_log_path, FileAccess.WRITE)
+	var saved := log_file != null
+	if saved:
+		log_file.store_string(output)
+		log_file.close()
+	var detail := heading + "\n" + str(stage[0 if spanish else 1]) + "\n\n" + reason
+	if source != "":
+		detail += ("\n\nArchivo o carpeta: " if spanish else "\n\nFile or folder: ") + source
+	var diagnostics := str(failure.get("diagnostics", ""))
+	if diagnostics == "":
+		diagnostics = output
+	if diagnostics != "":
+		detail += ("\n\nDetalle técnico:\n" if spanish else "\n\nTechnical details:\n") + diagnostics
+	detail += ("\n\nRegistro completo: " if spanish else "\n\nFull log: ") + _error_log_path
+	if not saved:
+		detail += "\n" + ("No se pudo guardar el registro. Puedes copiar estos detalles." if spanish else "Could not save the log. You can copy these details.")
+	_error_details.text = detail
+	_error_dialog.title = heading
+	_error_dialog.get_ok_button().text = "Cerrar" if spanish else "Close"
+	_error_copy_button.text = "Copiar detalles" if spanish else "Copy details"
+	_error_log_button.text = "Abrir registro" if spanish else "Open log"
+	_error_log_button.disabled = not saved
+	_status.text = heading + " · " + str(stage[0 if spanish else 1])
+	_status.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_status.tooltip_text = detail
+	_error_link.text = "Ver error" if spanish else "View error"
+	_error_link.show()
+	_layout()
+	_error_dialog.popup_centered(Vector2i(650, 400))
 
 
 func _close() -> void:

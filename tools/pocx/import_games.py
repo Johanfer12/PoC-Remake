@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import uuid
 
@@ -16,6 +18,36 @@ from .archive import Archive
 from .executable import validate
 from .voices import add_voice
 from .compact import optimize_tree
+
+
+class ImportFailure(ValueError):
+    """Machine-readable context without guessing the failed game from progress logs."""
+    def __init__(self, stage, reason, game=None, source=None, diagnostics=""):
+        self.stage, self.reason = stage, str(reason)
+        self.game, self.source = game, str(source) if source is not None else None
+        self.diagnostics = diagnostics
+        super().__init__(self.reason)
+
+    def __str__(self):
+        return (f"{self.game}: " if self.game else "") + self.reason
+
+    def payload(self):
+        return dict(stage=self.stage, game=self.game, source=self.source,
+                    reason=self.reason, diagnostics=self.diagnostics)
+
+
+@contextmanager
+def import_context(stage, game=None, source=None):
+    try:
+        yield
+    except ImportFailure as error:
+        if error.game is None:
+            error.game = game
+        if error.source is None and source is not None:
+            error.source = str(source)
+        raise
+    except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError) as error:
+        raise ImportFailure(stage, str(error), game, source) from error
 
 
 def locate(root: Path, game: str) -> dict[str, Path]:
@@ -65,7 +97,11 @@ def unpack(source: Path, destination: Path) -> Path:
     result = subprocess.run([sevenzip, "x", str(source), f"-o{destination}", "-y"],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if result.returncode != 0:
-        raise ValueError("La ISO está incompleta o dañada. No se importó; selecciona otra imagen o una carpeta instalada.")
+        details = result.stdout.decode("utf-8", errors="replace").strip()
+        reason = ("La ISO está incompleta o truncada. Selecciona una imagen completa o una carpeta instalada."
+                  if "Unexpected end of archive" in details else
+                  f"7-Zip no pudo extraer la ISO (código {result.returncode}). Revisa el detalle técnico.")
+        raise ImportFailure("iso", reason, source=source, diagnostics=details)
     return destination
 
 
@@ -132,6 +168,11 @@ def export_audio(src: Path, out: Path, games=None) -> None:
     (out / "common/audio_native.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
 
 
+def _import_voice(path, output, game):
+    with import_context("voices", game, path):
+        add_voice(path, output, game)
+
+
 def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tuple[str, Path]] | None = None, base: Path | None = None,
                  compact: bool = False, replace: bool = False) -> None:
     output = output.resolve()
@@ -159,25 +200,30 @@ def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tupl
             for game, voice_path in extra_voices or []:
                 if game not in previous["games"]:
                     raise ValueError(f"{game}: prepara el juego antes de añadir voces")
-                add_voice(voice_path, converted, game)
+                _import_voice(voice_path, converted, game)
             _publish(converted, output, compact, replace)
             return
         for game in sources:
             print(f"Validando {game}…", flush=True)
-            root = unpack(sources[game].resolve(), work / f"media-{game}")
-            names = installation(root, game, work / game)
-            app = work / "sources" / game / "app"
-            app.mkdir(parents=True)
-            for name in ("Data.dat", "Voice.dat", "Region.dat", STARTER_TABLES[game][0]):
-                shutil.copyfile(names[name.lower()], app / name)
+            with import_context("iso", game, sources[game]):
+                root = unpack(sources[game].resolve(), work / f"media-{game}")
+            with import_context("installation", game, sources[game]):
+                names = installation(root, game, work / game)
+            with import_context("write", game, sources[game]):
+                app = work / "sources" / game / "app"
+                app.mkdir(parents=True)
+                for name in ("Data.dat", "Voice.dat", "Region.dat", STARTER_TABLES[game][0]):
+                    shutil.copyfile(names[name.lower()], app / name)
         converted = work / "converted"
-        extract(work / "sources", converted)
+        with import_context("conversion"):
+            extract(work / "sources", converted)
         for game, voice_path in extra_voices or []:
             if game in sources:
-                add_voice(voice_path, converted, game)
+                _import_voice(voice_path, converted, game)
             elif previous is None or game not in previous["games"]:
                 raise ValueError(f"Juego no reconocido para voces: {game}")
-        export_audio(work / "sources", converted, sources)
+        with import_context("audio"):
+            export_audio(work / "sources", converted, sources)
         if base is None:
             _publish(converted, output, compact, replace)
         else:
@@ -217,14 +263,20 @@ def import_games(sources: dict[str, Path], output: Path, extra_voices: list[tupl
             (merged / "common/audio_native.json").write_text(json.dumps(audio, indent=2), encoding="utf-8")
             for game, voice_path in extra_voices or []:
                 if game not in sources:
-                    add_voice(voice_path, merged, game)
+                    _import_voice(voice_path, merged, game)
             _publish(merged, output, compact, replace)
     print("Importación completa.", flush=True)
 
 
 def _publish(staging: Path, output: Path, compact: bool, replace: bool) -> None:
     if compact:
-        optimize_tree(staging)
+        with import_context("compact"):
+            optimize_tree(staging)
+    with import_context("write", source=output):
+        _publish_ready(staging, output, replace)
+
+
+def _publish_ready(staging: Path, output: Path, replace: bool) -> None:
     backup = output.with_name(".poc-previous-" + uuid.uuid4().hex)
     if output.exists():
         if not replace:
@@ -241,6 +293,10 @@ def _publish(staging: Path, output: Path, compact: bool, replace: bool) -> None:
 
 
 def main() -> None:
+    # Godot captures pipes as UTF-8, regardless of the Windows console code page.
+    for stream in (sys.stdout, sys.stderr):
+        if stream is not None and hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     parser = argparse.ArgumentParser(description=__doc__)
     for game in GAMES:
         parser.add_argument(f"--{game}", type=Path)
@@ -267,6 +323,8 @@ def main() -> None:
             import_games(sources, args.out, extra, args.base,
                          compact=not args.no_compact, replace=args.replace)
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError, SystemExit) as error:
+        failure = error if isinstance(error, ImportFailure) else ImportFailure("setup", str(error))
+        print("POC_IMPORT_ERROR " + json.dumps(failure.payload()), file=sys.stderr, flush=True)
         parser.exit(1, f"No se pudo importar: {error}\n")
 
 

@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 import soundfile as sf
 from pocx.compact import optimize_tree
-from pocx.import_games import import_games
+from pocx.import_games import import_games, ImportFailure
 from pocx.voices import export_voice
 from test_media_import import archive
 
@@ -48,8 +48,10 @@ class CompactImportTests(unittest.TestCase):
             root = self.library(Path(folder) / "resources")
             (root / "broken.png").write_bytes(b"invalid PNG")
             before = {p.name: p.read_bytes() for p in root.iterdir()}
-            with self.assertRaises(OSError):
+            with self.assertRaises(ImportFailure) as caught:
                 import_games({}, root, base=root, compact=True, replace=True)
+            self.assertEqual(caught.exception.stage, "compact")
+            self.assertIsNone(caught.exception.game)
             self.assertEqual({p.name: p.read_bytes() for p in root.iterdir()}, before)
             self.assertEqual(list(Path(folder).glob(".poc-*")), [])
 

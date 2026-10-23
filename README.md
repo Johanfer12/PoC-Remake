@@ -102,6 +102,8 @@ The importer validates supported executable profiles and rejects unsupported rev
 | Temporary extraction files | `PoC Data/temp/` and transient staging directories inside `PoC Data/` |
 | Last import error report | `PoC Data/import-last-error.log` |
 
+Import failures show the affected game, source file or folder, stage and cause. Use **Copy details** or **Open log** in the error dialog, and **View error** to reopen it. General conversion, compression or write failures identify their stage without blaming an ISO without evidence.
+
 Keep **`PowerOfChaos.exe` and `PoC Data` together** when moving or backing up the game. The launcher uses relative resource paths, so moving the pair to another folder or drive does not require importing again. Choose a writable folder; if it is read-only, the launcher asks you to move it instead of silently storing games elsewhere.
 
 When upgrading in the same folder, the launcher copies existing adjacent `saves/` into `PoC Data/saves/` without replacing newer portable saves. It also migrates the older application preferences and prepares a compact local copy of the previous imported library. Migration keeps the old source intact until the new library is verified. If upgrading to a different folder, copy your previous `saves/` beside the new EXE before its first run, or move an existing `PoC Data` folder with it.
