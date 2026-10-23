@@ -9,10 +9,10 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {"README.md", "README.es.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md", ".gitattributes", "docs/LAUNCHER_SETTINGS.md", "docs/REDDIT_POST.en.md"}
+TOP = {"README.md", "README.es.md", "Jugar demo.bat", "THIRD_PARTY_NOTICES.md", ".gitattributes", "docs/LAUNCHER_SETTINGS.md", "docs/REDDIT_POST.en.md", "docs/CARD_TRANSLATIONS.md", "game/translations/spanish-card-catalog.json"}
 TOOL_TOP = {"tools/pyproject.toml", "tools/prepare_public.py", "tools/build_windows.py", "tools/importer_entry.py", "tools/trace_logo_contours.py",
             "tools/tests/test_public_import.py", "tools/tests/test_media_import.py",
-            "tools/tests/test_compact_import.py", "tools/configure_android_builder.py", "tools/tests/test_android_builder.py", "tools/tests/test_android_toolchain.py", "tools/tests/test_updater.py",
+            "tools/tests/test_compact_import.py", "tools/configure_android_builder.py", "tools/tests/test_android_builder.py", "tools/tests/test_android_toolchain.py", "tools/tests/test_updater.py", "tools/tests/test_card_translations.py",
             "tools/prepare_android_public.py", "tools/public_android/README.md", "tools/public_android/README.es.md",
             ".github/workflows/build-windows.yml", "game/export_presets.cfg"}
 OWN_ASSETS = {"game/assets/music/launcher_theme.mp3",

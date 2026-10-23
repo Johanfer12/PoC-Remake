@@ -28,7 +28,6 @@ const SVG_SOUND := SVG_HEAD + "<polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 
 const SVG_MUTED := SVG_HEAD + "<polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'/><line x1='23' y1='9' x2='17' y2='15'/><line x1='17' y1='9' x2='23' y2='15'/></svg>"
 const SVG_GEAR := SVG_HEAD + "<circle cx='12' cy='12' r='3'/><path d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/></svg>"
 const SVG_CLOSE := SVG_HEAD + "<line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg>"
-const SVG_CHECK := SVG_HEAD + "<polyline points='20 6 9 17 4 12'/></svg>"
 const SVG_EXIT := SVG_HEAD + "<path d='M18.36 6.64a9 9 0 1 1-12.73 0'/><line x1='12' y1='2' x2='12' y2='12'/></svg>"
 const SVG_UPDATE := SVG_HEAD + "<path d='M20 7a9 9 0 1 0 1 9'/><polyline points='20 2 20 8 14 8'/></svg>"
 
@@ -51,7 +50,7 @@ func _ready() -> void:
 	volume = clampf(float(saved.get("music_volume", DEFAULT_VOLUME)), 0.0, 1.0)
 	muted = bool(saved.get("music_muted", false))
 	for pair in [["sound", SVG_SOUND], ["muted", SVG_MUTED], ["gear", SVG_GEAR],
-			["close", SVG_CLOSE], ["check", SVG_CHECK], ["exit", SVG_EXIT], ["update", SVG_UPDATE]]:
+			["close", SVG_CLOSE], ["exit", SVG_EXIT], ["update", SVG_UPDATE]]:
 		_icons[pair[0]] = _rasterize(pair[1])
 
 
@@ -103,13 +102,8 @@ func _slider_rect() -> Rect2:
 	return Rect2(r.position.x + 215, r.position.y + 92, SLIDER_W, 8)
 
 
-func _mute_rect() -> Rect2:
-	var r := _panel_rect()
-	return Rect2(r.position.x + 215, r.position.y + 136, 22, 22)
-
-
 func _option_rect(row: int) -> Rect2:
-	return Rect2(_panel_rect().position + Vector2(215, 178 + row * 48), Vector2(270, 32))
+	return Rect2(_panel_rect().position + Vector2(215, 130 + row * 48), Vector2(270, 32))
 
 
 func _hit(pos: Vector2) -> String:
@@ -118,11 +112,9 @@ func _hit(pos: Vector2) -> String:
 			return "close"
 		if _slider_rect().grow_individual(8, 12, 8, 12).has_point(pos):
 			return "slider"
-		if _mute_rect().grow(4).has_point(pos):
-			return "mute"
-		for row in 4:
+		for row in 5:
 			if _option_rect(row).has_point(pos):
-				return ["aspect", "fps", "speed", "fast_play"][row]
+				return ["aspect", "fps", "speed", "fast_play", "translations"][row]
 		return "panel" if _panel_rect().has_point(pos) else "outside"
 	if pos.distance_to(_sound_center()) <= RADIUS:
 		return "sound"
@@ -173,12 +165,9 @@ func _input(event: InputEvent) -> void:
 				_focused_row = 0
 				_dragging = true
 				_set_volume_from(local_pos.x)
-			"mute":
-				_focused_row = 1
-				_toggle_mute()
-			"aspect", "fps", "speed", "fast_play":
-				_focused_row = ["aspect", "fps", "speed", "fast_play"].find(_hit(local_pos)) + 2
-				_cycle_option(_focused_row - 2, 1)
+			"aspect", "fps", "speed", "fast_play", "translations":
+				_focused_row = ["aspect", "fps", "speed", "fast_play", "translations"].find(_hit(local_pos)) + 1
+				_cycle_option(_focused_row - 1, 1)
 			"panel":
 				pass
 			_:
@@ -199,13 +188,10 @@ func _input(event: InputEvent) -> void:
 		if _focused_row == 0:
 			_set_volume(volume + KEY_STEP * step)
 			_save()
-		elif _focused_row == 1:
-			_toggle_mute()
 		else:
-			_cycle_option(_focused_row - 2, step)
+			_cycle_option(_focused_row - 1, step)
 	elif event.is_action_pressed("ui_accept"):
-		if _focused_row == 1: _toggle_mute()
-		elif _focused_row >= 2: _cycle_option(_focused_row - 2, 1)
+		if _focused_row >= 1: _cycle_option(_focused_row - 1, 1)
 	get_viewport().set_input_as_handled()
 
 
@@ -221,7 +207,11 @@ func _cycle_option(row: int, step: int) -> void:
 			LauncherSettings.simulation_speed = 2.0 if LauncherSettings.simulation_speed == 1.0 else 1.0
 		3:
 			LauncherSettings.fast_play = not LauncherSettings.fast_play
+		4:
+			LauncherSettings.improved_card_texts = not LauncherSettings.improved_card_texts
 	LauncherSettings.save_preferences()
+	if row == 4 and LauncherSettings.improved_card_texts:
+		CardTranslations.ensure_spanish_pack()
 	queue_redraw()
 
 
@@ -324,23 +314,23 @@ func _draw_panel() -> void:
 	draw_line(Vector2(r.position.x + 40, line_y), Vector2(r.end.x - 40, line_y), Color(GOLD, 0.5), 1.0)
 	_label(Assets.port_label(2), Vector2(r.position.x + 34, _slider_rect().get_center().y + 6))
 	_draw_slider()
-	_label(Assets.port_label(3), Vector2(r.position.x + 34, _mute_rect().get_center().y + 6))
-	_draw_checkbox()
 	var spanish := Assets.lang == "s"
-	var names := ["Aspecto", "FPS", "Simulación", "Juego rápido"] if spanish else ["Aspect", "FPS", "Simulation", "Quick play"]
+	var names := ["Aspecto", "FPS", "Simulación", "Juego rápido", "Traducciones"] if spanish else ["Aspect", "FPS", "Simulation", "Quick play", "Translations"]
 	var aspects := ["Estirado", "Original sin fondo", "Overlay"] if spanish else ["Stretched", "Original, no background", "Overlay"]
 	var values := [str(aspects[LauncherSettings.ASPECTS.find(LauncherSettings.aspect)]),
 		("Display (%d Hz)" % LauncherSettings.display_fps()) if LauncherSettings.frame_rate == 0 else str(LauncherSettings.frame_rate),
 		"Normal" if LauncherSettings.simulation_speed == 1.0 else "2×",
-		("Activado" if LauncherSettings.fast_play else "Desactivado") if spanish else ("On" if LauncherSettings.fast_play else "Off")]
-	for row in 4:
+		("Activado" if LauncherSettings.fast_play else "Desactivado") if spanish else ("On" if LauncherSettings.fast_play else "Off"),
+		("Mejoradas (ES)" if spanish else "Enhanced (ES)") if LauncherSettings.improved_card_texts else ("Originales" if spanish else "Original")]
+	for row in 5:
 		var rect := _option_rect(row)
 		_label(names[row], Vector2(r.position.x + 34, rect.get_center().y + 6))
-		draw_rect(rect, GOLD if _focused_row == row + 2 or _hover == ["aspect", "fps", "speed", "fast_play"][row] else GOLD_DARK)
+		draw_rect(rect, GOLD if _focused_row == row + 1 or _hover == ["aspect", "fps", "speed", "fast_play", "translations"][row] else GOLD_DARK)
 		draw_rect(rect.grow(-1), STONE)
 		_label(values[row] + "  >", rect.position + Vector2(8, 22))
-	var focus_rect := _slider_rect().grow(12) if _focused_row == 0 else _mute_rect().grow(4)
-	if _focused_row < 2: draw_rect(focus_rect, Color(GOLD, 0.6), false, 1.0)
+	if _focused_row == 0: draw_rect(_slider_rect().grow(12), Color(GOLD, 0.6), false, 1.0)
+	var status: String = CardTranslations.status_text(spanish) if LauncherSettings.improved_card_texts else ("Solo nombres y descripciones de cartas" if spanish else "Card names and descriptions only")
+	draw_string(_font, Vector2(r.position.x + 34, r.end.y - 20), status, HORIZONTAL_ALIGNMENT_LEFT, 450, 13, GOLD_LIGHT)
 	_medallion(_close_center(), 14.0, "close", _hover == "close")
 
 
@@ -358,16 +348,6 @@ func _draw_slider() -> void:
 	draw_circle(knob, (9 if hot else 8) - 1.5, GOLD_LIGHT if hot else GOLD)
 	draw_circle(knob, 3, GOLD_DARK)
 	_label("%d%%" % roundi(volume * 100), Vector2(t.end.x + 16, t.get_center().y + 6))
-
-
-func _draw_checkbox() -> void:
-	var b := _mute_rect()
-	var hot := _hover == "mute"
-	draw_rect(b.grow(1), GOLD_DARK)
-	draw_rect(b, GOLD_LIGHT if hot else GOLD)
-	draw_rect(b.grow(-2), STONE)
-	if muted:
-		_draw_icon("check", b.get_center(), 18, GOLD_LIGHT)
 
 
 func _label(text: String, pos: Vector2) -> void:

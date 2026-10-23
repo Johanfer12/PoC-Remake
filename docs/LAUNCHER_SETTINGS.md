@@ -1,6 +1,7 @@
 # Ajustes del launcher
 
-El engranaje ofrece volumen/silencio y cuatro selectores. Se conserva el idioma de la
+El engranaje ofrece volumen y cinco selectores. El silencio se controla con el botón
+de sonido exterior, sin una casilla duplicada en ajustes. Se conserva el idioma de la
 esquina superior; el selector redundante del panel se ha retirado.
 
 - **Aspecto:** Estirado ocupa la ventana completa; Original sin fondo conserva 4:3
@@ -18,9 +19,14 @@ esquina superior; el selector redundante del panel se ha retirado.
   Conserva música, efectos, janken, reglas y resultados. La presentación original
   se recupera al desactivarlo.
 
+- **Traducciones:** Originales o Mejoradas (ES), solo para nombres y descripciones
+  de cartas. La base española inicial es parcial; conserva cada texto original que
+  no tenga una mejora comprobada. Ver [fuentes y cobertura](CARD_TRANSLATIONS.md).
+
 Las preferencias se guardan en la sección `launcher` de `PoC Data/content.cfg`,
 conservando los otros ajustes, incluso antes de importar recursos. Valores iniciales:
-Overlay, Display y Normal. Volumen y silencio mantienen su guardado existente.
+Overlay, Display, velocidad Normal, Juego rápido desactivado y traducciones Originales.
+Volumen y silencio mantienen su guardado existente.
 
 Clic sobre un selector avanza su valor. Arriba/abajo eligen fila, izquierda/derecha
 cambian el valor, Enter activa la fila y Escape cierra el panel.

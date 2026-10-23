@@ -45,10 +45,15 @@ Open the **gear** in the launcher to choose how you play:
 | FPS | **30**, **60**, or **Display**, which follows the current monitor's refresh rate. |
 | Simulation | **Normal** or **2×**. Simulation speed is independent of the FPS limit. |
 | Quick play | Skip character introductions, outros, portrait reactions, spoken lines and scene wipes in **Yugi, Kaiba and Joey**. Music and sound effects remain enabled. |
+| Improved card translations | Initial, partial improvements to Spanish card names and descriptions from the official Yu-Gi-Oh! Card Database. Download available texts explicitly and keep them locally. |
+
+**Default settings:** display refresh rate, normal simulation speed and quick play off.
 
 Preferences are remembered between launches. Quick play is optional and starts **off**;
 turn it off to restore the original presentation. The launcher opens maximized from
 the start, and you can still resize the window or use **F11 / Alt+Enter** for fullscreen.
+
+**Improved card translations** starts off and currently offers partial Spanish coverage for card names and descriptions. Cards and fields awaiting review or download retain their imported text. Descriptions change only when the current official English text matches the original game's wording; menus and rules stay as they are. Enabling the option explicitly starts the download. Cached texts work offline, and reopening the launcher does not start another download. If the server limits access, the download stops and preserves what is already cached; try again later by toggling the option off and on. Turn it off at any time to restore imported wording.
 
 ## Your ISO → PC or Android APK
 

@@ -182,6 +182,8 @@ def build(godot: Path, output: Path, with_android: bool = False) -> Path:
             # Exercise the actual packed implementation explicitly; conversion is now lazy.
             probe = work/"verify_tools.gd"
             probe.write_text('extends SceneTree\nfunc _init() -> void:\n\t_run.call_deferred()\nfunc _run() -> void:\n'
+                             '\tvar translations = root.get_node("CardTranslations")\n'
+                             '\tif translations.total != 771 or translations.busy:\n\t\tquit(1)\n\t\treturn\n'
                              '\tvar importer: String = load("res://core/bundled_tools.gd").prepare()\n'
                              '\tquit(int(importer == ""))\n', encoding="utf-8")
             command([str(godot), "--headless", "--main-pack", str(executable),

@@ -1,0 +1,5405 @@
+{
+  "format": 1,
+  "locale": "spa",
+  "identity_source": "https://db.ygoprodeck.com/api/v7/cardinfo.php?misc=yes",
+  "text_source": "https://www.db.yugioh-card.com/yugiohdb/",
+  "cards": {
+    "1504": {
+      "cid": 5226,
+      "password": "67105242",
+      "english_name": "Earthbound Spirit",
+      "legacy_description_sha256": "c0f5fd7eace5fcf46b046f9770b9bd4dcad7a2eb99f29580a20defe88a84a263",
+      "review_description": true
+    },
+    "614": {
+      "cid": 4621,
+      "password": "17535588",
+      "english_name": "Armored Starfish",
+      "legacy_description_sha256": "d9819495ddfb4d4a3d99554788137a7732547b8b9890c027a0b22766ce1be533",
+      "review_description": true
+    },
+    "50": {
+      "cid": 4057,
+      "password": "15480588",
+      "english_name": "Armored Lizard",
+      "legacy_description_sha256": "b746d5dac8cee0bba76700ce82255877e77ed0b861fbef83d182c9f754dedd6d",
+      "review_description": true
+    },
+    "171": {
+      "cid": 4178,
+      "password": "53153481",
+      "english_name": "Armaill",
+      "legacy_description_sha256": "4fcfd92c100612e8f60ff86c100148e2a368fbab3c63016a686af355c88dedcc",
+      "review_description": true
+    },
+    "261": {
+      "cid": 4268,
+      "password": "25109950",
+      "english_name": "The Little Swordsman of Aile",
+      "legacy_description_sha256": "56932608c0175ab14185149f571235cd5550ba541e8470d83d716fb77601d2a4",
+      "review_description": true
+    },
+    "1330": {
+      "cid": 4777,
+      "password": "50122883",
+      "english_name": "Bite Shoes",
+      "legacy_description_sha256": "ca2710157257b20e9219cd6362f44291946bbff0cc718f7769aaf7558d2c9f04",
+      "review_description": false
+    },
+    "1178": {
+      "cid": 5006,
+      "password": "95132338",
+      "english_name": "Aqua Chorus",
+      "legacy_description_sha256": "45c79d20cd356a017a0d4eda89e223af56dd12d58d4fa3a8c474819aebbb4a45",
+      "review_description": false
+    },
+    "212": {
+      "cid": 4219,
+      "password": "85639257",
+      "english_name": "Aqua Madoor",
+      "legacy_description_sha256": "38b3fa0940304b6bd5aeac0be7c95e6b2b1deadd20f6f04e00fc07eb51ea4059",
+      "review_description": true
+    },
+    "320": {
+      "cid": 4327,
+      "password": "99597615",
+      "english_name": "Malevolent Nuzzler",
+      "legacy_description_sha256": "cd3afed5d1c2039d883ccbb47c00199a224c699813bb35964693dbaf79861891",
+      "review_description": false
+    },
+    "1204": {
+      "cid": 4816,
+      "password": "00126218",
+      "english_name": "Skull Dice",
+      "legacy_description_sha256": "22700106c68b2feb592a13c341cefd99acdb591eee6f5343017846df2dd77b24",
+      "review_description": false
+    },
+    "161": {
+      "cid": 4168,
+      "password": "28725004",
+      "english_name": "Tainted Wisdom",
+      "legacy_description_sha256": "9a0a884ddc0888824778d3ca151960e06e04372627fbb217879ec030f2a5023f",
+      "review_description": false
+    },
+    "610": {
+      "cid": 4617,
+      "password": "81863068",
+      "english_name": "Hiro's Shadow Scout",
+      "legacy_description_sha256": "6dbbf7c817a61c5e2dcc5857b9ec74f32de55d1e9f57266d306c9576a641eb58",
+      "review_description": false
+    },
+    "1037": {
+      "cid": 4869,
+      "password": "26725158",
+      "english_name": "Exile of the Wicked",
+      "legacy_description_sha256": "34a28c6a8aa6c34292f042f1f4c3772ea05726bd398ba1f7e2cbddae0389f77c",
+      "review_description": false
+    },
+    "1230": {
+      "cid": 5120,
+      "password": "58775978",
+      "english_name": "Nightmare's Steelcage",
+      "legacy_description_sha256": "b01055a0768edfb8ac88107f583ea555e6a7562b115072bbac3927babfeb8c5b",
+      "review_description": false
+    },
+    "126": {
+      "cid": 4133,
+      "password": "48365709",
+      "english_name": "Ansatsu",
+      "legacy_description_sha256": "d5eeda90d55139e633d33bcaaeb66113d8c6d65c3bafd64d8e225a127e184e4a",
+      "review_description": true
+    },
+    "1159": {
+      "cid": 4965,
+      "password": "43434803",
+      "english_name": "The Shallow Grave",
+      "legacy_description_sha256": "2be99a4d235991fc352d71fae3d1803038821426f2840bc3c2bdc9232a1a33be",
+      "review_description": false
+    },
+    "77": {
+      "cid": 4084,
+      "password": "48305365",
+      "english_name": "Axe Raider",
+      "legacy_description_sha256": "1ee8be18fa958e42e4e408aa2df192b20a23ca7c5f41e8a9a26890c0eacec70c",
+      "review_description": true
+    },
+    "1432": {
+      "cid": 5195,
+      "password": "91869203",
+      "english_name": "Amazon Archer",
+      "legacy_description_sha256": "f1abcd389fab093ec7cea59d345658edc24641ee6297acf6f343638a05757151",
+      "review_description": false
+    },
+    "688": {
+      "cid": 4695,
+      "password": "77622396",
+      "english_name": "Reverse Trap",
+      "legacy_description_sha256": "e0a3f0e4b315f4117d077965de49cb5288006ce0517146ee1563832e75fb233c",
+      "review_description": false
+    },
+    "483": {
+      "cid": 4490,
+      "password": "95174353",
+      "english_name": "Ameba",
+      "legacy_description_sha256": "bc416efb6fead98b6d05e234c6a632274c6c77fdc35cc08c0e722113d676a47a",
+      "review_description": false
+    },
+    "167": {
+      "cid": 4174,
+      "password": "17881964",
+      "english_name": "Darkfire Dragon",
+      "legacy_description_sha256": "dc0fd1ff3209a88424b83e4ab42a1b3a2fc5d7074a82caf24456b9f4bd1c432d",
+      "review_description": true
+    },
+    "37": {
+      "cid": 4044,
+      "password": "06368038",
+      "english_name": "Gaia The Fierce Knight",
+      "legacy_description_sha256": "ef2e623bc29426bdf7316c94375e75232cd2d507562e08bf01db293f79cee8fb",
+      "review_description": true
+    },
+    "1538": {
+      "cid": 5225,
+      "password": "30606547",
+      "english_name": "The Dark Door",
+      "legacy_description_sha256": "93f5dcb06e551ab00b030acb5a9817ad2a6f03e732b05d6136677d6e0f08ccaa",
+      "review_description": false
+    },
+    "9": {
+      "cid": 4016,
+      "password": "87564352",
+      "english_name": "Blackland Fire Dragon",
+      "legacy_description_sha256": "c2b191343e48b1dcc4a6d4cc0afae1184437515a464e32d2abd5d81f50fa5b51",
+      "review_description": true
+    },
+    "1332": {
+      "cid": 4746,
+      "password": "52675689",
+      "english_name": "Invitation to a Dark Sleep",
+      "legacy_description_sha256": "a89c811ec8a064db876cc4c55ec4958ee98e2ba4a2294ed2888b27ed224dab26",
+      "review_description": true
+    },
+    "1242": {
+      "cid": 5091,
+      "password": "50287060",
+      "english_name": "Beast of Gilfer",
+      "legacy_description_sha256": "63f3c828dfdff28d3efd1df65fcca5e18f62a349af17d6ed1feb66416e3abb3a",
+      "review_description": false
+    },
+    "514": {
+      "cid": 4521,
+      "password": "10262698",
+      "english_name": "The Statue of Easter Island",
+      "legacy_description_sha256": "063df50279ceeaec7e59031c607e494d117e792b5f979553c21ce271753a444b",
+      "review_description": true
+    },
+    "264": {
+      "cid": 4271,
+      "password": "18710707",
+      "english_name": "The Furious Sea King",
+      "legacy_description_sha256": "dec717cf2f1132078cacb5b7025424b09968226b93e09e90a39b8b35c52f79e9",
+      "review_description": true
+    },
+    "568": {
+      "cid": 4575,
+      "password": "16353197",
+      "english_name": "Drooling Lizard",
+      "legacy_description_sha256": "b53df6076c7d460913eeda60916e635a1565dbdc541871bc95b52906d4e0a61a",
+      "review_description": true
+    },
+    "1418": {
+      "cid": 5106,
+      "password": "29549364",
+      "english_name": "Mask of Restrict",
+      "legacy_description_sha256": "b5e37e0f8b96c972efc99d2a6e3e9d972841cfa37a5d640ac333d5d97dcbd65a",
+      "review_description": false
+    },
+    "255": {
+      "cid": 4262,
+      "password": "37043180",
+      "english_name": "Dimensional Warrior",
+      "legacy_description_sha256": "961b925d72d777783a210fd3388008f296dd3a93ecb7a5769f02de38b721d6d0",
+      "review_description": false
+    },
+    "1526": {
+      "cid": 4785,
+      "password": "86099788",
+      "english_name": "The Last Warrior from Another Planet",
+      "legacy_description_sha256": "2e140531998072820741abb50b20343a4b180653a3111cb4aa20fcd0188ce7ec",
+      "review_description": false
+    },
+    "1177": {
+      "cid": 5001,
+      "password": "59744639",
+      "english_name": "Windstorm of Etaqua",
+      "legacy_description_sha256": "cc4bb8a59f27be218149c5bd70933e311132c4af3e05de825d4c3ada52e8bf82",
+      "review_description": false
+    },
+    "1071": {
+      "cid": 4901,
+      "password": "44763025",
+      "english_name": "Delinquent Duo",
+      "legacy_description_sha256": "6a8c42ff9085ca493266a04d9cb2f069a17458d7ee69c3971f65aafd5afb5bae",
+      "review_description": false
+    },
+    "1059": {
+      "cid": 4889,
+      "password": "56830749",
+      "english_name": "Share the Pain",
+      "legacy_description_sha256": "2c64ec449dc008ef2a1e2cb1f66d36165382368be7bf9089bf0c4dc9b5c8314a",
+      "review_description": false
+    },
+    "1146": {
+      "cid": 4952,
+      "password": "00296499",
+      "english_name": "The Regulation of Tribe",
+      "legacy_description_sha256": "d9be95223d26c3e333473f262fe90bf73a8c841d1ec389fcade76ba0ad0c4699",
+      "review_description": false
+    },
+    "313": {
+      "cid": 4320,
+      "password": "64047146",
+      "english_name": "Horn of the Unicorn",
+      "legacy_description_sha256": "c6e866c64b0109a86a97abc39b155d20b18380dd53fc3205a4ac54ed7996fe9d",
+      "review_description": false
+    },
+    "1422": {
+      "cid": 5110,
+      "password": "55226821",
+      "english_name": "Lightning Blade",
+      "legacy_description_sha256": "280cc80cc22bc52130fd664d8a67d6e16091953c001a4b787910a6bf16d5d240",
+      "review_description": false
+    },
+    "533": {
+      "cid": 4540,
+      "password": "32539892",
+      "english_name": "Minar",
+      "legacy_description_sha256": "278350f5871e289784e6de615ce177fc39e6ef4f7db1d6b0aca1304afa11ab9d",
+      "review_description": false
+    },
+    "41": {
+      "cid": 4048,
+      "password": "28546905",
+      "english_name": "Illusionist Faceless Mage",
+      "legacy_description_sha256": "58136933195caef3861b47ad808eff3d01b932fb13bde157533aa121a58af177",
+      "review_description": true
+    },
+    "641": {
+      "cid": 4648,
+      "password": "30451366",
+      "english_name": "Mystical Sheep #1",
+      "legacy_description_sha256": "551dd5e968587901e85b66b7782bc1724a07ad61504db2b77fce5d9cc6011383",
+      "review_description": false
+    },
+    "958": {
+      "cid": 4802,
+      "password": "41426869",
+      "english_name": "Black Illusion Ritual",
+      "legacy_description_sha256": "60bc7255e56c03e69d305b20915665097fcae72f09cacaad620697fae1a1ef3f",
+      "review_description": false
+    },
+    "1518": {
+      "cid": 5254,
+      "password": "76305638",
+      "english_name": "The Rock Spirit",
+      "legacy_description_sha256": "9cca987a66d9aa69ef626e79e03e7f432b3e3a83a2c3163f182a8169152c69b2",
+      "review_description": false
+    },
+    "761": {
+      "cid": 4768,
+      "password": "91512835",
+      "english_name": "Insect Queen",
+      "legacy_description_sha256": "c40666642c691c4ab218af3b7ae4d9a491577d2ef43d79eb1a6ed703fbefdc05",
+      "review_description": false
+    },
+    "1528": {
+      "cid": 5224,
+      "password": "94212438",
+      "english_name": "Destiny Board",
+      "legacy_description_sha256": "341f471e8343b11394c4e7c9e2bc2ccf110e75f2a3eb04d220aae54b3694724b",
+      "review_description": false
+    },
+    "649": {
+      "cid": 4656,
+      "password": "91996584",
+      "english_name": "Whiptail Crow",
+      "legacy_description_sha256": "34e705215da80617a7cb578e7983c9e5395003c6b6cae9ad5d3187a6fcda628a",
+      "review_description": true
+    },
+    "582": {
+      "cid": 4589,
+      "password": "72053645",
+      "english_name": "Weather Report",
+      "legacy_description_sha256": "b0e29ffa2c951034430b4492879cdb151f4b3a1d1694c6187afdb6b4c3dd603c",
+      "review_description": false
+    },
+    "1126": {
+      "cid": 4933,
+      "password": "82999629",
+      "english_name": "Umiiruka",
+      "legacy_description_sha256": "fc68a8129f90ca0f1c3a1f5415d0ed527fb6ee224f4d879875f3bcd3ac0de61d",
+      "review_description": false
+    },
+    "368": {
+      "cid": 4375,
+      "password": "ffffffff",
+      "english_name": "Wall Shadow",
+      "legacy_description_sha256": "41332a57cf2c6b446ae585da2e1bdbbf37ffb2e760f219481fd0cf09f1db7536",
+      "review_description": false
+    },
+    "400": {
+      "cid": 4407,
+      "password": "48649353",
+      "english_name": "Ushi Oni",
+      "legacy_description_sha256": "423528ac61208c4799229add8ed52dbeb9f2d53a70ab9965ce8bab5dde2ec4b5",
+      "review_description": true
+    },
+    "1074": {
+      "cid": 4904,
+      "password": "43641473",
+      "english_name": "Tailor of the Fickle",
+      "legacy_description_sha256": "7aed236c2eb3e6442bd2752721b412daeb18a6b0711e409d6df2854f6c6b048d",
+      "review_description": false
+    },
+    "333": {
+      "cid": 4340,
+      "password": "22702055",
+      "english_name": "Umi",
+      "legacy_description_sha256": "0b655805c1e7ee057f381f1fdba38ddc2e689a3b32e4cf935e8d6807680bed01",
+      "review_description": false
+    },
+    "1548": {
+      "cid": 5277,
+      "password": "69954399",
+      "english_name": "Ekibyo Drakmord",
+      "legacy_description_sha256": "56ef1dafa498ba8ab37234ec0b0244ad5992b8e68b1b5b01fbf69fb4ee8f6ed7",
+      "review_description": false
+    },
+    "1205": {
+      "cid": 5218,
+      "password": "05556668",
+      "english_name": "Exchange",
+      "legacy_description_sha256": "45f08bf772fb250e2095766a524b1510a3152cc9b82b60b3fe362806ce182e15",
+      "review_description": false
+    },
+    "705": {
+      "cid": 4712,
+      "password": "ffffffff",
+      "english_name": "Serpent Night Dragon",
+      "legacy_description_sha256": "cc9ef671e01385d90e3d8a43112cc8a03cc927dc5c5a1e22edf5d6e95c0d463e",
+      "review_description": true
+    },
+    "1414": {
+      "cid": 5101,
+      "password": "21888494",
+      "english_name": "Chosen One",
+      "legacy_description_sha256": "276339a851b9d517e2683c851b6e5aac0cecc314159b2cbc394d6395a5c80cbd",
+      "review_description": false
+    },
+    "40": {
+      "cid": 4047,
+      "password": "91152256",
+      "english_name": "Celtic Guardian",
+      "legacy_description_sha256": "4fab9b305d33618a76405fb98dc9779cc3764772ee310391bebe7d4be1c1b5ce",
+      "review_description": true
+    },
+    "306": {
+      "cid": 4313,
+      "password": "39897277",
+      "english_name": "Elf's Light",
+      "legacy_description_sha256": "596b206ab236061e187f642aa14832015e16fa0b53f3cfe752116017c6330a26",
+      "review_description": true
+    },
+    "44": {
+      "cid": 4051,
+      "password": "27324313",
+      "english_name": "Oscillo Hero #2",
+      "legacy_description_sha256": "4741f96cae9b452ea25239ebb2456bc62f9eb5cbb9ce9ce72aa0c113d385d189",
+      "review_description": true
+    },
+    "462": {
+      "cid": 4469,
+      "password": "11324436",
+      "english_name": "Electric Snake",
+      "legacy_description_sha256": "f48c1398a5c8f8b5b84124cd2a32a125ffcda7f857ed05b0acc706e8582cbd61",
+      "review_description": false
+    },
+    "1015": {
+      "cid": 4849,
+      "password": "17814387",
+      "english_name": "Reinforcements",
+      "legacy_description_sha256": "2dac658e3c5a224ba88ee31655ad6d824c3166302ad794b4baaf517510dd21d6",
+      "review_description": false
+    },
+    "432": {
+      "cid": 4439,
+      "password": "93221206",
+      "english_name": "Ancient Elf",
+      "legacy_description_sha256": "42b198b384db9bbab726eed70156ead3262d74160dec0be2b7c023ee68032443",
+      "review_description": true
+    },
+    "395": {
+      "cid": 4402,
+      "password": "86088138",
+      "english_name": "Ocubeam",
+      "legacy_description_sha256": "58e7cd64385f176b87684d219659275d6bb37a14d9e1c96ffe0e08a63476bc6d",
+      "review_description": true
+    },
+    "1045": {
+      "cid": 4876,
+      "password": "88279736",
+      "english_name": "Robbin' Goblin",
+      "legacy_description_sha256": "c473c15b2b4cf724d1d4cdbe3d84b69fc30b68eed66ccbb51ed55ae2272c3034",
+      "review_description": false
+    },
+    "1033": {
+      "cid": 4866,
+      "password": "51452091",
+      "english_name": "Royal Decree",
+      "legacy_description_sha256": "cc69b412021f033a106a23174ebd14371936021bed5d610b89b64cb8f1046170",
+      "review_description": false
+    },
+    "1530": {
+      "cid": 5262,
+      "password": "33950246",
+      "english_name": "Royal Command",
+      "legacy_description_sha256": "0712a9ff9645fb85a2f70fabfeb104740e97c1621a94da7c3142b17d2c3c8d06",
+      "review_description": false
+    },
+    "1154": {
+      "cid": 4960,
+      "password": "61740673",
+      "english_name": "Imperial Order",
+      "legacy_description_sha256": "92367fc15b004ae077d63b5fdcc1c3343f9388452267470c370d7e631ee6d92f",
+      "review_description": false
+    },
+    "279": {
+      "cid": 4286,
+      "password": "10071456",
+      "english_name": "Protector of the Throne",
+      "legacy_description_sha256": "cf118b489565488504abfb30d442a5586997cc9080f4f0592225c3bfa5ab74ce",
+      "review_description": true
+    },
+    "640": {
+      "cid": 4647,
+      "password": "03056267",
+      "english_name": "Invader of the Throne",
+      "legacy_description_sha256": "e3ea232c8bb688108388e10e9c21f815b9e1453a43ba63831fc775b18dba0805",
+      "review_description": false
+    },
+    "512": {
+      "cid": 4519,
+      "password": "47879985",
+      "english_name": "Guardian of the Throne Room",
+      "legacy_description_sha256": "4ddb77a7eabb1c6cd89426d71cff0551987f5a2e6c4ceccbaca59103ca693853",
+      "review_description": true
+    },
+    "1070": {
+      "cid": 4900,
+      "password": "17375316",
+      "english_name": "Confiscation",
+      "legacy_description_sha256": "f6f5434a41ec38146945ed00b85c660244f14e55903cadcef8cbfb3afe93761b",
+      "review_description": false
+    },
+    "1061": {
+      "cid": 4891,
+      "password": "19613556",
+      "english_name": "Heavy Storm",
+      "legacy_description_sha256": "f07ac7a07edba8afdc2368480e197760bd260d6b65933670bc6f5d586e6b416c",
+      "review_description": false
+    },
+    "1149": {
+      "cid": 4955,
+      "password": "09074847",
+      "english_name": "Major Riot",
+      "legacy_description_sha256": "dbf7a9dda7203be09b7639f5ac52e7f873366396a7ea0b992fe99dbd633779b5",
+      "review_description": false
+    },
+    "130": {
+      "cid": 4137,
+      "password": "74637266",
+      "english_name": "Octoberser",
+      "legacy_description_sha256": "d141eb4bed3a40e2f2c53c96139732c348f421de092456785e284e361af5e928",
+      "review_description": true
+    },
+    "558": {
+      "cid": 4565,
+      "password": "82065276",
+      "english_name": "Oscillo Hero",
+      "legacy_description_sha256": "0bb3ad00e5ec2e77e11d822cd66ba76109859c9a836dc7a3b4b082aad7d1e2d9",
+      "review_description": true
+    },
+    "1002": {
+      "cid": 4836,
+      "password": "04206964",
+      "english_name": "Trap Hole",
+      "legacy_description_sha256": "d3e8c3d83538658d16c0481a1d0a3ca4cbc50be51cdf85d9c90d5a92452eb0d1",
+      "review_description": false
+    },
+    "298": {
+      "cid": 4305,
+      "password": "38942059",
+      "english_name": "Sonic Maid",
+      "legacy_description_sha256": "46cb1ae8c50c943b8ed480cf40d10d650c01f0cbec5852d53b5253b038f8500d",
+      "review_description": true
+    },
+    "675": {
+      "cid": 4682,
+      "password": "ffffffff",
+      "english_name": "Commencement Dance",
+      "legacy_description_sha256": "b3345ee988e609051ae322531d1c944739b4d29f689d6c7c3647b285d00e75d5",
+      "review_description": false
+    },
+    "1545": {
+      "cid": 5275,
+      "password": "07165085",
+      "english_name": "Bait Doll",
+      "legacy_description_sha256": "8e18c47a5c4c61658f93c7ace545bc5801ba33015a2db7df613d161f5c565162",
+      "review_description": false
+    },
+    "1309": {
+      "cid": 4981,
+      "password": "66927994",
+      "english_name": "Oni Tank T-34",
+      "legacy_description_sha256": "2f7d7f989b3dafe8365fb57f428a8b4e8049892904b39bdb340d837ab3630a71",
+      "review_description": true
+    },
+    "1348": {
+      "cid": 5149,
+      "password": "04920010",
+      "english_name": "Souls of the Forgotten",
+      "legacy_description_sha256": "8b3fc94b995ada25a81481ad309f6eaf030b58c8ffeb1c1b6286a62aebfde934",
+      "review_description": true
+    },
+    "1552": {
+      "cid": 5281,
+      "password": "95220856",
+      "english_name": "Vengeful Bog Spirit",
+      "legacy_description_sha256": "718b66ea08bdb4f3aa8254905187f7c952d31949020157b094635a5f07279009",
+      "review_description": false
+    },
+    "376": {
+      "cid": 4383,
+      "password": "24611934",
+      "english_name": "Ryu-Kishin Powered",
+      "legacy_description_sha256": "ddc343baf1366891084198d840de86844bcd874db45d65ac1c62191f95fe696a",
+      "review_description": true
+    },
+    "38": {
+      "cid": 4045,
+      "password": "28279543",
+      "english_name": "Curse of Dragon",
+      "legacy_description_sha256": "fd0fc33fa9f645b59295ee370edb4436a97c2a495da5cf259455054ab7cda9df",
+      "review_description": true
+    },
+    "83": {
+      "cid": 4090,
+      "password": "33066139",
+      "english_name": "Reaper of the Cards",
+      "legacy_description_sha256": "19a540345a99823025e0d383ad565d347e543abaca74980a46a08c5bf3bb453b",
+      "review_description": false
+    },
+    "795": {
+      "cid": 4787,
+      "password": "49888191",
+      "english_name": "Garnecia Elefantis",
+      "legacy_description_sha256": "28432846343d9590e34ce8b08edd36ec4b3ea2e2769c05300548aa8ed6568e19",
+      "review_description": true
+    },
+    "1125": {
+      "cid": 4932,
+      "password": "56594520",
+      "english_name": "Gaia Power",
+      "legacy_description_sha256": "73c4c1e267c8736ed43e13ac55e6609c1ce7ccca8f40fe1072628be098a7a522",
+      "review_description": false
+    },
+    "1501": {
+      "cid": 5219,
+      "password": "32541773",
+      "english_name": "The Portrait's Secret",
+      "legacy_description_sha256": "213cbf7b280950df091b628579d7145efb1c74852f5f39c905d77cb424804f1a",
+      "review_description": true
+    },
+    "1342": {
+      "cid": 5143,
+      "password": "05265750",
+      "english_name": "Skull Mariner",
+      "legacy_description_sha256": "d617f377a8ae966826430f9b35e66d8c00374bd5e1208986875c286ab01f859c",
+      "review_description": true
+    },
+    "1535": {
+      "cid": 5267,
+      "password": "05616412",
+      "english_name": "Destruction Punch",
+      "legacy_description_sha256": "2c5825e5ad9c09f268fec186c9bafabf61904243b1381b07144204f7146f6da4",
+      "review_description": false
+    },
+    "548": {
+      "cid": 4555,
+      "password": "68638985",
+      "english_name": "Frog The Jam",
+      "legacy_description_sha256": "5ce803271e60e7378ae47cb162f7244986bae877f38800ef3e70886c7fab9366",
+      "review_description": true
+    },
+    "346": {
+      "cid": 4353,
+      "password": "ffffffff",
+      "english_name": "Tremendous Fire",
+      "legacy_description_sha256": "8ded59e74c5f6510b1fd6bdbc77456a8da789ce7ac2d7bd01ceb5c9e9f5820e2",
+      "review_description": false
+    },
+    "156": {
+      "cid": 4163,
+      "password": "53293545",
+      "english_name": "Firegrass",
+      "legacy_description_sha256": "b62aad6115236dccb387e3b5c12213778b54b670e2a115ef871294a02a8ad7d2",
+      "review_description": true
+    },
+    "720": {
+      "cid": 4727,
+      "password": "ffffffff",
+      "english_name": "Dark Magic Ritual",
+      "legacy_description_sha256": "b68f20a9612aeee64490e9edd97afb3c3bc1bfcf4fd28697feace7b7313c661d",
+      "review_description": false
+    },
+    "1163": {
+      "cid": 4969,
+      "password": "79106360",
+      "english_name": "Morphing Jar #2",
+      "legacy_description_sha256": "688c86a6f337b528e9e41b9ae73ab1e56ceba807c0004749c8cf4155b8ff91c8",
+      "review_description": false
+    },
+    "1347": {
+      "cid": 5148,
+      "password": "67532912",
+      "english_name": "Science Soldier",
+      "legacy_description_sha256": "9d53b317f1a6a6eebdcd75b4419e23406a8561815e6008b53959b8a82387ecdb",
+      "review_description": true
+    },
+    "99": {
+      "cid": 4106,
+      "password": "55550921",
+      "english_name": "Battle Warrior",
+      "legacy_description_sha256": "73dcb8683d30e43367473d8e1e35c416afc1239a19ff77e491f33526fa75df14",
+      "review_description": true
+    },
+    "1409": {
+      "cid": 5092,
+      "password": "86281779",
+      "english_name": "Gadget Soldier",
+      "legacy_description_sha256": "3e5a0097e83ac37991bb72cee567dc0ffabf1f30f1ba9f36049431baa1d59ca6",
+      "review_description": true
+    },
+    "1519": {
+      "cid": 5255,
+      "password": "12800777",
+      "english_name": "Garuda the Wind Spirit",
+      "legacy_description_sha256": "620403e15a9d051e60a743afc5a2161335f74c9dab8cc3e233d771233517ee50",
+      "review_description": false
+    },
+    "88": {
+      "cid": 4095,
+      "password": "95727991",
+      "english_name": "Catapult Turtle",
+      "legacy_description_sha256": "81a778d54768146452876e3757bc83bccc515873285d28f961dd7a4f184667be",
+      "review_description": false
+    },
+    "1310": {
+      "cid": 4982,
+      "password": "02311603",
+      "english_name": "Overdrive",
+      "legacy_description_sha256": "c0a633544ee40eae2cee451e77db05b7bdf32bc3b649094eed7580f0965faeb3",
+      "review_description": true
+    },
+    "1509": {
+      "cid": 5079,
+      "password": "27671321",
+      "english_name": "Lightning Conger",
+      "legacy_description_sha256": "2702056c1f402d43789b48d4986368addd478f468de0cdd43bac73b81888ab63",
+      "review_description": true
+    },
+    "461": {
+      "cid": 4468,
+      "password": "84926738",
+      "english_name": "The Immortal of Thunder",
+      "legacy_description_sha256": "476c63e03f56390ef0d243abf081339bac17d60df3e1b2100292c673c125da98",
+      "review_description": false
+    },
+    "1028": {
+      "cid": 4861,
+      "password": "41420027",
+      "english_name": "Solemn Judgment",
+      "legacy_description_sha256": "2efc1c1c2897225271c7891e7c1bb3e80c2a570c9b239b8ae0926327215bf7c6",
+      "review_description": false
+    },
+    "1305": {
+      "cid": 5125,
+      "password": "35346968",
+      "english_name": "Solemn Wishes",
+      "legacy_description_sha256": "ad5b3a2a644a9a6197650481e83ea4265eff59886c1bbe2262c3e3b1641ce239",
+      "review_description": false
+    },
+    "691": {
+      "cid": 4698,
+      "password": "ffffffff",
+      "english_name": "Turtle Oath",
+      "legacy_description_sha256": "8752994a024c45783edf0bafe400f68fc419f0ae136f44add95c04e9d440cd16",
+      "review_description": true
+    },
+    "1410": {
+      "cid": 5093,
+      "password": "13676474",
+      "english_name": "Grand Tiki Elder",
+      "legacy_description_sha256": "59f852a711341fb8a4dcdee8286173e10db2cb7c1feaa53a0e9e7ef119b7d124",
+      "review_description": true
+    },
+    "1416": {
+      "cid": 5103,
+      "password": "94377247",
+      "english_name": "Curse of the Masked Beast",
+      "legacy_description_sha256": "41553cfa9e623f1a188e12bf8fb2bc93e858d751572bc6a97370f24101c24a47",
+      "review_description": false
+    },
+    "1411": {
+      "cid": 5094,
+      "password": "49064413",
+      "english_name": "The Masked Beast",
+      "legacy_description_sha256": "753c4262e26bbc60d72fe2799a7aee6c26917a882e5da4d0c6e8ce3f7674f9da",
+      "review_description": false
+    },
+    "219": {
+      "cid": 4226,
+      "password": "10189126",
+      "english_name": "Masked Sorcerer",
+      "legacy_description_sha256": "5d53ee070259dfa8a82f7a1c796f6a7ec2cf5d6318c49a53beefc0adac4b57aa",
+      "review_description": false
+    },
+    "1136": {
+      "cid": 4942,
+      "password": "36868108",
+      "english_name": "Armored Glass",
+      "legacy_description_sha256": "3c4278e5f1d01e6c918c7c10be495f83d852c113f6257c85a4b106c2e4863508",
+      "review_description": false
+    },
+    "1112": {
+      "cid": 4919,
+      "password": "23289281",
+      "english_name": "Karate Man",
+      "legacy_description_sha256": "8b707cb7c5383427c8749271564ff87a465646d6eabacda1de7981732745e329",
+      "review_description": false
+    },
+    "67": {
+      "cid": 4074,
+      "password": "14977074",
+      "english_name": "Garoozis",
+      "legacy_description_sha256": "1dea5cc172201ff8e3ed32e3e9d12a44dac6965fec25a607923d505f6ff3b49a",
+      "review_description": true
+    },
+    "42": {
+      "cid": 4049,
+      "password": "54541900",
+      "english_name": "Karbonala Warrior",
+      "legacy_description_sha256": "436709992b0d0582980dbb1cca237d83a7131b109214819fc93060a2aed0148d",
+      "review_description": true
+    },
+    "27": {
+      "cid": 4034,
+      "password": "68846917",
+      "english_name": "Rock Ogre Grotto #1",
+      "legacy_description_sha256": "ac86e316f699396b1b3ea1257e006b971a92542f0bdbc5201a5552619457e1b4",
+      "review_description": true
+    },
+    "73": {
+      "cid": 4080,
+      "password": "13039848",
+      "english_name": "Giant Soldier of Stone",
+      "legacy_description_sha256": "cc9fc831ee37176a8dd463e644e4b273f904c2315fcc83ab762193b6b022679c",
+      "review_description": true
+    },
+    "635": {
+      "cid": 4642,
+      "password": "41396436",
+      "english_name": "Blue-Winged Crown",
+      "legacy_description_sha256": "70521db5977e66f103aeee48a47be55d21800dbea54f6df5414f4824676e7d76",
+      "review_description": true
+    },
+    "406": {
+      "cid": 4413,
+      "password": "46700124",
+      "english_name": "Machine King",
+      "legacy_description_sha256": "5b814359b1b329ea76fdc92a1ee229b73bb4c44defcc4658c17f0f06fa3a6a20",
+      "review_description": false
+    },
+    "324": {
+      "cid": 4331,
+      "password": "25769732",
+      "english_name": "Machine Conversion Factory",
+      "legacy_description_sha256": "e89890ea34452873f9e8fac1c6f06e880c0ffe485811db17f4007db1661c6188",
+      "review_description": false
+    },
+    "411": {
+      "cid": 4418,
+      "password": "08471389",
+      "english_name": "Giga-Tech Wolf",
+      "legacy_description_sha256": "bbadb60e0cb79f3298ec5546298b8bf8a8de9fc06337d19612e9a2d73438c26b",
+      "review_description": true
+    },
+    "762": {
+      "cid": 4769,
+      "password": "27911549",
+      "english_name": "Parasite Paracide",
+      "legacy_description_sha256": "007dd7963f61f360cfe81a688f86af153f6fa35a4f3328c8895834e88acaaf80",
+      "review_description": false
+    },
+    "1549": {
+      "cid": 5278,
+      "password": "06343408",
+      "english_name": "Miracle Dig",
+      "legacy_description_sha256": "4bb56adbe85806835782a6014805373173b6ea77826fcea6f99c9b5e82c1eb82",
+      "review_description": false
+    },
+    "275": {
+      "cid": 4282,
+      "password": "85309439",
+      "english_name": "Ray & Temperature",
+      "legacy_description_sha256": "2651219e0f31f41f9fb2a7acf3e8a64cd1ab23fdf654cee1bf2d3cf48aeccddf",
+      "review_description": true
+    },
+    "428": {
+      "cid": 4435,
+      "password": "67959180",
+      "english_name": "Goddess of Whim",
+      "legacy_description_sha256": "636a2736d7008ce8620498fd0950f93e1041737bc72a81e4b05c9a9ecca102fd",
+      "review_description": false
+    },
+    "511": {
+      "cid": 4518,
+      "password": "11384280",
+      "english_name": "Cannon Soldier",
+      "legacy_description_sha256": "59f6bf0c0a65a9c41ecbb2ecb5b8942c487cb41ea0fbb48d642785606c093de2",
+      "review_description": false
+    },
+    "1303": {
+      "cid": 4950,
+      "password": "37313786",
+      "english_name": "Gamble",
+      "legacy_description_sha256": "747cde70346a196aaff07e4cc19563e8aa1cbd17df533798234724ce884179fd",
+      "review_description": false
+    },
+    "66": {
+      "cid": 4073,
+      "password": "ffffffff",
+      "english_name": "Perfectly Ultimate Great Moth",
+      "legacy_description_sha256": "c556c2794841fe06d3a0b52ee8edd4543280c0d5b84d47dbce5e9fbfcd370ab2",
+      "review_description": false
+    },
+    "54": {
+      "cid": 4061,
+      "password": "41762634",
+      "english_name": "Giant Flea",
+      "legacy_description_sha256": "6508222c4dd585d4bec396ccb0a0e78c6d3ffd6086ec7ebba886980b66c7507f",
+      "review_description": true
+    },
+    "1183": {
+      "cid": 5011,
+      "password": "97809599",
+      "english_name": "Seal of the Ancients",
+      "legacy_description_sha256": "8be2941c7159bed98832f1c3f91a861a703837a25ab9cea4126944f092fb6b94",
+      "review_description": false
+    },
+    "13": {
+      "cid": 4020,
+      "password": "18246479",
+      "english_name": "Battle Steer",
+      "legacy_description_sha256": "40b461073ee1d440254f737107a5a2a18c7f98af352c6f732d9a7e09d5a42e80",
+      "review_description": true
+    },
+    "1142": {
+      "cid": 4948,
+      "password": "74923978",
+      "english_name": "Forced Requisition",
+      "legacy_description_sha256": "90a811650e8e32ce308359c56a1182ca9b3d475a18181d403c3081476b6daecc",
+      "review_description": false
+    },
+    "1420": {
+      "cid": 5108,
+      "password": "82432018",
+      "english_name": "Mask of Brutality",
+      "legacy_description_sha256": "fcc314a51621cec2446960005c89f1da736b1638aa75690337dff86f551c69c5",
+      "review_description": false
+    },
+    "545": {
+      "cid": 4552,
+      "password": "69750536",
+      "english_name": "Wow Warrior",
+      "legacy_description_sha256": "91c69c9d250b29eaa8de49c4e0e8fa3163fa944321f6bad30ede8ea537a5694f",
+      "review_description": true
+    },
+    "656": {
+      "cid": 4663,
+      "password": "22046459",
+      "english_name": "Megamorph",
+      "legacy_description_sha256": "caad17f0181a38e28fc52a350195c4b227518c2d506b876ed7bda041f497d896",
+      "review_description": false
+    },
+    "1108": {
+      "cid": 4915,
+      "password": "97017120",
+      "english_name": "Giant Rat",
+      "legacy_description_sha256": "1b4620f82b6a89970daf98a9e693cf367018cec6d7bed568f48072b093669db0",
+      "review_description": false
+    },
+    "177": {
+      "cid": 4184,
+      "password": "41218256",
+      "english_name": "Claw Reacher",
+      "legacy_description_sha256": "8271f0bb330d6f26ff7a38f698f98872d27e9cd89fc18233e4e4a7a8e3ec20a5",
+      "review_description": true
+    },
+    "474": {
+      "cid": 4481,
+      "password": "08131171",
+      "english_name": "Sinister Serpent",
+      "legacy_description_sha256": "3de1ea26d6043ec7da473ac83ac846c93f8410b1927b287d38014f4563a78fe0",
+      "review_description": false
+    },
+    "1123": {
+      "cid": 4930,
+      "password": "83011277",
+      "english_name": "Mystic Tomato",
+      "legacy_description_sha256": "b5275daa59462b62d1639318b74a06af9de7437674ba2267a295be39f5ac3bce",
+      "review_description": false
+    },
+    "200": {
+      "cid": 4207,
+      "password": "98818516",
+      "english_name": "Frenzied Panda",
+      "legacy_description_sha256": "6d3e401fd3f7d215acdef7769bf62ac33396621fd100b21c2e77c51feea0ab10",
+      "review_description": true
+    },
+    "52": {
+      "cid": 4059,
+      "password": "88979991",
+      "english_name": "Killer Needle",
+      "legacy_description_sha256": "189475b26c7b068aafa2adf2f39ac79c4a3741d902121f19b777387a1fa60d9e",
+      "review_description": true
+    },
+    "1335": {
+      "cid": 5136,
+      "password": "84620194",
+      "english_name": "Girochin Kuwagata",
+      "legacy_description_sha256": "836055817fc08550eeb0a5484c1a9fa935ed2b7306955d0e5054606d21891a26",
+      "review_description": true
+    },
+    "278": {
+      "cid": 4285,
+      "password": "84686841",
+      "english_name": "King Fog",
+      "legacy_description_sha256": "ee356ee409752e31b8b5796d7ff869c34faf5632c520d70e8b911fb833d1ed87",
+      "review_description": true
+    },
+    "1162": {
+      "cid": 4968,
+      "password": "43711255",
+      "english_name": "Prohibition",
+      "legacy_description_sha256": "955dcb5c08355b665716891b320f1521ed491baf1fa8162bc19d302b63aa84b9",
+      "review_description": false
+    },
+    "1139": {
+      "cid": 4945,
+      "password": "75646520",
+      "english_name": "Metal Detector",
+      "legacy_description_sha256": "68cb94f3d5e92b47341831f1a9f377455472bbd5995bc211a983a13844ee492d",
+      "review_description": false
+    },
+    "311": {
+      "cid": 4318,
+      "password": "01557499",
+      "english_name": "Silver Bow and Arrow",
+      "legacy_description_sha256": "f9c1e43b76ddbaf7a4247464a5b328f788a72d8d49b6472d63c4e4be7f922f67",
+      "review_description": true
+    },
+    "1099": {
+      "cid": 4993,
+      "password": "22359980",
+      "english_name": "Mirror Wall",
+      "legacy_description_sha256": "8b60c3d1f343983c1518704b9fdf77e26f66e3cb8685aaf0e2da9d7b3d4e631d",
+      "review_description": false
+    },
+    "467": {
+      "cid": 4474,
+      "password": "73081602",
+      "english_name": "Queen Bird",
+      "legacy_description_sha256": "1c581bc35bfc83ce8bc849b0f9d81a647a09f731af795959ba06e9c18270c2e4",
+      "review_description": true
+    },
+    "353": {
+      "cid": 4360,
+      "password": "71068263",
+      "english_name": "Stuffed Animal",
+      "legacy_description_sha256": "4892028c4e1428b63a02605a52f4dc9991f00c8cd8b77c5f241431509557e708",
+      "review_description": true
+    },
+    "650": {
+      "cid": 4657,
+      "password": "37390589",
+      "english_name": "Kunai with Chain",
+      "legacy_description_sha256": "d3c9ed8e50b120ab3614f85f327fc43535b4e5d84c228e65db0ba19674b11d3b",
+      "review_description": false
+    },
+    "490": {
+      "cid": 4497,
+      "password": "20624263",
+      "english_name": "Peacock",
+      "legacy_description_sha256": "12d34887b3289a1cb1ae50d0c9782c5c797ab6a11651d0733778b340df9a6d22",
+      "review_description": true
+    },
+    "1081": {
+      "cid": 4911,
+      "password": "74191942",
+      "english_name": "Painful Choice",
+      "legacy_description_sha256": "f76e51a970f142448711aff63bcb3cf912f599c8dbe4c8ae24335a3011707ada",
+      "review_description": false
+    },
+    "1503": {
+      "cid": 5221,
+      "password": "05434080",
+      "english_name": "Headless Knight",
+      "legacy_description_sha256": "236767f9e3f68d39b26c93efdbf202e3ca48a7603f6bf30232e15325d4a40f1f",
+      "review_description": true
+    },
+    "220": {
+      "cid": 4227,
+      "password": "56283725",
+      "english_name": "Kumootoko",
+      "legacy_description_sha256": "c1d4e633b772b853070893659f41ac903e8cb02c85940eb2538aa695b5698598",
+      "review_description": true
+    },
+    "70": {
+      "cid": 4077,
+      "password": "14851496",
+      "english_name": "Jellyfish",
+      "legacy_description_sha256": "6ae2d3a36d7e697210e37687b6ede5bebb267151bc77a2048ec0d9aa7825452f",
+      "review_description": true
+    },
+    "1323": {
+      "cid": 5134,
+      "password": "85742772",
+      "english_name": "Gravity Bind",
+      "legacy_description_sha256": "2c00d7308065179a324a6a5f7456f18c5124e629409437a4aa8adea686031954",
+      "review_description": false
+    },
+    "709": {
+      "cid": 4716,
+      "password": "ffffffff",
+      "english_name": "Crab Turtle",
+      "legacy_description_sha256": "892d5724b1a499187e572b4ce5a32230b2713720371706c501ebdf48d87fc7fc",
+      "review_description": true
+    },
+    "546": {
+      "cid": 4553,
+      "password": "95744531",
+      "english_name": "Griggle",
+      "legacy_description_sha256": "ff83e591fa591d05b220ef6e8827fc2a965998d4b53f25ce83ed18620ee3af09",
+      "review_description": false
+    },
+    "1119": {
+      "cid": 4926,
+      "password": "57839750",
+      "english_name": "Mother Grizzly",
+      "legacy_description_sha256": "2b4e82edac849df6acb6dc3094f6f60bc2b3282322a3b3df6842fb7f6749433b",
+      "review_description": false
+    },
+    "47": {
+      "cid": 4054,
+      "password": "26202165",
+      "english_name": "Sangan",
+      "legacy_description_sha256": "9006f331f7b52161ac470470329662986d98604f1d82e8901e4498aebcc4c5fc",
+      "review_description": false
+    },
+    "1062": {
+      "cid": 4892,
+      "password": "55608151",
+      "english_name": "Gryphon Wing",
+      "legacy_description_sha256": "94d62b6624fbbac0e586fc9d10a36c86e8df521d0a62ef39082a50c633ebc156",
+      "review_description": false
+    },
+    "57": {
+      "cid": 4064,
+      "password": "40640057",
+      "english_name": "Kuriboh",
+      "legacy_description_sha256": "0ab2f49b745cb99a61413ac4649745792403db97a0dc287df9434a7efa233b46",
+      "review_description": false
+    },
+    "59": {
+      "cid": 4066,
+      "password": "13429800",
+      "english_name": "Great White",
+      "legacy_description_sha256": "548f6d3c38663c8e725221c9245c7c1de0d29dd2d2a8f65ebcab92269518f0f0",
+      "review_description": true
+    },
+    "56": {
+      "cid": 4063,
+      "password": "ffffffff",
+      "english_name": "Great Moth",
+      "legacy_description_sha256": "f84158b4027a3f70915487745ca129644751231744c58158e3d348947becda38",
+      "review_description": false
+    },
+    "710": {
+      "cid": 4717,
+      "password": "ffffffff",
+      "english_name": "Mikazukinoyaiba",
+      "legacy_description_sha256": "c0a6926158ce59fa37065e6b2655e85917d917cc18979f2833bcdd76f54d496a",
+      "review_description": true
+    },
+    "5": {
+      "cid": 4012,
+      "password": "41392891",
+      "english_name": "Feral Imp",
+      "legacy_description_sha256": "eb0f7c4d8a3b599efe0725b0090e560531236790436090ac9035a1cfc84c1f50",
+      "review_description": true
+    },
+    "1433": {
+      "cid": 5196,
+      "password": "28358902",
+      "english_name": "Crimson Sentry",
+      "legacy_description_sha256": "12c7e5a1d6fbee74aa7d58acbfc6308e9bb9e3a40e0b8efb24edf4727c9d3f84",
+      "review_description": false
+    },
+    "573": {
+      "cid": 4580,
+      "password": "78010363",
+      "english_name": "Witch of the Black Forest",
+      "legacy_description_sha256": "7829965581493bcf4960e9097b1f430e677dfa81d083872670a792d7ad9c47ae",
+      "review_description": false
+    },
+    "1220": {
+      "cid": 5099,
+      "password": "68005187",
+      "english_name": "Soul Exchange",
+      "legacy_description_sha256": "359d4caab3a5429a8a7d61b1970e6facc2d0f945ee7cb33fdb2c95906f41ed8e",
+      "review_description": false
+    },
+    "1212": {
+      "cid": 4830,
+      "password": "99789342",
+      "english_name": "Dark Magic Curtain",
+      "legacy_description_sha256": "873287f16b5e6994fba7c08f798480128c28e2ec94c9434ac893083dfd8e279d",
+      "review_description": false
+    },
+    "532": {
+      "cid": 4539,
+      "password": "95144193",
+      "english_name": "Kwagar Hercules",
+      "legacy_description_sha256": "08a8b632f8de80ab244d7068b885158ffc24f4e31fbf97c78bedd3e6dba5a3ae",
+      "review_description": false
+    },
+    "479": {
+      "cid": 4486,
+      "password": "60802233",
+      "english_name": "Kuwagata Alpha",
+      "legacy_description_sha256": "de569d7cdb76362cdef2f408966906fae7dface502733d6f65aa886f82d3f62e",
+      "review_description": true
+    },
+    "373": {
+      "cid": 4380,
+      "password": "ffffffff",
+      "english_name": "Gate Guardian",
+      "legacy_description_sha256": "80a04ff75fecf3bac38cde64c1629580ee9d1ec8657872ca14167145859968c9",
+      "review_description": false
+    },
+    "1425": {
+      "cid": 5114,
+      "password": "53582587",
+      "english_name": "Torrential Tribute",
+      "legacy_description_sha256": "d61609f68f45854c18365f9c2f5f4d93ebb078652ab7b9827584ea68ab724ff5",
+      "review_description": false
+    },
+    "1049": {
+      "cid": 4880,
+      "password": "13945283",
+      "english_name": "Wall of Illusion",
+      "legacy_description_sha256": "730a21d49c487587af8a9c0baee8166096fbd6947998cf2fc8b1dc8c4891b893",
+      "review_description": false
+    },
+    "1522": {
+      "cid": 5258,
+      "password": "08687195",
+      "english_name": "Dreamsprite",
+      "legacy_description_sha256": "73d2fa633d93ec53cbc6c58a6573bf8318cbd843ed6ffeb3d1ec9e0d567c50ef",
+      "review_description": true
+    },
+    "1161": {
+      "cid": 4967,
+      "password": "16227556",
+      "english_name": "Inspection",
+      "legacy_description_sha256": "35daba626fc20697e0a2bc621df247e953abdaaba175fae500b5aa09a298d2da",
+      "review_description": false
+    },
+    "1048": {
+      "cid": 4879,
+      "password": "87557188",
+      "english_name": "The Stern Mystic",
+      "legacy_description_sha256": "bcdea62f918febc96ddebf6ce37b22884b77abf121afd6e71d27cdac6853d41e",
+      "review_description": false
+    },
+    "746": {
+      "cid": 4753,
+      "password": "05818798",
+      "english_name": "Gazelle the King of Mythical Beasts",
+      "legacy_description_sha256": "a16af937f78b127746f883936a91e915439a5ecd8df27fc07aa69519d5d59795",
+      "review_description": false
+    },
+    "1512": {
+      "cid": 5249,
+      "password": "14644902",
+      "english_name": "Summoner of Illusions",
+      "legacy_description_sha256": "ba26690273f276734cfc57ecc933c3e285d110356026db1bbdc90fafa9bb2286",
+      "review_description": false
+    },
+    "90": {
+      "cid": 4097,
+      "password": "68516705",
+      "english_name": "Mystic Horseman",
+      "legacy_description_sha256": "579756e4f4677e38e3db5b99593e0c6c585b5f32fb0ae8a63134c1e0a0e5d39a",
+      "review_description": true
+    },
+    "1448": {
+      "cid": 5211,
+      "password": "10352095",
+      "english_name": "Scroll of Bewitchment",
+      "legacy_description_sha256": "ca76f711157c37bf8674fdd5fca20077cde1c7b2126d8295d4d24a226fa51df7",
+      "review_description": false
+    },
+    "1077": {
+      "cid": 4907,
+      "password": "42829885",
+      "english_name": "The Forceful Sentry",
+      "legacy_description_sha256": "37749a6dbdca80ef49cd7fb2ccc57010b65a18383b05e395e00dc9aab3789fd7",
+      "review_description": false
+    },
+    "960": {
+      "cid": 4804,
+      "password": "14315573",
+      "english_name": "Negate Attack",
+      "legacy_description_sha256": "5e04aff09278c1beeb70cc8a188cf4c9f2432209678ae2d5a20df76fb2a646f1",
+      "review_description": false
+    },
+    "1043": {
+      "cid": 4874,
+      "password": "25880422",
+      "english_name": "Block Attack",
+      "legacy_description_sha256": "f9db84d40cf3401b12d3b4a8edd422d813b50dc7033138d2bef2fdde87bf30c5",
+      "review_description": false
+    },
+    "250": {
+      "cid": 4257,
+      "password": "75376965",
+      "english_name": "Enchanting Mermaid",
+      "legacy_description_sha256": "b949ebce1324ab62eaaaf639d198a1516d321fed6c536870dc02142223f3eebc",
+      "review_description": true
+    },
+    "1068": {
+      "cid": 4898,
+      "password": "45986603",
+      "english_name": "Snatch Steal",
+      "legacy_description_sha256": "79044a1317c414104cd90d41ea1021a3004eb0085c7a323d0b99699b290a43b8",
+      "review_description": false
+    },
+    "556": {
+      "cid": 4563,
+      "password": "29172562",
+      "english_name": "Steel Ogre Grotto #1",
+      "legacy_description_sha256": "abdc3c44ea2d2b298c668b47a5fb83809f01a1c888f90f740729fab68bf2d2db",
+      "review_description": true
+    },
+    "330": {
+      "cid": 4337,
+      "password": "23424603",
+      "english_name": "Wasteland",
+      "legacy_description_sha256": "b284a10e9ec1ffa726dea3b3c3f42e0ac0a4ed19388c919c2146a737a2800139",
+      "review_description": false
+    },
+    "637": {
+      "cid": 4644,
+      "password": "04179849",
+      "english_name": "Queen of Autumn Leaves",
+      "legacy_description_sha256": "42ce7011350b9cc1755604d97c8c4a381ea58decbfdc4d38cea9ab72abdfc8a2",
+      "review_description": true
+    },
+    "1447": {
+      "cid": 5210,
+      "password": "83968380",
+      "english_name": "Jar of Greed",
+      "legacy_description_sha256": "bd999ffb8df76d6be1e0d5ae06d62bac3ee64a575306ba99519bb490594a42b8",
+      "review_description": false
+    },
+    "1010": {
+      "cid": 4844,
+      "password": "55144522",
+      "english_name": "Pot of Greed",
+      "legacy_description_sha256": "a165783f01ff68ecb92e446570d442a75be6df04d8beb6aa8fa8127e87eab605",
+      "review_description": false
+    },
+    "98": {
+      "cid": 4105,
+      "password": "29155212",
+      "english_name": "Pumpking the King of Ghosts",
+      "legacy_description_sha256": "deffe32fd31d494cc3e18ae6ab388b8a8516e02125d14599e6e692c76e46fa88",
+      "review_description": false
+    },
+    "478": {
+      "cid": 4485,
+      "password": "33413638",
+      "english_name": "Cockroach Knight",
+      "legacy_description_sha256": "92c3bf8059ce4445956591e1572d3fd4b1814f0f11a2e1cd1a7399497bcb906a",
+      "review_description": false
+    },
+    "537": {
+      "cid": 4544,
+      "password": "07805359",
+      "english_name": "Niwatori",
+      "legacy_description_sha256": "14f768d47a9ad3a7af8a2cd774c4724a3c3d83580c7bee4727f15cad09ddeb85",
+      "review_description": true
+    },
+    "1027": {
+      "cid": 4860,
+      "password": "04031928",
+      "english_name": "Change of Heart",
+      "legacy_description_sha256": "66bdd7fc5728235963eb5dde5a5540a0f6f71d3ef5337be51cfadccbcfcaf425",
+      "review_description": false
+    },
+    "707": {
+      "cid": 4714,
+      "password": "ffffffff",
+      "english_name": "Cosmo Queen",
+      "legacy_description_sha256": "14794f39d3e63f56788ca4c854d638692da16a134d3edf4e59e45fbaf3a13ed7",
+      "review_description": true
+    },
+    "629": {
+      "cid": 4636,
+      "password": "43230671",
+      "english_name": "Ancient Lizard Warrior",
+      "legacy_description_sha256": "c4750a4f8d98218401a1e5ffe0f516a9d8dfc2d18308a5da0aff78d6d111e0c9",
+      "review_description": true
+    },
+    "1124": {
+      "cid": 4931,
+      "password": "19406822",
+      "english_name": "Kotodama",
+      "legacy_description_sha256": "c10936726b8c766957e0b5a42aa4fd0721789fd907978ed3da76fdc729f28615",
+      "review_description": false
+    },
+    "1344": {
+      "cid": 5145,
+      "password": "78658564",
+      "english_name": "Goblin Attack Force",
+      "legacy_description_sha256": "89d87f83f86f869e95dd3c50ae069273c2712d008d7110a765a5a53d1b2deedd",
+      "review_description": false
+    },
+    "1302": {
+      "cid": 4949,
+      "password": "01918087",
+      "english_name": "Minor Goblin Official",
+      "legacy_description_sha256": "fca2fc20149fb053681725e7d90e08949d093a8f3a912fd859934543ff64c6f1",
+      "review_description": false
+    },
+    "339": {
+      "cid": 4346,
+      "password": "11868825",
+      "english_name": "Goblin's Secret Remedy",
+      "legacy_description_sha256": "41d7166d7d6cd5ef9727888a07e6188ea9ccba43298c27e2a6956c6230f299b5",
+      "review_description": false
+    },
+    "1046": {
+      "cid": 4877,
+      "password": "24668830",
+      "english_name": "Germ Infection",
+      "legacy_description_sha256": "82e47128280f9f4892c968ea6f25b31f1479e3e16d32d911fab2f43792770da9",
+      "review_description": true
+    },
+    "2": {
+      "cid": 4009,
+      "password": "76184692",
+      "english_name": "Hitotsu-Me Giant",
+      "legacy_description_sha256": "e59f936c34c49f8494b3d92dd143362132b7d08278f9796a476df2719d33e004",
+      "review_description": true
+    },
+    "1079": {
+      "cid": 4909,
+      "password": "05318639",
+      "english_name": "Mystical Space Typhoon",
+      "legacy_description_sha256": "bcc146b20d29f04f733d2b873827e85619cfdeec19050cf35d8070b6559db6b1",
+      "review_description": false
+    },
+    "1540": {
+      "cid": 5270,
+      "password": "05494820",
+      "english_name": "Cyclon Laser",
+      "legacy_description_sha256": "f447382ebd6952866978f73b06bafc70c188b98b8b1cbba0c5091f659214cb6c",
+      "review_description": false
+    },
+    "291": {
+      "cid": 4298,
+      "password": "07892180",
+      "english_name": "Psychic Kappa",
+      "legacy_description_sha256": "fc248175cf5a25be29089299e5162440835cdda3da7dce28fdaad47e121f4f8d",
+      "review_description": true
+    },
+    "1067": {
+      "cid": 4897,
+      "password": "18591904",
+      "english_name": "Final Destiny",
+      "legacy_description_sha256": "b29fc252f689efa96b6058fe9804b23d2b2c80af1eb435c6d7dbd74f35330fb8",
+      "review_description": false
+    },
+    "1106": {
+      "cid": 4913,
+      "password": "34124316",
+      "english_name": "Cyber Jar",
+      "legacy_description_sha256": "67189bafd0a4cdc3d37b3de56b3e54a10b178be4dc7caa0ac7728e3e2c2aaab8",
+      "review_description": false
+    },
+    "798": {
+      "cid": 4790,
+      "password": "48766543",
+      "english_name": "Cyber-Tech Alligator",
+      "legacy_description_sha256": "c0a9ae65feeb271bb46f5b5446433b83488cdbb56fc902f14453c984e8bc3b43",
+      "review_description": false
+    },
+    "1253": {
+      "cid": 5034,
+      "password": "79853073",
+      "english_name": "Kinetic Soldier",
+      "legacy_description_sha256": "694908569dc47dab7618336f923646a0aeb19d5cb538b3a29bbd584c86a254e1",
+      "review_description": false
+    },
+    "970": {
+      "cid": 4814,
+      "password": "48642904",
+      "english_name": "Mesmeric Control",
+      "legacy_description_sha256": "d0621003e0c83c05411f518505dafd9fc2f723ffe2c0c6dc75bec8f98932950c",
+      "review_description": false
+    },
+    "1334": {
+      "cid": 4740,
+      "password": "63519819",
+      "english_name": "Thousand-Eyes Restrict",
+      "legacy_description_sha256": "e4d355b6ec9cf3f810f3c252eb4450479e9e76ef54a0bd53f62e42eafafd8dc5",
+      "review_description": false
+    },
+    "68": {
+      "cid": 4075,
+      "password": "ffffffff",
+      "english_name": "Thousand Dragon",
+      "legacy_description_sha256": "06bd97ebd08244da5da71ac1e4381e445dd14d459c7caac1c8b39c967daa5a8b",
+      "review_description": true
+    },
+    "1211": {
+      "cid": 5166,
+      "password": "63391643",
+      "english_name": "Thousand Knives",
+      "legacy_description_sha256": "10e9bbd79ff2a67333d48117197844769dc861f92143c35187d9da13db42fe8f",
+      "review_description": false
+    },
+    "620": {
+      "cid": 4627,
+      "password": "55291359",
+      "english_name": "Succubus Knight",
+      "legacy_description_sha256": "8f984ffc6f4cf40e3c92f1a86219e2e7fd44be705fb16c70485f13a5b75a3801",
+      "review_description": true
+    },
+    "730": {
+      "cid": 4737,
+      "password": "64631466",
+      "english_name": "Relinquished",
+      "legacy_description_sha256": "be66bdce4c5f3c56c777e3b84edd38e09cb5b505a6fdae9dad5a67269d74332a",
+      "review_description": false
+    },
+    "1094": {
+      "cid": 4988,
+      "password": "60082869",
+      "english_name": "Dust Tornado",
+      "legacy_description_sha256": "ac038573619676dad085fa2a3ef801346eea534a95369a9583b00ed2e232e3a2",
+      "review_description": false
+    },
+    "1255": {
+      "cid": 5040,
+      "password": "07914843",
+      "english_name": "Electromagnetic Bagworm",
+      "legacy_description_sha256": "9e7c5b3831ea94404a013efda82ac7d5f05b878b1168347736c3e4d50715e25a",
+      "review_description": false
+    },
+    "464": {
+      "cid": 4471,
+      "password": "74703140",
+      "english_name": "Punished Eagle",
+      "legacy_description_sha256": "3b6e0b361f15381dc56dea849f96cc2e95e9a5f4a3a02511f45d776856e9e4a7",
+      "review_description": true
+    },
+    "571": {
+      "cid": 4578,
+      "password": "15237615",
+      "english_name": "Empress Judge",
+      "legacy_description_sha256": "d01bcaa5abaac988bb3c6188ad0308135c73cf94a4e643a68a8232fbf5e24df4",
+      "review_description": true
+    },
+    "653": {
+      "cid": 4660,
+      "password": "32268901",
+      "english_name": "Salamandra",
+      "legacy_description_sha256": "68c2755448ab4f89874b9e80659399141e36a1d051a514a964c809906b752f32",
+      "review_description": false
+    },
+    "233": {
+      "cid": 4240,
+      "password": "16899564",
+      "english_name": "Beautiful Headhuntress",
+      "legacy_description_sha256": "b29e3eedfec5b9ca5d699a20e11fa493b115f564df4b71628323725f87abd7c5",
+      "review_description": true
+    },
+    "424": {
+      "cid": 4431,
+      "password": "31786629",
+      "english_name": "Thunder Dragon",
+      "legacy_description_sha256": "4c2ee452c35eb3fd2bfde39ead2e4d01d3a39653156c21136cf1fa68dbc05f96",
+      "review_description": false
+    },
+    "336": {
+      "cid": 4343,
+      "password": "12580477",
+      "english_name": "Raigeki",
+      "legacy_description_sha256": "822494e1e9da446db1dd3487c1db2f0c5f0f70b6ba8415f04be90a13f6f2adab",
+      "review_description": false
+    },
+    "516": {
+      "cid": 4523,
+      "password": "73051941",
+      "english_name": "Sand Stone",
+      "legacy_description_sha256": "0fa76aef44976d3384f7594188fc9276c234aef55a8e077665e4fa377b4911a8",
+      "review_description": true
+    },
+    "446": {
+      "cid": 4453,
+      "password": "58831685",
+      "english_name": "Giant Red Seasnake",
+      "legacy_description_sha256": "f98a03a714f5aa908566f5a3d3b8764122bd4907884b68d23c9a3395696d58c1",
+      "review_description": true
+    },
+    "213": {
+      "cid": 4220,
+      "password": "15401633",
+      "english_name": "Kagemusha of the Blue Flame",
+      "legacy_description_sha256": "85d012251e86f510a8958aa4d9b32cdae8b6aceb70b6c1e911837829d5384c7b",
+      "review_description": true
+    },
+    "80": {
+      "cid": 4087,
+      "password": "38289717",
+      "english_name": "Crawling Dragon #2",
+      "legacy_description_sha256": "dd04bd441b99e055b3920b96df660dfc9ed147b73948949fbb006c73b502406a",
+      "review_description": true
+    },
+    "118": {
+      "cid": 4125,
+      "password": "77827521",
+      "english_name": "Trial of Nightmare",
+      "legacy_description_sha256": "d5d859d14b84ef80c60c4b96af54fd2642278d1cfcdaf9110651b7dafd57cea2",
+      "review_description": true
+    },
+    "845": {
+      "cid": 5002,
+      "password": "75347539",
+      "english_name": "Valkyrion the Magna Warrior",
+      "legacy_description_sha256": "a4fc52dae459eab5bc2710382c027af78a95c3e948d6430afba660d016aa5871",
+      "review_description": false
+    },
+    "1008": {
+      "cid": 4842,
+      "password": "83764718",
+      "english_name": "Monster Reborn",
+      "legacy_description_sha256": "8799bf9eef4551cd457600ba22d4cf370ea3c74fff0e8afdf2dc864b1ac6580a",
+      "review_description": false
+    },
+    "1421": {
+      "cid": 5109,
+      "password": "19827717",
+      "english_name": "Return of the Doomed",
+      "legacy_description_sha256": "6c7399bb590a195cf4c61ec517cd58efcd83fc1eeb9f3f4b7cad65ad15ef0f9d",
+      "review_description": false
+    },
+    "1451": {
+      "cid": 5214,
+      "password": "19230407",
+      "english_name": "Offerings to the Doomed",
+      "legacy_description_sha256": "6a5e1840c0a2a76e9a10cd05b44297c63484c44450871e64dd79cfd856ecff60",
+      "review_description": false
+    },
+    "1023": {
+      "cid": 4856,
+      "password": "79759861",
+      "english_name": "Tribute to The Doomed",
+      "legacy_description_sha256": "199cdf04308fd8998558c0c8178d4b0505366a31d99a35ef6c110699a90a9c13",
+      "review_description": false
+    },
+    "744": {
+      "cid": 4751,
+      "password": "42035044",
+      "english_name": "Panther Warrior",
+      "legacy_description_sha256": "505533fc0670b799d1893a879b60efbf35d093f814d4497a021a4c2e8ac7e260",
+      "review_description": false
+    },
+    "1349": {
+      "cid": 5150,
+      "password": "30325729",
+      "english_name": "Dokuroyaiba",
+      "legacy_description_sha256": "5d747e9d23902497aaad2645a5653c2b0d1df86a28329a7f6e357fc6c41d5ccc",
+      "review_description": true
+    },
+    "110": {
+      "cid": 4117,
+      "password": "16972957",
+      "english_name": "Doma The Angel of Silence",
+      "legacy_description_sha256": "b5b712d5f80ba34858f75e0ad1766ae0139676f56559472f59ceccb57212c181",
+      "review_description": true
+    },
+    "660": {
+      "cid": 4667,
+      "password": "57728570",
+      "english_name": "Crush Card",
+      "legacy_description_sha256": "2f3c39ac08416a48961078e8691245577a5c9704094690850e402828e97e8ea5",
+      "review_description": false
+    },
+    "1213": {
+      "cid": 5168,
+      "password": "25774450",
+      "english_name": "Mystic Box",
+      "legacy_description_sha256": "699ffaa321ffc85ae547a150a9fb0c6fc0f079c02f5f11e39791cb818d7d47f2",
+      "review_description": false
+    },
+    "1541": {
+      "cid": 5271,
+      "password": "31893528",
+      "english_name": "Spirit Message \"I\"",
+      "legacy_description_sha256": "90992184acce54d87266c59c791fc109fc5ba3d5efacee8d860055e1c2654133",
+      "review_description": false
+    },
+    "1544": {
+      "cid": 5274,
+      "password": "30170981",
+      "english_name": "Spirit Message \"L\"",
+      "legacy_description_sha256": "90992184acce54d87266c59c791fc109fc5ba3d5efacee8d860055e1c2654133",
+      "review_description": false
+    },
+    "1542": {
+      "cid": 5272,
+      "password": "67287533",
+      "english_name": "Spirit Message \"N\"",
+      "legacy_description_sha256": "90992184acce54d87266c59c791fc109fc5ba3d5efacee8d860055e1c2654133",
+      "review_description": false
+    },
+    "1543": {
+      "cid": 5273,
+      "password": "94772232",
+      "english_name": "Spirit Message \"A\"",
+      "legacy_description_sha256": "90992184acce54d87266c59c791fc109fc5ba3d5efacee8d860055e1c2654133",
+      "review_description": false
+    },
+    "1338": {
+      "cid": 5139,
+      "password": "83994646",
+      "english_name": "4-Starred Ladybug of Doom",
+      "legacy_description_sha256": "35ac78dfae715346dc796374ca691acd9f8ff5884a08f8d0d584e83d56166265",
+      "review_description": false
+    },
+    "1320": {
+      "cid": 5170,
+      "password": "90502999",
+      "english_name": "Ground Collapse",
+      "legacy_description_sha256": "5062aeec4e5b496ad6f791011a5f4ec2644a4c163e280ca75b5c92b221960838",
+      "review_description": false
+    },
+    "1444": {
+      "cid": 5207,
+      "password": "84080938",
+      "english_name": "The Forgiving Maiden",
+      "legacy_description_sha256": "ad12f8e46453d9cbc59767e5ac7a1b86826dabfc1ccd31ae611806e118755e48",
+      "review_description": false
+    },
+    "1047": {
+      "cid": 4878,
+      "password": "50152549",
+      "english_name": "Paralyzing Potion",
+      "legacy_description_sha256": "865b006012f3ce65c619c5a2682e827af99a25b04801263b2d5c549d52ba75bd",
+      "review_description": true
+    },
+    "1317": {
+      "cid": 5130,
+      "password": "59560625",
+      "english_name": "Shift",
+      "legacy_description_sha256": "33fea39fc729f92f663c3f3ba3a825f94f63d21b8e5eb93365fdbc7a73bcfacd",
+      "review_description": false
+    },
+    "1345": {
+      "cid": 5146,
+      "password": "04042268",
+      "english_name": "Island Turtle",
+      "legacy_description_sha256": "cecbb3b7f1d09fe9a855e60cc1e47f630d8f66d7eecc3409b017c5533ea79d1b",
+      "review_description": true
+    },
+    "1064": {
+      "cid": 4894,
+      "password": "12470447",
+      "english_name": "Curse of Fiend",
+      "legacy_description_sha256": "b5c35d759abea061b6cf6a4c7035324fb9a62216bec92eb2a4005afcb4616d74",
+      "review_description": false
+    },
+    "22": {
+      "cid": 4029,
+      "password": "06285791",
+      "english_name": "The Wicked Worm Beast",
+      "legacy_description_sha256": "a792a644a4405e70533da6cf0afdfd6e18acb0c9075e79c13da4e5e0460ed4a0",
+      "review_description": false
+    },
+    "1114": {
+      "cid": 4921,
+      "password": "95178994",
+      "english_name": "Giant Germ",
+      "legacy_description_sha256": "71aec6f1931e17311e014b851f8eeafb7522a39d540e394a33f29eb25bdea975",
+      "review_description": false
+    },
+    "1408": {
+      "cid": 5090,
+      "password": "87303357",
+      "english_name": "Shining Abyss",
+      "legacy_description_sha256": "76f8688b9c08f1a6bdef2edd2265ff74597b26b3ae519aa49174283cc27781f5",
+      "review_description": true
+    },
+    "1117": {
+      "cid": 4924,
+      "password": "95956346",
+      "english_name": "Shining Angel",
+      "legacy_description_sha256": "3c5ec08ef78dd08fb728d0174e578e48780949e638f1149700a40b97fca59b6f",
+      "review_description": false
+    },
+    "1129": {
+      "cid": 4936,
+      "password": "81777047",
+      "english_name": "Luminous Spark",
+      "legacy_description_sha256": "4c2fb0068c473c72f3692e8fdd34017e0cfd9d14c1e16d7cac1159307fa27428",
+      "review_description": false
+    },
+    "1415": {
+      "cid": 5102,
+      "password": "57882509",
+      "english_name": "Mask of Weakness",
+      "legacy_description_sha256": "8676821221c438c52ed7fc06f4a1fa9fead416007947c8a416e823e4496b23a0",
+      "review_description": false
+    },
+    "1012": {
+      "cid": 4846,
+      "password": "18937875",
+      "english_name": "Burning Spear",
+      "legacy_description_sha256": "f7c4e5122ca1eabcb59272b1e75d38536a99202c146bbfd23112afc02bf4415e",
+      "review_description": true
+    },
+    "1051": {
+      "cid": 4882,
+      "password": "86325596",
+      "english_name": "Baron of the Fiend Sword",
+      "legacy_description_sha256": "977d2ef14fb052811f868f9c5815a314df394b08de8d6973eb4b1e2312793bc5",
+      "review_description": true
+    },
+    "164": {
+      "cid": 4171,
+      "password": "28003512",
+      "english_name": "The Judgement Hand",
+      "legacy_description_sha256": "90d9f01e814809a00012f8e9685806d180f3ff33db8a427e638cdb91fa56c441",
+      "review_description": true
+    },
+    "32": {
+      "cid": 4039,
+      "password": "30113682",
+      "english_name": "Judge Man",
+      "legacy_description_sha256": "c381c69911b84f70bf0a3804b3ecda2318d1ab4493f9736a15d123d2f6151ebf",
+      "review_description": true
+    },
+    "367": {
+      "cid": 4374,
+      "password": "ffffffff",
+      "english_name": "Shadow Ghoul",
+      "legacy_description_sha256": "226028cee5b5d70181bb9450841c29b49307f93c9f1f71b5dc572ef7e0ca86ce",
+      "review_description": false
+    },
+    "131": {
+      "cid": 4138,
+      "password": "00032864",
+      "english_name": "The 13th Grave",
+      "legacy_description_sha256": "553e94e66b67efd79fdc0e3ad9904e51c88d10ed446c45329a758d77b090b199",
+      "review_description": true
+    },
+    "1042": {
+      "cid": 4873,
+      "password": "98495314",
+      "english_name": "Sword of Deep-Seated",
+      "legacy_description_sha256": "ced0632b9ba713090c584d2ae16be84129d5ef61a2e7532c54985c4e436dde79",
+      "review_description": false
+    },
+    "1534": {
+      "cid": 5266,
+      "password": "69122763",
+      "english_name": "Deal of Phantom",
+      "legacy_description_sha256": "f5aedee90e1f91a60ba1bd933b92af672b4569cbbc89b1d5405151cf42713e21",
+      "review_description": false
+    },
+    "1419": {
+      "cid": 5107,
+      "password": "56948373",
+      "english_name": "Mask of the Accursed",
+      "legacy_description_sha256": "35ac145e8ce8ec10e60d15de06ff9c3c241773bec32a93c731187dbb37b600e3",
+      "review_description": false
+    },
+    "319": {
+      "cid": 4326,
+      "password": "63102017",
+      "english_name": "Stop Defense",
+      "legacy_description_sha256": "19f557b8469553d8474be492121629e59c07e380d4fe869043313458057a9f2c",
+      "review_description": false
+    },
+    "1520": {
+      "cid": 5256,
+      "password": "45894482",
+      "english_name": "Gilasaurus",
+      "legacy_description_sha256": "6560cbcaac115d573f4ce8d7dcd41aa71e3423958dfe67aaa4f5f91d8c649f41",
+      "review_description": false
+    },
+    "1031": {
+      "cid": 4864,
+      "password": "98069388",
+      "english_name": "Horn of Heaven",
+      "legacy_description_sha256": "ee236954b7bc8f3980f21a28d4203443badb978876b033e9092f59803c1ba2aa",
+      "review_description": false
+    },
+    "655": {
+      "cid": 4662,
+      "password": "95051344",
+      "english_name": "Eternal Rest",
+      "legacy_description_sha256": "a37059c19532014f2c430ce790a5e5c5d7f1174370a8fe04e64c50753bd2fff8",
+      "review_description": false
+    },
+    "1016": {
+      "cid": 4850,
+      "password": "44209392",
+      "english_name": "Castle Walls",
+      "legacy_description_sha256": "c22a2c033108f68a48313c35c901613351b5a1251d387c9d8363b7159c8845cc",
+      "review_description": false
+    },
+    "1510": {
+      "cid": 5247,
+      "password": "41855169",
+      "english_name": "Jowgen the Spiritualist",
+      "legacy_description_sha256": "5e19f99d3c62f7fb60175d7d376fcdace3cfa7acbf4aa6450dcb5b69883e49ed",
+      "review_description": false
+    },
+    "634": {
+      "cid": 4641,
+      "password": "05901497",
+      "english_name": "Queen's Double",
+      "legacy_description_sha256": "2b9a921187d21dd4cb3c8576277e71710d29ecc09b293cc37b134d5d82f1242a",
+      "review_description": true
+    },
+    "1440": {
+      "cid": 5203,
+      "password": "58818411",
+      "english_name": "Empress Mantis",
+      "legacy_description_sha256": "9144fd9a091e2dba37c52717755756ac0f7c9ab91432c0491cb43cd0fde7f136",
+      "review_description": true
+    },
+    "366": {
+      "cid": 4373,
+      "password": "94773007",
+      "english_name": "Jirai Gumo",
+      "legacy_description_sha256": "5321e7030a7912532fa7d0353c41f2a957413e05973c1fce5c9273edeb574abe",
+      "review_description": false
+    },
+    "458": {
+      "cid": 4465,
+      "password": "45042329",
+      "english_name": "Tripwire Beast",
+      "legacy_description_sha256": "10f837c61b0284bf4bf8b193c9cfa532b6b1d4e04a0f90ddaa3431c9f75c08f7",
+      "review_description": true
+    },
+    "1306": {
+      "cid": 4961,
+      "password": "98139712",
+      "english_name": "Skull Invitation",
+      "legacy_description_sha256": "b624a6056c43bc005466d13719f806660e820bc4bac4d2bee4645be932245b2a",
+      "review_description": false
+    },
+    "1532": {
+      "cid": 5264,
+      "password": "06733059",
+      "english_name": "Skull Lair",
+      "legacy_description_sha256": "f97f53221cc0aa10d7ba0db37539dcf77394fd5fbfb4fdbe5e2e635fa3b2bc41",
+      "review_description": false
+    },
+    "1505": {
+      "cid": 5229,
+      "password": "66989694",
+      "english_name": "The Earl of Demise",
+      "legacy_description_sha256": "5e803750d12be64fa54ffb6dbaaea298b2d176a06f0b8bed2bd6072d9da4595f",
+      "review_description": true
+    },
+    "1058": {
+      "cid": 4888,
+      "password": "20436034",
+      "english_name": "Ring of Magnetism",
+      "legacy_description_sha256": "f097da95f4560b4fa6138a1bc859d3b9bb31217b033011adc4d33fa5c825a4d6",
+      "review_description": false
+    },
+    "64": {
+      "cid": 4071,
+      "password": "90357090",
+      "english_name": "Silver Fang",
+      "legacy_description_sha256": "6bfb69a675250850fdd4734ff6fcc1884112599efab53c719d72ab159c4b5c68",
+      "review_description": true
+    },
+    "1001": {
+      "cid": 4835,
+      "password": "66788016",
+      "english_name": "Fissure",
+      "legacy_description_sha256": "5e54ed9f210834261a52fd5c116df8beed9d1cff6110d4195afa1c0b650aa171",
+      "review_description": false
+    },
+    "168": {
+      "cid": 4175,
+      "password": "53375573",
+      "english_name": "Dark King of the Abyss",
+      "legacy_description_sha256": "53ca80a7532010e20e5282288537827a7b1b5f08a36535fdd3f6f1608a7413b3",
+      "review_description": true
+    },
+    "436": {
+      "cid": 4443,
+      "password": "28593363",
+      "english_name": "Deepsea Shark",
+      "legacy_description_sha256": "b78fa88080eb2fce0287731fc73b27f9decc3bfbd56b5980b9e6ea5927bda88a",
+      "review_description": true
+    },
+    "1329": {
+      "cid": 4776,
+      "password": "24128274",
+      "english_name": "Deepsea Warrior",
+      "legacy_description_sha256": "1192023850babacb1cff559855432e890cba691970cfba7ac5a93f65c146bb98",
+      "review_description": false
+    },
+    "71": {
+      "cid": 4078,
+      "password": "ffffffff",
+      "english_name": "Cocoon of Evolution",
+      "legacy_description_sha256": "2ebe9822f2ace30ab209229bc73e7c876865c2a91c22e4b65d5ca9b1f9820a0f",
+      "review_description": false
+    },
+    "108": {
+      "cid": 4115,
+      "password": "53493204",
+      "english_name": "Goddess with the Third Eye",
+      "legacy_description_sha256": "551dd5e968587901e85b66b7782bc1724a07ad61504db2b77fce5d9cc6011383",
+      "review_description": false
+    },
+    "438": {
+      "cid": 4445,
+      "password": "81386177",
+      "english_name": "Bottom Dweller",
+      "legacy_description_sha256": "77518e5c792a3caf60078f3733ab9bf07b407b6f2bcb89140166b62a7757e1de",
+      "review_description": true
+    },
+    "1093": {
+      "cid": 4987,
+      "password": "34694160",
+      "english_name": "The Eye of Truth",
+      "legacy_description_sha256": "7929a088e919960e0c0efdd984dbd734ba683360d395f663f058bfd5ab851d25",
+      "review_description": false
+    },
+    "751": {
+      "cid": 4758,
+      "password": "77585513",
+      "english_name": "Jinzo",
+      "legacy_description_sha256": "1fdc6189fd7135d1fa82d3f9529c84a895698402bc5ede49df43ff85a1733c26",
+      "review_description": false
+    },
+    "421": {
+      "cid": 4428,
+      "password": "32809211",
+      "english_name": "Jinzo #7",
+      "legacy_description_sha256": "2b9a921187d21dd4cb3c8576277e71710d29ecc09b293cc37b134d5d82f1242a",
+      "review_description": false
+    },
+    "372": {
+      "cid": 4379,
+      "password": "ffffffff",
+      "english_name": "Suijin",
+      "legacy_description_sha256": "cebd8cc06d01e2e4bd982363aefc3f206ea621fccdbe08788652a5935c908328",
+      "review_description": false
+    },
+    "491": {
+      "cid": 4498,
+      "password": "67629977",
+      "english_name": "Hoshiningen",
+      "legacy_description_sha256": "47fb7e96d6da5c98ab811455aee682e4e2d576e48d7bdc5b5dd654c57afce9cf",
+      "review_description": false
+    },
+    "423": {
+      "cid": 4430,
+      "password": "95288024",
+      "english_name": "Sky Dragon",
+      "legacy_description_sha256": "e8818c0e5b59cf34eccaffde42994e189d32137b2257396f66e5d807bfe1b06f",
+      "review_description": true
+    },
+    "465": {
+      "cid": 4472,
+      "password": "10202894",
+      "english_name": "Skull Red Bird",
+      "legacy_description_sha256": "9472461d163876870dac5fc2d0c9ac0a2e33218a433db0a72bc5d1f95eb80f68",
+      "review_description": true
+    },
+    "706": {
+      "cid": 4713,
+      "password": "ffffffff",
+      "english_name": "Skull Knight",
+      "legacy_description_sha256": "373a36c0d67514c71fa4310be46e87893eb6f1b3abddee2133098a667767257a",
+      "review_description": true
+    },
+    "718": {
+      "cid": 4725,
+      "password": "ffffffff",
+      "english_name": "Dokurorider",
+      "legacy_description_sha256": "a50c2e09c0fd548e0b547e82ba1e8be5e278fcaf2b5f6211aefca301b6cc9b80",
+      "review_description": true
+    },
+    "698": {
+      "cid": 4705,
+      "password": "ffffffff",
+      "english_name": "Revival of Dokurorider",
+      "legacy_description_sha256": "11cffca55e11ce5ed72fde4523def74ffefdfc5ab39dfa51c588e899254b2725",
+      "review_description": true
+    },
+    "539": {
+      "cid": 4546,
+      "password": "60694662",
+      "english_name": "Skelengel",
+      "legacy_description_sha256": "7c72350f0fd2a3d01ca0701d99101514f43b7b94fd2afc7bb6bb515827287def",
+      "review_description": false
+    },
+    "523": {
+      "cid": 4530,
+      "password": "08201910",
+      "english_name": "Star Boy",
+      "legacy_description_sha256": "e069a10bfb759b7aa35b15d84d368401691f930f4ec611ee727f7c093c3186b0",
+      "review_description": true
+    },
+    "209": {
+      "cid": 4216,
+      "password": "96851799",
+      "english_name": "Hinotama Soul",
+      "legacy_description_sha256": "3c444aba4517e1994e70af2a8724375a3bc873bc4bf48da378b2b0d3429d110e",
+      "review_description": true
+    },
+    "631": {
+      "cid": 4638,
+      "password": "15023985",
+      "english_name": "Stone Ogre Grotto",
+      "legacy_description_sha256": "fea4bf6f38b2d7b4e2579360d19e6e6691725dd24dcc37c5af21b26610cd94e4",
+      "review_description": true
+    },
+    "447": {
+      "cid": 4454,
+      "password": "85326399",
+      "english_name": "Spike Seadra",
+      "legacy_description_sha256": "a00a6e27bb585cb5a9b2b0d2f21918c1268df8f232f17a37cd2c2d9b5999fd29",
+      "review_description": true
+    },
+    "1331": {
+      "cid": 4778,
+      "password": "87511987",
+      "english_name": "Spikebot",
+      "legacy_description_sha256": "c0f62a19cf237c245bd91a1ebb7790056c0c7f4e5524f1f18f68eec17070e3bb",
+      "review_description": true
+    },
+    "1115": {
+      "cid": 4922,
+      "password": "22567609",
+      "english_name": "Nimble Momonga",
+      "legacy_description_sha256": "cc39fd88df4d1393d98fbbbbf0bc85950d4ef75dc62e866d002c29c4d8e8ddac",
+      "review_description": false
+    },
+    "735": {
+      "cid": 4742,
+      "password": "26302522",
+      "english_name": "Blast Sphere",
+      "legacy_description_sha256": "3f5ff2ea7bd38eba0e92e981ed7745af369774bf658fe6fe278b03a70292b41c",
+      "review_description": false
+    },
+    "1508": {
+      "cid": 5086,
+      "password": "52121290",
+      "english_name": "Spherous Lady",
+      "legacy_description_sha256": "fde474735a6e6733c02691a6242a3a735a66a63c2c7b7f36d73efa2883a12972",
+      "review_description": true
+    },
+    "1426": {
+      "cid": 5119,
+      "password": "21770260",
+      "english_name": "Jam Breeding Machine",
+      "legacy_description_sha256": "1b0dd091cf416c9d96f78b13e14c059b55252a3fcdfdecda1b1a0c9c249e5aee",
+      "review_description": false
+    },
+    "281": {
+      "cid": 4288,
+      "password": "83464209",
+      "english_name": "Mystical Sheep #2",
+      "legacy_description_sha256": "2881df93ecab5b7d27fb039f282de66692164052995e47a5a89bc35bbc5371aa",
+      "review_description": true
+    },
+    "722": {
+      "cid": 4729,
+      "password": "03797883",
+      "english_name": "Slot Machine",
+      "legacy_description_sha256": "8d3fef9ed9ab854d5de435a5f900a6f55273afd16f7692d8b90e07d9e5065596",
+      "review_description": true
+    },
+    "1069": {
+      "cid": 4899,
+      "password": "81380218",
+      "english_name": "Chorus of Sanctuary",
+      "legacy_description_sha256": "d33c5724d9100ce78ad69b8691420f483a9ca5facb9c630a5f1998250095a048",
+      "review_description": false
+    },
+    "1429": {
+      "cid": 5123,
+      "password": "57953380",
+      "english_name": "Card of Safe Return",
+      "legacy_description_sha256": "b0d15fe3e44c93ff4d550318a4cb97a14c426b44621734d1757d84326292516c",
+      "review_description": false
+    },
+    "1445": {
+      "cid": 5208,
+      "password": "21175632",
+      "english_name": "St. Joan",
+      "legacy_description_sha256": "9331bae9f9de59da5d88aee810f4c471fd81d6b8423829f2c26eda992a73c8fa",
+      "review_description": false
+    },
+    "1170": {
+      "cid": 4976,
+      "password": "04266839",
+      "english_name": "Kiseitai",
+      "legacy_description_sha256": "40ea3fe8c0ec1a0a5606c6938bebe35f6bc206f64eb443081eb05ccd10df791d",
+      "review_description": false
+    },
+    "1152": {
+      "cid": 4958,
+      "password": "08951260",
+      "english_name": "Respect Play",
+      "legacy_description_sha256": "cbe4d02a0b0da6e4e4a7f1a4b57920b0fffc64bea668255d54715f16e7e10763",
+      "review_description": true
+    },
+    "1151": {
+      "cid": 4957,
+      "password": "62867251",
+      "english_name": "Light of Intervention",
+      "legacy_description_sha256": "f48490ea3559161bfcb8448104af902bb41d0a4084f9761dc55f4a52840f6b7e",
+      "review_description": false
+    },
+    "1056": {
+      "cid": 4887,
+      "password": "44095762",
+      "english_name": "Mirror Force",
+      "legacy_description_sha256": "d45909a81886830597138186cb1c3f159800b1e4355dfdbd725d8a0b97026fd3",
+      "review_description": false
+    },
+    "124": {
+      "cid": 4131,
+      "password": "75582395",
+      "english_name": "Faith Bird",
+      "legacy_description_sha256": "1871ca45bbac310645c4aca647a25a52bf9b6b302bc63fab2fefeb6eabbfbcae",
+      "review_description": true
+    },
+    "427": {
+      "cid": 4434,
+      "password": "31560081",
+      "english_name": "Magician of Faith",
+      "legacy_description_sha256": "3ee18ca0b4637e19beb6d20b1b95d2c028c85ce010b62f2a5d59461e90b6dc77",
+      "review_description": false
+    },
+    "1137": {
+      "cid": 4943,
+      "password": "12253117",
+      "english_name": "World Suppression",
+      "legacy_description_sha256": "4e0ae7b543c0814e078bc3029acb5d947abfe6f185454049d7200d39a99f16e7",
+      "review_description": false
+    },
+    "1343": {
+      "cid": 5144,
+      "password": "32269855",
+      "english_name": "The All-Seeing White Tiger",
+      "legacy_description_sha256": "bd4ef96226e291dcbed15ac9ad8be58c828bb5bcd6565759d27c95c46f88b4d4",
+      "review_description": true
+    },
+    "796": {
+      "cid": 4788,
+      "password": "75372290",
+      "english_name": "Total Defense Shogun",
+      "legacy_description_sha256": "957a3b910d3ea53d242ff6b72ca922c8d004252e32f84521b60892f626118e0e",
+      "review_description": false
+    },
+    "962": {
+      "cid": 4806,
+      "password": "86198326",
+      "english_name": "7 Completed",
+      "legacy_description_sha256": "23ce692e9056d7b229d25809149c98e5276ed839a6f8a9fc19f2d9dbe78a02ae",
+      "review_description": false
+    },
+    "1179": {
+      "cid": 5007,
+      "password": "22537443",
+      "english_name": "Sebek's Blessing",
+      "legacy_description_sha256": "4d2c24464348c3e7316a1674683ede43295f626e0b62718af4e72f44ae68f9e2",
+      "review_description": false
+    },
+    "1121": {
+      "cid": 4928,
+      "password": "20228463",
+      "english_name": "Ceremonial Bell",
+      "legacy_description_sha256": "c553d3c3df887b2b6b198be71ea3c4d98b881f9d5f027dff17a1e764e20cdd7c",
+      "review_description": false
+    },
+    "1324": {
+      "cid": 5153,
+      "password": "21237481",
+      "english_name": "Type Zero Magic Crusher",
+      "legacy_description_sha256": "3279ad69505ac9817ac61a43b62ef1f2d3f2086dffc6f68da6e440c48e1c4b64",
+      "review_description": false
+    },
+    "1333": {
+      "cid": 4739,
+      "password": "27125110",
+      "english_name": "Thousand-Eyes Idol",
+      "legacy_description_sha256": "28a972a5f5c8d67564f78e6ea41814a36fd0f95871f424f07761b1f7431b09ff",
+      "review_description": true
+    },
+    "1328": {
+      "cid": 4775,
+      "password": "88733579",
+      "english_name": "Drill Bug",
+      "legacy_description_sha256": "c838abcc025dfb5dc3ecf03526e57cb0a7a7fb74a7c3c05adc7fc84da2db3989",
+      "review_description": false
+    },
+    "1109": {
+      "cid": 4916,
+      "password": "23401839",
+      "english_name": "Senju of the Thousand Hands",
+      "legacy_description_sha256": "4a393d64e5d0b9aa943c7146df5cd919c6f5d94afa3a57a51280258ccc115ee5",
+      "review_description": false
+    },
+    "617": {
+      "cid": 4624,
+      "password": "56413937",
+      "english_name": "Warrior of Tradition",
+      "legacy_description_sha256": "f2f69ce605bb230b0c46918d1c59bc00e06bad128cb3a2cd94ea220fe488415e",
+      "review_description": true
+    },
+    "361": {
+      "cid": 4368,
+      "password": "32012841",
+      "english_name": "Millennium Shield",
+      "legacy_description_sha256": "95e5dbea7dbead0030eae19d1ff5847a7496493e494f08fcde1b830a34209020",
+      "review_description": false
+    },
+    "332": {
+      "cid": 4339,
+      "password": "86318356",
+      "english_name": "Sogen",
+      "legacy_description_sha256": "925c008135f77a942a8b0cdac5d842365c31f02856998c382577db0c58e65339",
+      "review_description": false
+    },
+    "1232": {
+      "cid": 4805,
+      "password": "40703222",
+      "english_name": "Multiply",
+      "legacy_description_sha256": "bf400769189b59d173df22abb2a81e691b95b50c378031a6da434bf01d6593f5",
+      "review_description": false
+    },
+    "612": {
+      "cid": 4619,
+      "password": "54752875",
+      "english_name": "Twin-Headed Thunder Dragon",
+      "legacy_description_sha256": "4a79b2ff1e2bf34314bbeb6deab07804aa4d3fa775a50e2c5bde3fd19c18c021",
+      "review_description": true
+    },
+    "1327": {
+      "cid": 4774,
+      "password": "51345461",
+      "english_name": "Sword Hunter",
+      "legacy_description_sha256": "836235f11b971de5aceaa83d975604bd61619264b1acae608f30c5a1f6ab1c9b",
+      "review_description": false
+    },
+    "1122": {
+      "cid": 4929,
+      "password": "57617178",
+      "english_name": "Sonic Bird",
+      "legacy_description_sha256": "75441e8ff354adcd1117df3cea2b583429c57228c71f42d0a15a21629d522d5a",
+      "review_description": false
+    },
+    "1437": {
+      "cid": 5200,
+      "password": "53530069",
+      "english_name": "Spirit of the Breeze",
+      "legacy_description_sha256": "cb64447adc5c8ee5669aa5d73ea3cdb2166d6d683adddcbc5157a0ee80ea1055",
+      "review_description": false
+    },
+    "477": {
+      "cid": 4484,
+      "password": "07019529",
+      "english_name": "Insect Soldiers of the Sky",
+      "legacy_description_sha256": "2baca7deaa4c37046bfe5884c629282ba606b9bd27481799d23a6bbdf7cb799c",
+      "review_description": false
+    },
+    "1096": {
+      "cid": 4990,
+      "password": "23471572",
+      "english_name": "Solomon's Lawbook",
+      "legacy_description_sha256": "d832539330ba10f658fa083f731cfa80277bc3ad078547d3f3118f0b50e9f70e",
+      "review_description": false
+    },
+    "729": {
+      "cid": 4736,
+      "password": "38247752",
+      "english_name": "Dark-Eyes Illusionist",
+      "legacy_description_sha256": "7fad4518a8ddf538eb2c6ff91db629446c54a7db8b1905315c7f6ff0ae6667f9",
+      "review_description": false
+    },
+    "550": {
+      "cid": 4557,
+      "password": "21417692",
+      "english_name": "Dark Elf",
+      "legacy_description_sha256": "67968302d7c71c22baf294cda0305cfc073a62919e4bce061d92ecfbfb7e3307",
+      "review_description": true
+    },
+    "112": {
+      "cid": 4119,
+      "password": "09159938",
+      "english_name": "Dark Gray",
+      "legacy_description_sha256": "9f65329e54335e04a0e865ea17bc470f5c69ac1a98572048e7f9953914fe9e74",
+      "review_description": true
+    },
+    "1113": {
+      "cid": 4920,
+      "password": "59784896",
+      "english_name": "Dark Zebra",
+      "legacy_description_sha256": "8903bc4e71d2f0864ccf359e76b12855ba59726219a72bd6dcc246cee87da541",
+      "review_description": false
+    },
+    "1130": {
+      "cid": 4937,
+      "password": "18161786",
+      "english_name": "Mystic Plasma Zone",
+      "legacy_description_sha256": "dc67a866b1081a4444c6ddfdcd2e1a665e1787a3692e96228fcc68c34ecb7a84",
+      "review_description": false
+    },
+    "244": {
+      "cid": 4251,
+      "password": "76211194",
+      "english_name": "Meda Bat",
+      "legacy_description_sha256": "f016147c3efbaddfa615aef5cceb1e34c2fa8f58b2564b5c0632806c1d6da062",
+      "review_description": true
+    },
+    "1514": {
+      "cid": 5222,
+      "password": "31829185",
+      "english_name": "Dark Necrofear",
+      "legacy_description_sha256": "851f155653248b9a777b729a44a9fc680cada8bb6413ef2ea1cfee354dc9f75d",
+      "review_description": false
+    },
+    "1308": {
+      "cid": 4978,
+      "password": "67049542",
+      "english_name": "Dark Bat",
+      "legacy_description_sha256": "1dbb7e26301e7dc6ce91e02c0425126086bdc4b284fc0cdaf805289eb199ba83",
+      "review_description": true
+    },
+    "1523": {
+      "cid": 5245,
+      "password": "88472456",
+      "english_name": "Zombyra the Dark",
+      "legacy_description_sha256": "6bac26d7f5bffe9ff4ff554e35cc16893f800da9592e43ae23f4c3a07b1a62a3",
+      "review_description": false
+    },
+    "1116": {
+      "cid": 4923,
+      "password": "58551308",
+      "english_name": "Spear Cretin",
+      "legacy_description_sha256": "e29d284afde64ad1134ca3713f7fbcb811dc170f723291fcf67ad15de6b61e3f",
+      "review_description": false
+    },
+    "192": {
+      "cid": 4199,
+      "password": "37313348",
+      "english_name": "Turtle Tiger",
+      "legacy_description_sha256": "5375c3babf03f07006db176904d0c972d102f3de2c330532814e6e58093008a9",
+      "review_description": true
+    },
+    "519": {
+      "cid": 4526,
+      "password": "72929454",
+      "english_name": "Turtle Bird",
+      "legacy_description_sha256": "a6d0b0127573e0f00417dac01ca339bf8e89f4b004c6659ceb227b5ba14da111",
+      "review_description": true
+    },
+    "170": {
+      "cid": 4177,
+      "password": "16768387",
+      "english_name": "Big Eye",
+      "legacy_description_sha256": "0054e18d8c4dc9367e972f5f523257a156ddf8e6648671fb8c2924cb19885c19",
+      "review_description": false
+    },
+    "325": {
+      "cid": 4332,
+      "password": "51267887",
+      "english_name": "Raise Body Heat",
+      "legacy_description_sha256": "b4b5d0232c23c3aec1e033e3bfbcc582a7e1dae16f21c6d766e6677542c9df12",
+      "review_description": false
+    },
+    "63": {
+      "cid": 4070,
+      "password": "49791927",
+      "english_name": "Tiger Axe",
+      "legacy_description_sha256": "5502bfbde0c677b22391995d6a7a011beca0097ebbfead7158469a996faa5385",
+      "review_description": true
+    },
+    "1312": {
+      "cid": 5127,
+      "password": "60682203",
+      "english_name": "Cold Wave",
+      "legacy_description_sha256": "9493732b6fc7a64a2929fa5989907bce8f0dadc806c54beaa7721342ddd9af75",
+      "review_description": false
+    },
+    "543": {
+      "cid": 4550,
+      "password": "96967123",
+      "english_name": "Dharma Cannon",
+      "legacy_description_sha256": "246532d2e81062db7b775c856583492263585744e0be0184a3764f476f86ad4f",
+      "review_description": true
+    },
+    "12": {
+      "cid": 4019,
+      "password": "72842870",
+      "english_name": "Tyhone",
+      "legacy_description_sha256": "11d83c389164983258ac55f7c7b3dbd3ff9d8dee65fee880bb15d7221aae2bf4",
+      "review_description": true
+    },
+    "731": {
+      "cid": 4738,
+      "password": "90020065",
+      "english_name": "Jigen Bakudan",
+      "legacy_description_sha256": "355abf8e872e434208c5bd210a755988c240e1470fd88912457d9ac569a8d6a6",
+      "review_description": false
+    },
+    "736": {
+      "cid": 4743,
+      "password": "62397231",
+      "english_name": "Hyozanryu",
+      "legacy_description_sha256": "6c7ba955955d75556cc24ecfda6ca8f5b13ee03a5d0951fdd90480c946c707ed",
+      "review_description": true
+    },
+    "580": {
+      "cid": 4587,
+      "password": "03170832",
+      "english_name": "Takuhee",
+      "legacy_description_sha256": "ef15082391e8357e071f8afee1118df75e495ad07a4b58acbd7ac6a5b43ad9cb",
+      "review_description": true
+    },
+    "352": {
+      "cid": 4359,
+      "password": "44073668",
+      "english_name": "Takriminos",
+      "legacy_description_sha256": "c308c1dc7484ec748b79d3b3a29e12cd46aee5ddf4b74d8a2b0cf37cf02c929e",
+      "review_description": true
+    },
+    "1446": {
+      "cid": 5209,
+      "password": "57579381",
+      "english_name": "Marie the Fallen One",
+      "legacy_description_sha256": "2796219e49502943dd9faefb9f6920f7796c4c92d2ae9ad1b0b75b6f25ba5803",
+      "review_description": false
+    },
+    "1076": {
+      "cid": 4906,
+      "password": "16430187",
+      "english_name": "The Reliable Guardian",
+      "legacy_description_sha256": "b454bcf22c97ebf5740df9bb138387bbd6cc1b36c9f9b4a1361f613704f7d622",
+      "review_description": false
+    },
+    "1024": {
+      "cid": 4857,
+      "password": "05758500",
+      "english_name": "Soul Release",
+      "legacy_description_sha256": "4e7e6c2ec6a02c3af2d57cfd9cbaf28d65a4e285383899c23f776de8a5a7df8d",
+      "review_description": false
+    },
+    "1513": {
+      "cid": 5250,
+      "password": "40133511",
+      "english_name": "Bazoo the Soul-Eater",
+      "legacy_description_sha256": "d2623f4c9fbf29766eff1b62c7e897e527d48d3e6c8222ac5f244aaa1f18d246",
+      "review_description": false
+    },
+    "542": {
+      "cid": 4549,
+      "password": "69572024",
+      "english_name": "Tongyo",
+      "legacy_description_sha256": "609336570a4e385441100325e32fe3f5e1adcd8f6d62bedf29f6aaa14038fffd",
+      "review_description": true
+    },
+    "1449": {
+      "cid": 5212,
+      "password": "56747793",
+      "english_name": "United We Stand",
+      "legacy_description_sha256": "177765146db060d0132d35d1e215df9433809f355b7a477f91debbb944387b12",
+      "review_description": false
+    },
+    "394": {
+      "cid": 4401,
+      "password": "59983499",
+      "english_name": "Dancing Elf",
+      "legacy_description_sha256": "a79cd9b3df2af02a813f26bdbe640b2c10eebf457c242300a3d384abd20376a6",
+      "review_description": true
+    },
+    "700": {
+      "cid": 4707,
+      "password": "ffffffff",
+      "english_name": "Performance of Sword",
+      "legacy_description_sha256": "c51518a1750f1cfab3db3d79931da8523431dce6e51ca30a0ba4b927df98d562",
+      "review_description": true
+    },
+    "1438": {
+      "cid": 5201,
+      "password": "90925163",
+      "english_name": "Dancing Fairy",
+      "legacy_description_sha256": "225082a709175138a49146cc1550f753f0734863b81dc41c12223d5eff92a81a",
+      "review_description": false
+    },
+    "969": {
+      "cid": 4813,
+      "password": "01248895",
+      "english_name": "Chain Destruction",
+      "legacy_description_sha256": "f20579f014a6f94fd6768c2295b3c544967e1cecdc2e413f8231a214bb3eda53",
+      "review_description": false
+    },
+    "531": {
+      "cid": 4538,
+      "password": "69140098",
+      "english_name": "Gemini Elf",
+      "legacy_description_sha256": "5b8ea2aeffa149522ced8398718ebd993f81ff50cc986b2c62c885bf777ec9a8",
+      "review_description": true
+    },
+    "1097": {
+      "cid": 4991,
+      "password": "60866277",
+      "english_name": "Earthshaker",
+      "legacy_description_sha256": "e0434648d9aa71c087e44cb1dbc1600374d5bc16fea0cb085803926c5aeed2e3",
+      "review_description": true
+    },
+    "1527": {
+      "cid": 5261,
+      "password": "07565547",
+      "english_name": "Collected Power",
+      "legacy_description_sha256": "48b3394160161c6cb67755fbb84183129db4f8289af16e8b30a3e43d817f1f68",
+      "review_description": false
+    },
+    "1017": {
+      "cid": 4851,
+      "password": "80604091",
+      "english_name": "Ultimate Offering",
+      "legacy_description_sha256": "2388ebde375c1df85b312e6fff737ee7567e55b4fb2ffe9f9d00153408d17970",
+      "review_description": false
+    },
+    "1339": {
+      "cid": 5140,
+      "password": "10992251",
+      "english_name": "Gradius",
+      "legacy_description_sha256": "28d0dbdd04f2daa7a2ee239b435dbd39c91a47b2def6f597693083f596dbd197",
+      "review_description": true
+    },
+    "341": {
+      "cid": 4348,
+      "password": "ffffffff",
+      "english_name": "Dian Keto the Cure Master",
+      "legacy_description_sha256": "8ef5e16e6e5d82d87d2c89f319f01c3bd0f32188f5ba7962d43bcb76b68c8e19",
+      "review_description": false
+    },
+    "93": {
+      "cid": 4100,
+      "password": "67494157",
+      "english_name": "Crawling Dragon",
+      "legacy_description_sha256": "47c48da88d966e705bea7316d7e9d621f3f2bd176c38cd9263338eae5a4fbf56",
+      "review_description": true
+    },
+    "1529": {
+      "cid": 5227,
+      "password": "93599951",
+      "english_name": "Dark Spirit of the Silent",
+      "legacy_description_sha256": "97da9865fdea5eed13600d72a4ba5dc3822130ecc26ce5acd571d4a4d0f456cc",
+      "review_description": false
+    },
+    "605": {
+      "cid": 4612,
+      "password": "29692206",
+      "english_name": "Twin Long Rods #2",
+      "legacy_description_sha256": "f097a7d6aa59ee21c31ac1e02ba5e8df0010d50a3555b470c0c366b906443814",
+      "review_description": true
+    },
+    "1066": {
+      "cid": 4896,
+      "password": "82003859",
+      "english_name": "Toll",
+      "legacy_description_sha256": "290360893fb51f3ee5c1d214bc318b902ffaa1af52ce8d7b61cd024767ffcb97",
+      "review_description": false
+    },
+    "217": {
+      "cid": 4224,
+      "password": "57305373",
+      "english_name": "Two-Mouth Darkruler",
+      "legacy_description_sha256": "3e182c0334a7d823906c9ba85c3555f7f43eac7a401eb8285fa629f17c74de83",
+      "review_description": true
+    },
+    "630": {
+      "cid": 4637,
+      "password": "79629370",
+      "english_name": "Maiden of the Moonlight",
+      "legacy_description_sha256": "37b771d505d225ff3ee5146cb312b18c4ee96cf6c025dc57e16e77f9f5e05ab9",
+      "review_description": true
+    },
+    "1346": {
+      "cid": 5147,
+      "password": "31447217",
+      "english_name": "Wingweaver",
+      "legacy_description_sha256": "9b83f533423a982c01aba5780fb6eea8d54bbf731c37e9267e993301f5380036",
+      "review_description": true
+    },
+    "39": {
+      "cid": 4046,
+      "password": "55763552",
+      "english_name": "Dragon Piper",
+      "legacy_description_sha256": "ac2731b19d7c860ea0c49743075e47f98da54e1f20ce66c43a7baf5edefc479c",
+      "review_description": false
+    },
+    "265": {
+      "cid": 4272,
+      "password": "51371017",
+      "english_name": "Princess of Tsurugi",
+      "legacy_description_sha256": "9a75927b8176b70bc6126a66688ba4dd440b53b8b846527f1e85cd74a0e8b195",
+      "review_description": false
+    },
+    "443": {
+      "cid": 4450,
+      "password": "59053232",
+      "english_name": "Turu-Purun",
+      "legacy_description_sha256": "df93d51d9fdd49758374807dd182f7a84badb383a83b691380cfa46d1df544b1",
+      "review_description": true
+    },
+    "1145": {
+      "cid": 4951,
+      "password": "74701381",
+      "english_name": "DNA Surgery",
+      "legacy_description_sha256": "89e6d4255912214bf0a01cdc2770886b0218dea44a317de2c9827c071e54971f",
+      "review_description": false
+    },
+    "389": {
+      "cid": 4396,
+      "password": "87322377",
+      "english_name": "Launcher Spider",
+      "legacy_description_sha256": "edd9150d90bd8a6fe1653539f3f718d874dca02943074a80a5031fce89c39a47",
+      "review_description": true
+    },
+    "642": {
+      "cid": 4649,
+      "password": "76446915",
+      "english_name": "Disk Magician",
+      "legacy_description_sha256": "478888e94cddffc7fd01949b16adcdd8ac1893cfe7f0696b6fc2f4e7c53c16cd",
+      "review_description": true
+    },
+    "1150": {
+      "cid": 4956,
+      "password": "36468556",
+      "english_name": "Ceasefire",
+      "legacy_description_sha256": "12b9e555d2c1dcf8eb4e06409176af230b6811ad1c88c990dd614f8a0430094b",
+      "review_description": false
+    },
+    "1428": {
+      "cid": 5122,
+      "password": "21558682",
+      "english_name": "Jam Defender",
+      "legacy_description_sha256": "3560ba0cf50d5889b3f7d4314b417db05c2d84c43359392fe4dc2017b557d2ba",
+      "review_description": false
+    },
+    "303": {
+      "cid": 4310,
+      "password": "40619825",
+      "english_name": "Axe of Despair",
+      "legacy_description_sha256": "fcea6f72b3531a8f1a2a7308e2829bf1747e4d3513c4ee7662ad5d167395f392",
+      "review_description": false
+    },
+    "21": {
+      "cid": 4028,
+      "password": "70781052",
+      "english_name": "Summoned Skull",
+      "legacy_description_sha256": "0d857101571d6fd638ed987c18cea7489cf19c16c37a1efefdfc8108eb1276dc",
+      "review_description": false
+    },
+    "1128": {
+      "cid": 4935,
+      "password": "45778932",
+      "english_name": "Rising Air Current",
+      "legacy_description_sha256": "b67f668aeb3343351f08d2521ce784c61c6301a23bd9248536d4b0e030d15e67",
+      "review_description": false
+    },
+    "1053": {
+      "cid": 4884,
+      "password": "49218300",
+      "english_name": "Sorcerer of the Doomed",
+      "legacy_description_sha256": "a65b94c024a9f8599137b2d703852109e0283135aedcf526b5a2baea94d912fe",
+      "review_description": true
+    },
+    "1307": {
+      "cid": 4970,
+      "password": "06104968",
+      "english_name": "Bubonic Vermin",
+      "legacy_description_sha256": "f4449b4477563031f05b0c86743416d080094e1247c5b69697d32fc3cc842cd5",
+      "review_description": false
+    },
+    "538": {
+      "cid": 4545,
+      "password": "34290067",
+      "english_name": "Corroding Shark",
+      "legacy_description_sha256": "7bc2dab6e18cdd3adc42dc116c52789759bdb122bb72bee3512a6512bdc28dce",
+      "review_description": true
+    },
+    "1351": {
+      "cid": 5059,
+      "password": "00423705",
+      "english_name": "Gearfried the Iron Knight",
+      "legacy_description_sha256": "cea2166e11308672dc8eb98e77c89f66b03e75dcba3f65ac077d42d56438f107",
+      "review_description": false
+    },
+    "393": {
+      "cid": 4400,
+      "password": "13599884",
+      "english_name": "Steel Scorpion",
+      "legacy_description_sha256": "cfc47150fc9bb3e6d01a33f5ccb65fcb583ae7d17f66627f3eeb793b28b2fa6b",
+      "review_description": true
+    },
+    "734": {
+      "cid": 4741,
+      "password": "90908427",
+      "english_name": "Steel Ogre Grotto #2",
+      "legacy_description_sha256": "67e454f8050498057ffe7fab76f2d41a7af4179ca1495e6996be715e1c7182b3",
+      "review_description": true
+    },
+    "522": {
+      "cid": 4529,
+      "password": "71107816",
+      "english_name": "The Bistro Butcher",
+      "legacy_description_sha256": "8b46352572bd97879355ad6f1d18ffd3673910ef17c8652a28efb57e693a2baa",
+      "review_description": false
+    },
+    "390": {
+      "cid": 4397,
+      "password": "24311372",
+      "english_name": "Zoa",
+      "legacy_description_sha256": "5e5f87c99d8ec3c83d0b6a971fdd08caa54dbc7d53c17c4b82fdf5db34f02a8c",
+      "review_description": true
+    },
+    "419": {
+      "cid": 4426,
+      "password": "69015963",
+      "english_name": "Cyber-Stein",
+      "legacy_description_sha256": "10e36cae1dd06d3832a618dc3a8ac551b2c0c63474409e3b1605ea8d52b7d0ef",
+      "review_description": false
+    },
+    "384": {
+      "cid": 4391,
+      "password": "25655502",
+      "english_name": "Bickuribox",
+      "legacy_description_sha256": "5479d09defd3c52762d963658943357fd2185413364c83f5c94a83e4c7b88e9e",
+      "review_description": true
+    },
+    "1221": {
+      "cid": 4821,
+      "password": "72892473",
+      "english_name": "Card Destruction",
+      "legacy_description_sha256": "cf02ed73e6e121736f9f50cd6d05867ce66393de949e695b772917e1b3baa7e1",
+      "review_description": false
+    },
+    "794": {
+      "cid": 4786,
+      "password": "12493482",
+      "english_name": "Dunames Dark Witch",
+      "legacy_description_sha256": "a0d87d355b5a3ed6a0dbd5734bd6b01c00712315e88a543ddbd6cea44e34d521",
+      "review_description": false
+    },
+    "609": {
+      "cid": 4616,
+      "password": "55875323",
+      "english_name": "Electric Lizard",
+      "legacy_description_sha256": "d5ef225bc9c220917b403e8067ab31c71a035d93a73a8b334d960e3771a825dc",
+      "review_description": true
+    },
+    "686": {
+      "cid": 4693,
+      "password": "04149689",
+      "english_name": "Goblin Fan",
+      "legacy_description_sha256": "09e26a4bc0d616f229d419a15112da6c513c95fa53abbe41c080c14b41ec982b",
+      "review_description": false
+    },
+    "315": {
+      "cid": 4322,
+      "password": "37820550",
+      "english_name": "Electro-Whip",
+      "legacy_description_sha256": "2e396a24dae114b12fe1401bb0dbda35749bb95751965d27483ce2407518ecab",
+      "review_description": false
+    },
+    "340": {
+      "cid": 4347,
+      "password": "47852924",
+      "english_name": "Soul of the Pure",
+      "legacy_description_sha256": "864d741d0f169d52fce9ae6899ccc4fae0f9c388e90b4db566a8f856fab82d48",
+      "review_description": false
+    },
+    "1203": {
+      "cid": 4815,
+      "password": "74137509",
+      "english_name": "Graceful Dice",
+      "legacy_description_sha256": "946c8adc24c34b820b94c12f61358bd3166a2cc3bc027173bc251cebc3ddd602",
+      "review_description": false
+    },
+    "1073": {
+      "cid": 4903,
+      "password": "17653779",
+      "english_name": "Fairy's Hand Mirror",
+      "legacy_description_sha256": "a8e9013847f7c19f7fceb153e18c70b0559aa702fbf78a37fa585bc5a69deedd",
+      "review_description": false
+    },
+    "968": {
+      "cid": 4812,
+      "password": "79571449",
+      "english_name": "Graceful Charity",
+      "legacy_description_sha256": "d3528aa2fe4b615f455a2acd26042b735bd13c1d2ed1304d1a752b6bd3bed1be",
+      "review_description": false
+    },
+    "300": {
+      "cid": 4307,
+      "password": "61854111",
+      "english_name": "Legendary Sword",
+      "legacy_description_sha256": "2e3129c0b225952c28c27b071524d19b90033b2d0b05d50d7a135dfbab5d1608",
+      "review_description": false
+    },
+    "292": {
+      "cid": 4299,
+      "password": "44287299",
+      "english_name": "Masaki the Legendary Swordsman",
+      "legacy_description_sha256": "0d9f8f86aaff754e84bd83beb91745602ee2e19925211099d4391ba7bd98594a",
+      "review_description": true
+    },
+    "1326": {
+      "cid": 5069,
+      "password": "03643300",
+      "english_name": "The Legendary Fisherman",
+      "legacy_description_sha256": "2adfb44c481edfdafbeb81ab3833e3cb9d00beac3ff33c04ed501d7ae9184a73",
+      "review_description": false
+    },
+    "728": {
+      "cid": 4735,
+      "password": "91842653",
+      "english_name": "Toon Summoned Skull",
+      "legacy_description_sha256": "9fcef7e687dd190553da653a3dfafbb4bbd55ed43aca36353c9076be921bb92e",
+      "review_description": false
+    },
+    "726": {
+      "cid": 4733,
+      "password": "38369349",
+      "english_name": "Manga Ryu-Ran",
+      "legacy_description_sha256": "9fcef7e687dd190553da653a3dfafbb4bbd55ed43aca36353c9076be921bb92e",
+      "review_description": false
+    },
+    "727": {
+      "cid": 4734,
+      "password": "65458948",
+      "english_name": "Toon Mermaid",
+      "legacy_description_sha256": "9fcef7e687dd190553da653a3dfafbb4bbd55ed43aca36353c9076be921bb92e",
+      "review_description": false
+    },
+    "954": {
+      "cid": 4798,
+      "password": "15259703",
+      "english_name": "Toon World",
+      "legacy_description_sha256": "e150814870fb751abb43236b7139841bf56b9ba9d7afde24d4d185817c5b5e10",
+      "review_description": false
+    },
+    "1030": {
+      "cid": 4863,
+      "password": "03819470",
+      "english_name": "Seven Tools of the Bandit",
+      "legacy_description_sha256": "0f190695c37c7e60de8b364c7d68b2b728c53e1a682a381d6343372e9c4bbbe2",
+      "review_description": false
+    },
+    "1060": {
+      "cid": 4890,
+      "password": "83225447",
+      "english_name": "Stim-Pack",
+      "legacy_description_sha256": "9f86ce21ec6aec3a4c85d3a7acbbd4318542561dc1234b3572026cff606bcdd6",
+      "review_description": false
+    },
+    "950": {
+      "cid": 4794,
+      "password": "80987696",
+      "english_name": "Time Machine",
+      "legacy_description_sha256": "ddbf2d5c89c7377017aa553ba3027f58a3a8c85686766ca4403e1af75d95d1d1",
+      "review_description": false
+    },
+    "1090": {
+      "cid": 4984,
+      "password": "35316708",
+      "english_name": "Time Seal",
+      "legacy_description_sha256": "42820efae06656ace9edcc3f878c2c90c9cfe95ac244babd5354cb997e576e13",
+      "review_description": false
+    },
+    "15": {
+      "cid": 4022,
+      "password": "71625222",
+      "english_name": "Time Wizard",
+      "legacy_description_sha256": "9ee453c9343bda016523845d94e9ac77d84f9a4af344c1f600cd7e3ec7d00ff7",
+      "review_description": false
+    },
+    "1082": {
+      "cid": 4912,
+      "password": "00596051",
+      "english_name": "Snake Fang",
+      "legacy_description_sha256": "8de4390226de561b9c3514815fc3cceaca69e39b03c4d8bfa15c8b5047ef0291",
+      "review_description": true
+    },
+    "1075": {
+      "cid": 4905,
+      "password": "70046172",
+      "english_name": "Rush Recklessly",
+      "legacy_description_sha256": "7c69a529fe3cdfb55e26f4e24c9b60edfabaa3a5aa52f534716b7f6512507fb8",
+      "review_description": false
+    },
+    "1134": {
+      "cid": 4940,
+      "password": "73079365",
+      "english_name": "Gust",
+      "legacy_description_sha256": "049f98d9c224589beb0d23c8bedd040d7adcd4700b9330fee96b9ce1dfd818fd",
+      "review_description": true
+    },
+    "1013": {
+      "cid": 4847,
+      "password": "55321970",
+      "english_name": "Gust Fan",
+      "legacy_description_sha256": "e41e7e91c62a3da19a5db8efdfbe3f53dcb131fa7452ca1567125b30399fb6bd",
+      "review_description": true
+    },
+    "585": {
+      "cid": 4592,
+      "password": "61831093",
+      "english_name": "Greenkappa",
+      "legacy_description_sha256": "a2b8e228aa4db6dd897893517653dc8f84a96b82c30fe9d3a8fbb572849dbd3e",
+      "review_description": false
+    },
+    "222": {
+      "cid": 4229,
+      "password": "19066538",
+      "english_name": "Roaring Ocean Snake",
+      "legacy_description_sha256": "d515de215efddee4f2230b0cee197e4c503d1bb75750c6dc0b1b22156a5a4cbb",
+      "review_description": true
+    },
+    "360": {
+      "cid": 4367,
+      "password": "05628232",
+      "english_name": "Flying Penguin",
+      "legacy_description_sha256": "2f7102cde1aab8817f0b2d3dd288143c115f6849dfc5ab5d1090853ac57eac7b",
+      "review_description": true
+    },
+    "704": {
+      "cid": 4711,
+      "password": "ffffffff",
+      "english_name": "Tri-Horned Dragon",
+      "legacy_description_sha256": "056687b812840587c73454df308f249db78b6fb059715a5385839602bf9a7a99",
+      "review_description": true
+    },
+    "1550": {
+      "cid": 5279,
+      "password": "32437102",
+      "english_name": "Dragonic Attack",
+      "legacy_description_sha256": "9fe752158a20215aa9eb1424aebbe4e7d9c96055954322b669ee78741d868c11",
+      "review_description": true
+    },
+    "725": {
+      "cid": 4732,
+      "password": "02964201",
+      "english_name": "Ryu-Ran",
+      "legacy_description_sha256": "00b896c6c6384c3a7089473fde309c108bd33e89f917b886de0da91c64609e52",
+      "review_description": true
+    },
+    "499": {
+      "cid": 4506,
+      "password": "28563545",
+      "english_name": "Dragon Seeker",
+      "legacy_description_sha256": "b9257b9611d3a2c1621b398f75c900ef4a1e26b9ea3d95c5ad276c796ed3026a",
+      "review_description": false
+    },
+    "328": {
+      "cid": 4335,
+      "password": "50045299",
+      "english_name": "Dragon Capture Jar",
+      "legacy_description_sha256": "64a99ca8e6ec1d1a36d4434fabc3b4814d20d3dbf7a599f278889b27dcfd8d9d",
+      "review_description": false
+    },
+    "96": {
+      "cid": 4103,
+      "password": "66672569",
+      "english_name": "Dragon Zombie",
+      "legacy_description_sha256": "eb1224ae7bbcc506ee6a3f0e656ce753a7e4b0da154eabc5e45b00fcb8e4e697",
+      "review_description": true
+    },
+    "812": {
+      "cid": 5003,
+      "password": "03366982",
+      "english_name": "Alligator's Sword Dragon",
+      "legacy_description_sha256": "2f52e791490552970a2fde14d7482bb54092d31fd022548c07a56e71cd9ea054",
+      "review_description": false
+    },
+    "314": {
+      "cid": 4321,
+      "password": "01435851",
+      "english_name": "Dragon Treasure",
+      "legacy_description_sha256": "f266533d91882701d6b75d1283c3fa49213cfd6adb64e887930ed42b7a00f902",
+      "review_description": true
+    },
+    "1120": {
+      "cid": 4927,
+      "password": "84834865",
+      "english_name": "Flying Kamakiri #1",
+      "legacy_description_sha256": "a2fc4ea09c87059ca840633a15e80e72c3226130f970a1001cbaa48fdfbf5ec8",
+      "review_description": false
+    },
+    "966": {
+      "cid": 4810,
+      "password": "43973174",
+      "english_name": "The Flute of Summoning Dragon",
+      "legacy_description_sha256": "df398a45c3f74140b544b4b2cb68c0059f060385db897f9e38de30d48d2763cb",
+      "review_description": false
+    },
+    "223": {
+      "cid": 4230,
+      "password": "46461247",
+      "english_name": "Trap Master",
+      "legacy_description_sha256": "19a540345a99823025e0d383ad565d347e543abaca74980a46a08c5bf3bb453b",
+      "review_description": false
+    },
+    "119": {
+      "cid": 4126,
+      "password": "13215230",
+      "english_name": "Dream Clown",
+      "legacy_description_sha256": "a9e454f9382d050467cab2d342e1d7aa89b4891a33806a45c06eb080e5331ff6",
+      "review_description": false
+    },
+    "6": {
+      "cid": 4013,
+      "password": "87796900",
+      "english_name": "Winged Dragon, Guardian of the Fortress #1",
+      "legacy_description_sha256": "57e1e57c973cac5e2138837b06eba6d93ff4003e8dc5bff45d3eaf928d12d624",
+      "review_description": true
+    },
+    "1423": {
+      "cid": 5111,
+      "password": "18605135",
+      "english_name": "Tornado Wall",
+      "legacy_description_sha256": "070e707513edea863215cd6de9777d5f20920181e5ed24815cf77c58df6050c7",
+      "review_description": false
+    },
+    "1521": {
+      "cid": 5257,
+      "password": "71283180",
+      "english_name": "Tornado Bird",
+      "legacy_description_sha256": "6f1be784e7c528d8c39106c367c580cdf0f72ca46ecd5f2678ad3fd9fe41adfd",
+      "review_description": false
+    },
+    "299": {
+      "cid": 4306,
+      "password": "85705804",
+      "english_name": "Kurama",
+      "legacy_description_sha256": "efa63287aedcd14d56981672a90a50a6f7383e16947d45f510e25ce532fe66d0",
+      "review_description": true
+    },
+    "636": {
+      "cid": 4643,
+      "password": "78780140",
+      "english_name": "Trent",
+      "legacy_description_sha256": "26748838711f3fe21e036ee3e0205b8f604e2a87ea2ca1db551a0fd022074119",
+      "review_description": true
+    },
+    "541": {
+      "cid": 4548,
+      "password": "33178416",
+      "english_name": "Misairuzame",
+      "legacy_description_sha256": "e04c9b64cd3c1215660760017b80e3bca978a091c307a4bdabf8377432d7f151",
+      "review_description": true
+    },
+    "165": {
+      "cid": 4172,
+      "password": "54098121",
+      "english_name": "Mysterious Puppeteer",
+      "legacy_description_sha256": "1ea10b13a46ed06e1a7d5bacfd1fd7e2b570e819a770c3bdbacde2295f048661",
+      "review_description": false
+    },
+    "1065": {
+      "cid": 4895,
+      "password": "70368879",
+      "english_name": "Upstart Goblin",
+      "legacy_description_sha256": "fb2ad3e211a593ba44285ae03702f74da3a1e2cd3e5c93db6b185c49e2565b2d",
+      "review_description": false
+    },
+    "561": {
+      "cid": 4568,
+      "password": "81843628",
+      "english_name": "Needle Worm",
+      "legacy_description_sha256": "0baad6920ade5215f937b6c221d824d48d33b9112f70540d201eb80178750667",
+      "review_description": false
+    },
+    "689": {
+      "cid": 4696,
+      "password": "03027001",
+      "english_name": "Fake Trap",
+      "legacy_description_sha256": "a64963ba799e19accb1a2774f365ccf4ecf4aa05c061e0f09b1832c1ed1eb6d8",
+      "review_description": false
+    },
+    "31": {
+      "cid": 4038,
+      "password": "94119974",
+      "english_name": "Two-Headed King Rex",
+      "legacy_description_sha256": "c48ba35ae94a9035d25f9a7ce156c5792934554ff7d3df1280e28eb3eea35ed8",
+      "review_description": true
+    },
+    "358": {
+      "cid": 4365,
+      "password": "33734439",
+      "english_name": "Three-Legged Zombies",
+      "legacy_description_sha256": "86aa52bc0e046d16c271c3e6144759daa76c2d988c659fb58790f07e4881baac",
+      "review_description": true
+    },
+    "1254": {
+      "cid": 5037,
+      "password": "78636495",
+      "english_name": "Slate Warrior",
+      "legacy_description_sha256": "41a3df93e43424c307f18ab88f7078a3418aa0312ef0ce2237d9e8830fe43e36",
+      "review_description": false
+    },
+    "257": {
+      "cid": 4264,
+      "password": "99426834",
+      "english_name": "Beastking of the Swamps",
+      "legacy_description_sha256": "551dd5e968587901e85b66b7782bc1724a07ad61504db2b77fce5d9cc6011383",
+      "review_description": false
+    },
+    "681": {
+      "cid": 4688,
+      "password": "42578427",
+      "english_name": "Eatgaboon",
+      "legacy_description_sha256": "ff2784e9281a3a807767ee70497cdb856147e9ad3e549f2af84166fcbc67d716",
+      "review_description": true
+    },
+    "128": {
+      "cid": 4135,
+      "password": "90963488",
+      "english_name": "Nemuriko",
+      "legacy_description_sha256": "a1bbee7e9a4a16dc970c23b334993e689158306031ca5e8f4072a81cf8aa53fe",
+      "review_description": true
+    },
+    "680": {
+      "cid": 4687,
+      "password": "15083728",
+      "english_name": "House of Adhesive Tape",
+      "legacy_description_sha256": "3ad6c6275b20f7ae9a165ff0f980ccfb0173facbbe91b7521ebf3e499d0dc08b",
+      "review_description": true
+    },
+    "280": {
+      "cid": 4287,
+      "password": "47060154",
+      "english_name": "Mystic Clown",
+      "legacy_description_sha256": "3c6480a135ea65e2256d85c2546c973c67cafb44a5793d8a4b41e406906213f6",
+      "review_description": true
+    },
+    "155": {
+      "cid": 4162,
+      "password": "20060230",
+      "english_name": "Hard Armor",
+      "legacy_description_sha256": "75c9b18293d139f170deaa02cba380ff70426e40e991677bcd85df574ed43cda",
+      "review_description": true
+    },
+    "1174": {
+      "cid": 4980,
+      "password": "30532390",
+      "english_name": "Harpie's Brother",
+      "legacy_description_sha256": "6bfea4353750a13b472520182df16760e71388f9548ca5d8073fae751f118793",
+      "review_description": true
+    },
+    "1167": {
+      "cid": 4973,
+      "password": "05388481",
+      "english_name": "Darkfire Soldier #1",
+      "legacy_description_sha256": "a08a0007c81fd4f942901fb166aeedeafb93a7f927bd30bb88199aa788eb1f46",
+      "review_description": true
+    },
+    "1127": {
+      "cid": 4934,
+      "password": "19384334",
+      "english_name": "Molten Destruction",
+      "legacy_description_sha256": "c5ab6504322d5ad02ca210af86578973362a014ba15c09663be05675366bdcdc",
+      "review_description": false
+    },
+    "553": {
+      "cid": 4560,
+      "password": "20394040",
+      "english_name": "Lava Battleguard",
+      "legacy_description_sha256": "5c4649e00b4a98f00f6d0129c17c56bd5bf2b65d1420daa4dafe49883dabb45b",
+      "review_description": false
+    },
+    "11": {
+      "cid": 4018,
+      "password": "40453765",
+      "english_name": "Swamp Battleguard",
+      "legacy_description_sha256": "7d6eded90c630c95505bf4a3be790759dd11269de3b9a8579cd13ac7e2367c2d",
+      "review_description": false
+    },
+    "385": {
+      "cid": 4392,
+      "password": "52040216",
+      "english_name": "Harpie's Pet Dragon",
+      "legacy_description_sha256": "d90669c77d61993ea683ed67aa52f66da36f6a2eb1b459aee100e29e5516beae",
+      "review_description": false
+    },
+    "671": {
+      "cid": 4678,
+      "password": "18144506",
+      "english_name": "Harpie's Feather Duster",
+      "legacy_description_sha256": "bc8eebebda09e17597435543bc6140f0f687567d6d10115fda8fdddd2817404a",
+      "review_description": false
+    },
+    "61": {
+      "cid": 4068,
+      "password": "76812113",
+      "english_name": "Harpie Lady",
+      "legacy_description_sha256": "1ad45e6417af3c8ef51efdeb7b831755155abdabd9402f30c4e131b0b50136ba",
+      "review_description": true
+    },
+    "62": {
+      "cid": 4069,
+      "password": "12206212",
+      "english_name": "Harpie Lady Sisters",
+      "legacy_description_sha256": "3a53741a93d05e2fb7ba14b40a83273e439ab8043f925a0a9810e8f30a6486e9",
+      "review_description": false
+    },
+    "169": {
+      "cid": 4176,
+      "password": "80770678",
+      "english_name": "Spirit of the Harp",
+      "legacy_description_sha256": "802fca876845ec6c89dd75564576358663cc80d7b24a2ae415a0ba96a2aec3d9",
+      "review_description": true
+    },
+    "1443": {
+      "cid": 5206,
+      "password": "58696829",
+      "english_name": "Bio-Mage",
+      "legacy_description_sha256": "b9fb783e7480a5f7a2bb138a43a176e239907eaed43d8ec2f902ff921ad7295f",
+      "review_description": true
+    },
+    "611": {
+      "cid": 4618,
+      "password": "17358176",
+      "english_name": "Lady of Faith",
+      "legacy_description_sha256": "ed4927a16e74e0d4f88a56756f5e5d10fddff1d21b09f6d70cc90d08d8e1806f",
+      "review_description": true
+    },
+    "1091": {
+      "cid": 4985,
+      "password": "61705417",
+      "english_name": "Graverobber",
+      "legacy_description_sha256": "e3314f31dbfe3a6a668e0ba7ef3ccbb140d862b1ababb7b57da3775ffcd40c90",
+      "review_description": false
+    },
+    "1533": {
+      "cid": 5265,
+      "password": "33737664",
+      "english_name": "Graverobber's Retribution",
+      "legacy_description_sha256": "f4d8553c44ef47be97a9806e79002e1f0f208fc0b671d33d9ee0cefade105782",
+      "review_description": false
+    },
+    "268": {
+      "cid": 4275,
+      "password": "50259460",
+      "english_name": "Versago the Destroyer",
+      "legacy_description_sha256": "551dd5e968587901e85b66b7782bc1724a07ad61504db2b77fce5d9cc6011383",
+      "review_description": false
+    },
+    "453": {
+      "cid": 4460,
+      "password": "73481154",
+      "english_name": "Destroyer Golem",
+      "legacy_description_sha256": "a416aa3e108f763420fad566fa32df91ad4778ce2e0233549e67b47c8b9cd690",
+      "review_description": true
+    },
+    "939": {
+      "cid": 5005,
+      "password": "83555666",
+      "english_name": "Ring of Destruction",
+      "legacy_description_sha256": "58357d3d8e73931b55dc663e535703850a6f07cb3910722efc9de8ebafb2e87d",
+      "review_description": false
+    },
+    "308": {
+      "cid": 4315,
+      "password": "02370081",
+      "english_name": "Steel Shell",
+      "legacy_description_sha256": "3bbd3fda44172abacc792372b0a994d9b0a4f4539faf8ecd8267b527ddffc958",
+      "review_description": true
+    },
+    "1021": {
+      "cid": 4854,
+      "password": "16970158",
+      "english_name": "Call of the Grave",
+      "legacy_description_sha256": "8fb17ce504b0dcf5866993746b24c9a25809800a26875dc7edd9b46c071b4934",
+      "review_description": false
+    },
+    "1011": {
+      "cid": 4845,
+      "password": "82542267",
+      "english_name": "Gravedigger Ghoul",
+      "legacy_description_sha256": "2c045eafb1c12991206d66ca9119622f0a59db6eba9efe905c961e1d12eacace",
+      "review_description": false
+    },
+    "1063": {
+      "cid": 4893,
+      "password": "16762927",
+      "english_name": "Gravekeeper's Servant",
+      "legacy_description_sha256": "49b312af382201c3891ba1ae1c8efbb573650d36b82297c2999f504f26eebec0",
+      "review_description": false
+    },
+    "1140": {
+      "cid": 4946,
+      "password": "02130625",
+      "english_name": "Numinous Healer",
+      "legacy_description_sha256": "cd800355f1948362d19e55f6ef4ec4f1b40445a254e4dfd686c1ad19a7c22521",
+      "review_description": false
+    },
+    "1337": {
+      "cid": 5138,
+      "password": "57409948",
+      "english_name": "Bombardment Beetle",
+      "legacy_description_sha256": "f138e4b6aff61b175381c305da8c4b2fb019fc1ce900ddecf57fb267ccdfede4",
+      "review_description": false
+    },
+    "1304": {
+      "cid": 4954,
+      "password": "63689843",
+      "english_name": "Attack and Receive",
+      "legacy_description_sha256": "1180144dc97addb4d601e01b78e01b9ab15b48ae4487cbf9d7440d15e44ea411",
+      "review_description": false
+    },
+    "1005": {
+      "cid": 4839,
+      "password": "83887306",
+      "english_name": "Two-Pronged Attack",
+      "legacy_description_sha256": "04cd4292db20ce1ef6f511d6b3d88b45ac2f00eff11c7fd95743937188f9f2f5",
+      "review_description": true
+    },
+    "808": {
+      "cid": 4983,
+      "password": "78193831",
+      "english_name": "Buster Blader",
+      "legacy_description_sha256": "6057388f0fc495ee7a5a61955d7efda12e08893caeec377f7d771957b31145b8",
+      "review_description": false
+    },
+    "1537": {
+      "cid": 5269,
+      "password": "68400115",
+      "english_name": "The Emperor's Holiday",
+      "legacy_description_sha256": "f2556283fdb3ed5252fa6624da3a6aea80f646c2a5428022101e25bc95bb0f97",
+      "review_description": false
+    },
+    "1044": {
+      "cid": 4875,
+      "password": "51275027",
+      "english_name": "The Unhappy Maiden",
+      "legacy_description_sha256": "aa2e29d5d85b994bc48a10fb2790645eba6aa936cbc4b470901d674be9a0e1f8",
+      "review_description": true
+    },
+    "579": {
+      "cid": 4586,
+      "password": "76775123",
+      "english_name": "Patrol Robo",
+      "legacy_description_sha256": "8c1265be1293f3540c997bbf2b378652fc2938bec07f45bcf9430746d68f044c",
+      "review_description": true
+    },
+    "540": {
+      "cid": 4547,
+      "password": "07089711",
+      "english_name": "Hane-Hane",
+      "legacy_description_sha256": "ea8bc37fdf3126ef18e3549241a2d45dbad436696bf22990247a3b51e1b34709",
+      "review_description": false
+    },
+    "1240": {
+      "cid": 4755,
+      "password": "77207191",
+      "english_name": "Berfomet",
+      "legacy_description_sha256": "3ed87c9fc767f92e6e1829488b062c58290290f6ef962e76c34e548d3b01616c",
+      "review_description": false
+    },
+    "1160": {
+      "cid": 4966,
+      "password": "70828912",
+      "english_name": "Premature Burial",
+      "legacy_description_sha256": "87f00b24d863f7db186a8ca398473484551fac6f80be220d90ba12d8f1dbf679",
+      "review_description": false
+    },
+    "1336": {
+      "cid": 5137,
+      "password": "21015833",
+      "english_name": "Hayabusa Knight",
+      "legacy_description_sha256": "e733c0057d1d85dc4d13d43ac4564cd349f5185b3dd25df63cc5896d869378a4",
+      "review_description": false
+    },
+    "1080": {
+      "cid": 4910,
+      "password": "42703248",
+      "english_name": "Giant Trunade",
+      "legacy_description_sha256": "516e68ca4584bd1f63cb3c6b23c5f433e2a65e1a832c4c0ed2d86245e8ad6d3a",
+      "review_description": false
+    },
+    "382": {
+      "cid": 4389,
+      "password": "62762898",
+      "english_name": "Parrot Dragon",
+      "legacy_description_sha256": "4358f302c020eebc39be02bc240b3653ccd050de2dad983a9bc6da7ecbea8ce0",
+      "review_description": true
+    },
+    "1407": {
+      "cid": 5066,
+      "password": "67371383",
+      "english_name": "Amphibian Beast",
+      "legacy_description_sha256": "d56c7ae45afbdb5b4d2f1ba019fa9859dff55704a4cc7e8ab4392238ccb77572",
+      "review_description": true
+    },
+    "701": {
+      "cid": 4708,
+      "password": "ffffffff",
+      "english_name": "Hungry Burger",
+      "legacy_description_sha256": "fad5af9545a70c0c0eda6a0947875cc1c52927717c02e5096bca6e4c3f949149",
+      "review_description": false
+    },
+    "613": {
+      "cid": 4620,
+      "password": "80141480",
+      "english_name": "Hunter Spider",
+      "legacy_description_sha256": "618228be9f5f249d3a7659ccb36c1940cb93f7d13880a0e20aa23f6d13c396c1",
+      "review_description": true
+    },
+    "676": {
+      "cid": 4683,
+      "password": "ffffffff",
+      "english_name": "Hamburger Recipe",
+      "legacy_description_sha256": "2202c2d4e90f16bf1a7d3a5e0caa319e8629745e49056861d65e68e9e2400230",
+      "review_description": false
+    },
+    "344": {
+      "cid": 4351,
+      "password": "73134081",
+      "english_name": "Final Flame",
+      "legacy_description_sha256": "ed4b2703d5cf37a44c7e8fd22f7f7cee61d426e440e5d6c2459dc0c0643796c5",
+      "review_description": false
+    },
+    "510": {
+      "cid": 4517,
+      "password": "84990171",
+      "english_name": "Bean Soldier",
+      "legacy_description_sha256": "724dfa42e5a440a6e877e1f67975d4b41e45603b053d715ba196a9f2a8cdb6f2",
+      "review_description": true
+    },
+    "347": {
+      "cid": 4354,
+      "password": "72302403",
+      "english_name": "Swords of Revealing Light",
+      "legacy_description_sha256": "6f8be19aa4a29d193e27ef50768ad2395b2a7894aab9c2f382803c6fb88dc569",
+      "review_description": false
+    },
+    "1107": {
+      "cid": 4914,
+      "password": "61528025",
+      "english_name": "Banisher of the Light",
+      "legacy_description_sha256": "940321f8dd051c51da4c205f811557b229b3701ac17849a26547430b44e43144",
+      "review_description": false
+    },
+    "312": {
+      "cid": 4319,
+      "password": "38552107",
+      "english_name": "Horn of Light",
+      "legacy_description_sha256": "24e4b9e3fe84b72d9caca77d50d6715d49b3477b563e0b46960e736aa3cdad07",
+      "review_description": false
+    },
+    "964": {
+      "cid": 4808,
+      "password": "49587034",
+      "english_name": "Lightforce Sword",
+      "legacy_description_sha256": "be1de1e8050f6f0058bc85fc5d5a73c742e7a5fcfed0940c96d32cec28d630ba",
+      "review_description": false
+    },
+    "1439": {
+      "cid": 5202,
+      "password": "22419772",
+      "english_name": "Fairy Guardian",
+      "legacy_description_sha256": "f9f94d3a82bca61017e82ab441a1c4d7115e8c3e2f290dfb8fb5c1acfd28ac9c",
+      "review_description": false
+    },
+    "322": {
+      "cid": 4329,
+      "password": "91595718",
+      "english_name": "Book of Secret Arts",
+      "legacy_description_sha256": "aa4de96d9b9efb5e835637b6f459d54a25c57d007ae20a39bf364b7b88ce5c55",
+      "review_description": true
+    },
+    "1442": {
+      "cid": 5205,
+      "password": "21297224",
+      "english_name": "Hysteric Fairy",
+      "legacy_description_sha256": "6b17583f3aeb8f8a6546a51224b0c3ad6126797695fe3785caba088d664986ca",
+      "review_description": false
+    },
+    "1201": {
+      "cid": 4764,
+      "password": "65240384",
+      "english_name": "Big Shield Gardna",
+      "legacy_description_sha256": "ab584e4c8df1492e5575b55fc9a54b36312afb21a32fa795a67fef0dbc150f81",
+      "review_description": false
+    },
+    "1434": {
+      "cid": 5197,
+      "password": "64752646",
+      "english_name": "Fire Princess",
+      "legacy_description_sha256": "888ceb0bff5d83031abdefe3d330f3c5e1c0abe259cb2c0fc5dd4f1b147bbc44",
+      "review_description": false
+    },
+    "1166": {
+      "cid": 4972,
+      "password": "78984772",
+      "english_name": "Twin-Headed Fire Dragon",
+      "legacy_description_sha256": "2c4f5f4c5453bfedb2c093abc0f7b452b98f18f8923cbff2f8c84345d372aa14",
+      "review_description": true
+    },
+    "1052": {
+      "cid": 4883,
+      "password": "13723605",
+      "english_name": "Man-Eating Treasure Chest",
+      "legacy_description_sha256": "63986851f5d8f659a277aeb8820a66f2c3b79bf3b792934a5435b2cbdc5e7b6a",
+      "review_description": true
+    },
+    "500": {
+      "cid": 4507,
+      "password": "54652250",
+      "english_name": "Man-Eater Bug",
+      "legacy_description_sha256": "b7ce0a36f24b2dcc702e695c95bde1ee99de91f2f7a0a2d0d648b08d159fff96",
+      "review_description": false
+    },
+    "342": {
+      "cid": 4349,
+      "password": "76103675",
+      "english_name": "Sparks",
+      "legacy_description_sha256": "3e7ca53a9b0c831a8038d4d2d912dc6fe6266427839eaa50d0fd71795931e15a",
+      "review_description": false
+    },
+    "648": {
+      "cid": 4655,
+      "password": "64501875",
+      "english_name": "Hibikime",
+      "legacy_description_sha256": "318fd7aa0e57f42255f4a1939d2b44279cbe678c6349c0a2fd420abe1781f9e2",
+      "review_description": true
+    },
+    "1402": {
+      "cid": 5060,
+      "password": "46821314",
+      "english_name": "Humanoid Slime",
+      "legacy_description_sha256": "bc9de0020ac18f2084a9f4c60c0fe957b00aee6ff9d11d43527f1c0385ccc3b5",
+      "review_description": true
+    },
+    "1404": {
+      "cid": 5062,
+      "password": "05600127",
+      "english_name": "Humanoid Worm Drake",
+      "legacy_description_sha256": "63bea789dd8d514d8f2066e178a677993a4692b239e2a130205ac28deea77779",
+      "review_description": true
+    },
+    "1111": {
+      "cid": 4918,
+      "password": "96890582",
+      "english_name": "Flash Assailant",
+      "legacy_description_sha256": "7500c8654bd66514ed7c5fe087215361c1d6d42a111b0b63fa90993b2db6fa80",
+      "review_description": false
+    },
+    "646": {
+      "cid": 4653,
+      "password": "02118022",
+      "english_name": "Hyosube",
+      "legacy_description_sha256": "46627322aadd7f652da3907dd7396eb7177b2f905b33f05d28e3d8b5f1d31324",
+      "review_description": true
+    },
+    "1022": {
+      "cid": 4855,
+      "password": "42364257",
+      "english_name": "Anti Raigeki",
+      "legacy_description_sha256": "dd31ec39df6fa6f5791c33668a47551b34fcebc951eeb7651827efabba3b042c",
+      "review_description": false
+    },
+    "1141": {
+      "cid": 4947,
+      "password": "48539234",
+      "english_name": "Appropriate",
+      "legacy_description_sha256": "4bd0c2923b5152b71614a438cd312fceb1f6a90122106404874a0bdeb149a0ca",
+      "review_description": false
+    },
+    "518": {
+      "cid": 4525,
+      "password": "46534755",
+      "english_name": "Fire Kraken",
+      "legacy_description_sha256": "304d98c031f0e3b80603bdb5212c718f764cfa474a8798347c24e5920e8aedfd",
+      "review_description": true
+    },
+    "1436": {
+      "cid": 5199,
+      "password": "27132350",
+      "english_name": "Fire Sorcerer",
+      "legacy_description_sha256": "643aae13a2091ba37c67118fceb475b2d34979fb6d8a97dddbf7125bcb4265e5",
+      "review_description": false
+    },
+    "343": {
+      "cid": 4350,
+      "password": "46130346",
+      "english_name": "Hinotama",
+      "legacy_description_sha256": "d73f6a5b6e8ff79d404a2b48edf8583c0abc1bd9763247963d99a6617f8be66a",
+      "review_description": false
+    },
+    "581": {
+      "cid": 4588,
+      "password": "35565537",
+      "english_name": "Dark Witch",
+      "legacy_description_sha256": "526f71d06190333e0ef40a6f7e23047f3b3d798e3081a6907a5a9371bc0c71a6",
+      "review_description": true
+    },
+    "1340": {
+      "cid": 5141,
+      "password": "56387350",
+      "english_name": "Red-Moon Baby",
+      "legacy_description_sha256": "2917681ad7ad5688d760785423c9869afd2318879a02a8e9bcf6e9522237cc3b",
+      "review_description": false
+    },
+    "20": {
+      "cid": 4027,
+      "password": "33396948",
+      "english_name": "Exodia the Forbidden One",
+      "legacy_description_sha256": "b074bb86c2bdab8f07c8ea37cbc9555139e483fcfe7dc2e2f7d912a9cc01da96",
+      "review_description": false
+    },
+    "17": {
+      "cid": 4024,
+      "password": "44519536",
+      "english_name": "Left Leg of the Forbidden One",
+      "legacy_description_sha256": "74f5b6ccd29f53bec6def5ca9b74801d78859ddc6ab9067ba9f8dd42e4173240",
+      "review_description": false
+    },
+    "19": {
+      "cid": 4026,
+      "password": "07902349",
+      "english_name": "Left Arm of the Forbidden One",
+      "legacy_description_sha256": "6d3a357119a790fe8409a8e91d5d73cfa07037b0b8e1f930e05edaa2d0599336",
+      "review_description": false
+    },
+    "16": {
+      "cid": 4023,
+      "password": "08124921",
+      "english_name": "Right Leg of the Forbidden One",
+      "legacy_description_sha256": "1010594ac16794fd438f6072897afab091ab541d693df56b840465b79eda0f29",
+      "review_description": false
+    },
+    "18": {
+      "cid": 4025,
+      "password": "70903634",
+      "english_name": "Right Arm of the Forbidden One",
+      "legacy_description_sha256": "8728dc9c6a23bc07d40ebc55b8595147214a6adc8081658bc20f34ed469db7e3",
+      "review_description": false
+    },
+    "371": {
+      "cid": 4378,
+      "password": "ffffffff",
+      "english_name": "Kazejin",
+      "legacy_description_sha256": "cebd8cc06d01e2e4bd982363aefc3f206ea621fccdbe08788652a5935c908328",
+      "review_description": false
+    },
+    "1181": {
+      "cid": 5009,
+      "password": "34016756",
+      "english_name": "Riryoku",
+      "legacy_description_sha256": "6caad2d12cfecc176a7e6c327aa66e9441e2866dcafe5e38d1c07c352df29c3e",
+      "review_description": false
+    },
+    "1531": {
+      "cid": 5263,
+      "password": "70344351",
+      "english_name": "Riryoku Field",
+      "legacy_description_sha256": "1e1c9554cc0be348ac8875b21990fe4b760b0a1369295e60d16ec84e3d47a046",
+      "review_description": false
+    },
+    "326": {
+      "cid": 4333,
+      "password": "98252586",
+      "english_name": "Follow Wind",
+      "legacy_description_sha256": "bc517816ff35bfdf926e95a01bad85c4580d5cffc9f01f2932c5ba262ae56fa8",
+      "review_description": false
+    },
+    "1318": {
+      "cid": 5131,
+      "password": "96965364",
+      "english_name": "Insect Imitation",
+      "legacy_description_sha256": "d060d5b7495f50b23995f5f84b3b57b267ebffe94d97015f68303e9ae00db52f",
+      "review_description": false
+    },
+    "574": {
+      "cid": 4581,
+      "password": "14015067",
+      "english_name": "Ancient One of the Deep Forest",
+      "legacy_description_sha256": "d2a0138d62410ed46ab24f7ba55ef974d5be7e53d8f14f9228c8afba69b065bf",
+      "review_description": true
+    },
+    "377": {
+      "cid": 4384,
+      "password": "50005633",
+      "english_name": "Swordstalker",
+      "legacy_description_sha256": "3a60ee79f50a4be1cabc9c036243afe2b1dbf5d063540be3f1d1a67f9462d25a",
+      "review_description": true
+    },
+    "207": {
+      "cid": 4214,
+      "password": "38142739",
+      "english_name": "Petit Angel",
+      "legacy_description_sha256": "08d38f892bf44427277bfd05c2a1313eb4ab231c24e655d91906203b276fab27",
+      "review_description": true
+    },
+    "277": {
+      "cid": 4284,
+      "password": "58192742",
+      "english_name": "Petit Moth",
+      "legacy_description_sha256": "42e2ebc8c48bf8051d28feee35e514d45f88a135acc493daf0782f4b8db54bc2",
+      "review_description": true
+    },
+    "199": {
+      "cid": 4206,
+      "password": "75356564",
+      "english_name": "Petit Dragon",
+      "legacy_description_sha256": "ef27feb4f68c978670ebbe489202b5ff8e5fa938bf44eeae0613dc30a48493e5",
+      "review_description": true
+    },
+    "1524": {
+      "cid": 5259,
+      "password": "44072894",
+      "english_name": "Supply",
+      "legacy_description_sha256": "77244570d4540a7e920f758f87e5cfc89ed3dc3428210461b01e235284ee2a56",
+      "review_description": true
+    },
+    "188": {
+      "cid": 4195,
+      "password": "01641882",
+      "english_name": "Fusionist",
+      "legacy_description_sha256": "4eb89ef7b0d7afd82d17d270585e9ae54daa2845e7c48e040145a38890ae7648",
+      "review_description": true
+    },
+    "1547": {
+      "cid": 5276,
+      "password": "33550694",
+      "english_name": "Fusion Gate",
+      "legacy_description_sha256": "d53abe06e29fb0b880139dfec0021003eceb6d5547eeaf63847629924015dba5",
+      "review_description": false
+    },
+    "1406": {
+      "cid": 5065,
+      "password": "31987274",
+      "english_name": "Flying Fish",
+      "legacy_description_sha256": "1d083bd8168039c4aaac51fdae09c63834930cd50071cd4696a9b578de9e0ebb",
+      "review_description": true
+    },
+    "1173": {
+      "cid": 4979,
+      "password": "03134241",
+      "english_name": "Flying Kamakiri #2",
+      "legacy_description_sha256": "f2457775e5dc73cf24aa5b9a8b19a002af4e1a31979ef25ce3bee32e0f918342",
+      "review_description": true
+    },
+    "216": {
+      "cid": 4223,
+      "password": "ffffffff",
+      "english_name": "B. Skull Dragon",
+      "legacy_description_sha256": "69ad179ba62e031a5eb0e32c1824429dac0e42ac9836ff070aabb8381c8aae94",
+      "review_description": false
+    },
+    "310": {
+      "cid": 4317,
+      "password": "65169794",
+      "english_name": "Black Pendant",
+      "legacy_description_sha256": "7a29b7793abe10e09d64a3653e10cb945ecb02ea96e7a4305527893aaf25c4e4",
+      "review_description": false
+    },
+    "335": {
+      "cid": 4342,
+      "password": "53129443",
+      "english_name": "Dark Hole",
+      "legacy_description_sha256": "497e5f820a2bc6f0b9a5ceb3c56a0ecfdaa111e6aefdbe896924051cd55336ed",
+      "review_description": false
+    },
+    "34": {
+      "cid": 4041,
+      "password": "46986414",
+      "english_name": "Dark Magician",
+      "legacy_description_sha256": "e6a3a2d00304ea0c7983ed5dbc80758a0891759720dc57d80c12b466f78f06f7",
+      "review_description": true
+    },
+    "2034": {
+      "cid": 4041,
+      "password": "40609080",
+      "english_name": "Dark Magician",
+      "legacy_description_sha256": "e6a3a2d00304ea0c7983ed5dbc80758a0891759720dc57d80c12b466f78f06f7",
+      "review_description": true
+    },
+    "759": {
+      "cid": 4766,
+      "password": "ffffffff",
+      "english_name": "Dark Magician Girl",
+      "legacy_description_sha256": "e68ca75b6b8706400db05c466370923f5d807bb0dd6d746100c737f1c793485e",
+      "review_description": false
+    },
+    "837": {
+      "cid": 5004,
+      "password": "14898066",
+      "english_name": "Vorse Raider",
+      "legacy_description_sha256": "9ae5a252f16d57b79c88ed2b0e5b0ea3e397ab0f6bc1fcbaa8ac0fb180e15a92",
+      "review_description": false
+    },
+    "486": {
+      "cid": 4493,
+      "password": "95952802",
+      "english_name": "Flower Wolf",
+      "legacy_description_sha256": "5ce179b8bdb6dd8d4324408f9bf196e97ca072186df01176ac25143369deb108",
+      "review_description": true
+    },
+    "254": {
+      "cid": 4261,
+      "password": "00549481",
+      "english_name": "Prevent Rat",
+      "legacy_description_sha256": "95077e52fb4e3cadb5c32717e41dd3f6b73116294537661bec871ee5ede424d9",
+      "review_description": true
+    },
+    "1441": {
+      "cid": 5204,
+      "password": "85802526",
+      "english_name": "Cure Mermaid",
+      "legacy_description_sha256": "73e14acabb1d005cf5fc91e5b01c0497b7bc636f3bc618d4c5816c284932ebb0",
+      "review_description": true
+    },
+    "379": {
+      "cid": 4386,
+      "password": "ffffffff",
+      "english_name": "Blue-Eyes Ultimate Dragon",
+      "legacy_description_sha256": "5661941c2c7aba336c18d2413a10359b21f6091face26a496cb04abab7ea68f9",
+      "review_description": true
+    },
+    "766": {
+      "cid": 4773,
+      "password": "53183600",
+      "english_name": "Blue-Eyes Toon Dragon",
+      "legacy_description_sha256": "9fcef7e687dd190553da653a3dfafbb4bbd55ed43aca36353c9076be921bb92e",
+      "review_description": false
+    },
+    "0": {
+      "cid": 4007,
+      "password": "89631139",
+      "english_name": "Blue-Eyes White Dragon",
+      "legacy_description_sha256": "ce4cdf53ab2d3a65d361712e4c5c7542775849e902861e14d16e10937d0cabc6",
+      "review_description": true
+    },
+    "2000": {
+      "cid": 4007,
+      "password": "80906030",
+      "english_name": "Blue-Eyes White Dragon",
+      "legacy_description_sha256": "ce4cdf53ab2d3a65d361712e4c5c7542775849e902861e14d16e10937d0cabc6",
+      "review_description": true
+    },
+    "468": {
+      "cid": 4475,
+      "password": "09076207",
+      "english_name": "Armed Ninja",
+      "legacy_description_sha256": "f4830fe4a3507655c58f7f907f05d0cc103c278711d2766f38a97659cb531125",
+      "review_description": false
+    },
+    "1006": {
+      "cid": 4840,
+      "password": "20871001",
+      "english_name": "Blue Medicine",
+      "legacy_description_sha256": "554725e060051278aeca9b4833c280cd97711823d2babcdf44595eaca8601d4e",
+      "review_description": true
+    },
+    "1165": {
+      "cid": 4971,
+      "password": "42599677",
+      "english_name": "Flame Champion",
+      "legacy_description_sha256": "61bbaf87e4670763e2bd5f9d1964c51eea54870922a4945dd3ad9f5b2d292cfa",
+      "review_description": true
+    },
+    "528": {
+      "cid": 4535,
+      "password": "60862676",
+      "english_name": "Flame Cerebrus",
+      "legacy_description_sha256": "ab8ac303e41e4c45282ab2e46a28570235b959ea74f7ec2eca25dfdf89e7ccd4",
+      "review_description": true
+    },
+    "214": {
+      "cid": 4221,
+      "password": "58528964",
+      "english_name": "Flame Ghost",
+      "legacy_description_sha256": "67b5b0cd82278e5b101d52ba3654096b847629b6e23edde5bccc3d2f193c4e8b",
+      "review_description": true
+    },
+    "1507": {
+      "cid": 5048,
+      "password": "12883044",
+      "english_name": "Flame Dancer",
+      "legacy_description_sha256": "f1348ad4485026cdad54f8d327770e8a293871253fd2a88557d5a12a7acd4ca0",
+      "review_description": true
+    },
+    "608": {
+      "cid": 4615,
+      "password": "28470714",
+      "english_name": "Bladefly",
+      "legacy_description_sha256": "825b921cd22a684f185dfffa39693a102d486b55762a651cb8c59e8153e67eeb",
+      "review_description": true
+    },
+    "607": {
+      "cid": 4614,
+      "password": "82085619",
+      "english_name": "Shining Friendship",
+      "legacy_description_sha256": "3ee0bc8867c6efdc06ce6f656a08959f88a96d6fb488931dbfa35bbee8b14ad0",
+      "review_description": true
+    },
+    "596": {
+      "cid": 4603,
+      "password": "21263083",
+      "english_name": "Pale Beast",
+      "legacy_description_sha256": "bdafb44197dd2063bffa19d3fada8209ec30c172f5ea8d22834cdfb5a2eb4838",
+      "review_description": true
+    },
+    "1131": {
+      "cid": 4938,
+      "password": "44656491",
+      "english_name": "Messenger of Peace",
+      "legacy_description_sha256": "0a65c730bac0eb5ee0e9461ccdc162183a4355031d5ac0811e2620725acdde15",
+      "review_description": false
+    },
+    "49": {
+      "cid": 4056,
+      "password": "89091579",
+      "english_name": "Basic Insect",
+      "legacy_description_sha256": "6835fddf36b4b0b44d03633526e23a1c3c90cbfad1700d40ceb4db2a73b2413d",
+      "review_description": true
+    },
+    "3": {
+      "cid": 4010,
+      "password": "88819587",
+      "english_name": "Baby Dragon",
+      "legacy_description_sha256": "00af8bc0bcdb49b9de6388ea8afe4236e37a103b84c08e494dbc498f6ec57698",
+      "review_description": true
+    },
+    "51": {
+      "cid": 4058,
+      "password": "52584282",
+      "english_name": "Hercules Beetle",
+      "legacy_description_sha256": "adfb6027393cb9693bb590615ab3b64d378f44f33ab5b5e62f4cc63c2a2d2170",
+      "review_description": true
+    },
+    "601": {
+      "cid": 4608,
+      "password": "93920745",
+      "english_name": "Penguin Soldier",
+      "legacy_description_sha256": "903357fa6ef50be2e2c664bbef269558af924394d33f562fa9aa1ae00eb4d8db",
+      "review_description": false
+    },
+    "198": {
+      "cid": 4205,
+      "password": "36039163",
+      "english_name": "Penguin Knight",
+      "legacy_description_sha256": "e86c15246839e6dbc7ebf5985b2c9014c9e5c4b4bbaa3286ee8035bc517888d5",
+      "review_description": false
+    },
+    "1118": {
+      "cid": 4925,
+      "password": "21340051",
+      "english_name": "Boar Soldier",
+      "legacy_description_sha256": "e4ba5682cc199ba4b540ffdb8a787e505d3b4aa8f70cda8f9c879d6992df774c",
+      "review_description": false
+    },
+    "1": {
+      "cid": 4008,
+      "password": "15025844",
+      "english_name": "Mystical Elf",
+      "legacy_description_sha256": "5c071e37fbcc44e58e92edea03f77cc7ee50ce4a02da1988646287f6e5c97c84",
+      "review_description": true
+    },
+    "1092": {
+      "cid": 4986,
+      "password": "98299011",
+      "english_name": "Gift of The Mystical Elf",
+      "legacy_description_sha256": "dfeb32a34820c838941119fa06977005698a5b7bd0fc15a0cafc561c635f1c58",
+      "review_description": false
+    },
+    "1515": {
+      "cid": 5251,
+      "password": "77527210",
+      "english_name": "Soul of Purity and Light",
+      "legacy_description_sha256": "c9260452cef1b307872d4981d817c40ef0e84457d4b42a7a4c941270b280b323",
+      "review_description": false
+    },
+    "1098": {
+      "cid": 4992,
+      "password": "96355986",
+      "english_name": "Enchanted Javelin",
+      "legacy_description_sha256": "a801701c07af812d4b449ae426f2ab7d292a7450669247e9249683464bf6a69f",
+      "review_description": false
+    },
+    "357": {
+      "cid": 4364,
+      "password": "ffffffff",
+      "english_name": "Seiyaryu",
+      "legacy_description_sha256": "883d5afefcf121a83f0f831071830ca80fa88f73043f23e58f320e65c8b7d95a",
+      "review_description": true
+    },
+    "1506": {
+      "cid": 5046,
+      "password": "98456117",
+      "english_name": "Boneheimer",
+      "legacy_description_sha256": "03fa82fd80cd7670146a3d00d14d84ac5647673a739d25f49997d981a8b32c55",
+      "review_description": true
+    },
+    "1158": {
+      "cid": 4964,
+      "password": "17449108",
+      "english_name": "Nobleman of Extermination",
+      "legacy_description_sha256": "195e0aaa8e6cf118432b17e855677a78d8836b687b586543c7eb004c0e3d447b",
+      "review_description": false
+    },
+    "1147": {
+      "cid": 4953,
+      "password": "36280194",
+      "english_name": "Backup Soldier",
+      "legacy_description_sha256": "3f1f7f244fea55430103b4f1b1701d36d8e7b2588795f3dd6a60e24335ecb9e9",
+      "review_description": false
+    },
+    "327": {
+      "cid": 4334,
+      "password": "77027445",
+      "english_name": "Power of Kaishin",
+      "legacy_description_sha256": "be552b4f3ba5b215caadf1989be9a9fc983c161903d330bc122ea2c584c2fd4f",
+      "review_description": false
+    },
+    "1435": {
+      "cid": 5198,
+      "password": "90147755",
+      "english_name": "Lady Assailant of Flames",
+      "legacy_description_sha256": "228eec22f22b1b30d481b229addb5ad4cd83b94a88746e5446942c7268abb6ef",
+      "review_description": false
+    },
+    "132": {
+      "cid": 4139,
+      "password": "37421579",
+      "english_name": "Charubin the Fire Knight",
+      "legacy_description_sha256": "47dcec7b7d2f487f15c23aa2c1a9879f90db53767814ce29c60361ec37cf625d",
+      "review_description": true
+    },
+    "1169": {
+      "cid": 4975,
+      "password": "78861134",
+      "english_name": "Darkfire Soldier #2",
+      "legacy_description_sha256": "5807cfe9af01255e81cda6dd6c9e16467c46f94c197fbed8414dfa61f6c70b27",
+      "review_description": true
+    },
+    "14": {
+      "cid": 4021,
+      "password": "45231177",
+      "english_name": "Flame Swordsman",
+      "legacy_description_sha256": "49e9245a1b00ad3cde4784e7c0f06c6315b82977f6a0706ce6a8260c2b88b216",
+      "review_description": true
+    },
+    "1516": {
+      "cid": 5252,
+      "password": "13522325",
+      "english_name": "Spirit of Flames",
+      "legacy_description_sha256": "da9b6678bf4e077f92bdb3ad04d85fc97aed078d2dbad732af226e9f8778e1df",
+      "review_description": false
+    },
+    "290": {
+      "cid": 4297,
+      "password": "71407486",
+      "english_name": "Fireyarou",
+      "legacy_description_sha256": "e71532af2ce6cff459c543c04a705bd5d7573970567695418238a9d9891f8e73",
+      "review_description": true
+    },
+    "141": {
+      "cid": 4148,
+      "password": "34460851",
+      "english_name": "Flame Manipulator",
+      "legacy_description_sha256": "358fa90adcc0fc8980b14e42f444d6914b9094ca11208dc2760a0a96e0cfe1e6",
+      "review_description": true
+    },
+    "592": {
+      "cid": 4599,
+      "password": "96981563",
+      "english_name": "Giant Turtle Who Feeds on Flames",
+      "legacy_description_sha256": "7c3bb14dc414ad63c7e1ab5094fc17667f41bb44c1b2f2445ceb21ee6d2839cf",
+      "review_description": true
+    },
+    "1539": {
+      "cid": 5246,
+      "password": "15866454",
+      "english_name": "Spiritualism",
+      "legacy_description_sha256": "8a5d72898b5e449b975d57c00d195bd9c9e5564b8e00ebe489eaa9690acbb26b",
+      "review_description": false
+    },
+    "113": {
+      "cid": 4120,
+      "password": "15150365",
+      "english_name": "White Magical Hat",
+      "legacy_description_sha256": "a5f5dc12823d0de7ff8ee6f4b388f2d57b1d55eaef6dd62e2dc326f6ba3ef0ef",
+      "review_description": false
+    },
+    "1019": {
+      "cid": 4853,
+      "password": "43487744",
+      "english_name": "White Hole",
+      "legacy_description_sha256": "2016f9d17e4e2109e3cfcbc36fb1cf4f8152ab685c186a879db12f021df4f776",
+      "review_description": false
+    },
+    "116": {
+      "cid": 4123,
+      "password": "14037717",
+      "english_name": "Spirit of the Books",
+      "legacy_description_sha256": "8a127a887885c81b849e7dfb59e7258b0e87944a0c400c1b3d2ee8402140e134",
+      "review_description": true
+    },
+    "94": {
+      "cid": 4101,
+      "password": "93889755",
+      "english_name": "Crass Clown",
+      "legacy_description_sha256": "f3b9cd7d49cf069f1cd671dd987507ccd2a95ae1a516f16a7413698c468d7847",
+      "review_description": true
+    },
+    "566": {
+      "cid": 4573,
+      "password": "43500484",
+      "english_name": "Darkworld Thorns",
+      "legacy_description_sha256": "737c6fc508a4d10e9c8387935bd098dbbc5cf5d9d603041b5e468bf219b42e1a",
+      "review_description": true
+    },
+    "296": {
+      "cid": 4303,
+      "password": "75559356",
+      "english_name": "Cyber Soldier of Darkworld",
+      "legacy_description_sha256": "a841a9194ca634d062d5b3f61896bd4613fa9a4db97420d392fbf14b556734ca",
+      "review_description": true
+    },
+    "1248": {
+      "cid": 5237,
+      "password": "27827272",
+      "english_name": "Makiu",
+      "legacy_description_sha256": "1527402dcd436b41dabcb1200905ee96668a38d72a303505c9838a864d639734",
+      "review_description": false
+    },
+    "309": {
+      "cid": 4316,
+      "password": "39774685",
+      "english_name": "Vile Germs",
+      "legacy_description_sha256": "35f33802ecf5037fbd8c41b71fdd5b18d9d610f28a7fa3dda61fd59edf9b9098",
+      "review_description": true
+    },
+    "159": {
+      "cid": 4166,
+      "password": "56342351",
+      "english_name": "M-Warrior #1",
+      "legacy_description_sha256": "7d42f0a5fafc86db7bf1f73555289e593812ffa5a7f8c8b30aa6157917d03d06",
+      "review_description": true
+    },
+    "160": {
+      "cid": 4167,
+      "password": "92731455",
+      "english_name": "M-Warrior #2",
+      "legacy_description_sha256": "fa96e7406527ff4e3bc743d1b4b387c30bacb9496d81b83675de102d4908f3cb",
+      "review_description": true
+    },
+    "737": {
+      "cid": 4744,
+      "password": "99785935",
+      "english_name": "Alpha The Magnet Warrior",
+      "legacy_description_sha256": "900156da7c10dea6a8de301a70719ba3520ea6c9f0b2eb564e54d950d4780dcf",
+      "review_description": true
+    },
+    "800": {
+      "cid": 4792,
+      "password": "11549357",
+      "english_name": "Gamma The Magnet Warrior",
+      "legacy_description_sha256": "900156da7c10dea6a8de301a70719ba3520ea6c9f0b2eb564e54d950d4780dcf",
+      "review_description": true
+    },
+    "756": {
+      "cid": 4763,
+      "password": "39256679",
+      "english_name": "Beta The Magnet Warrior",
+      "legacy_description_sha256": "900156da7c10dea6a8de301a70719ba3520ea6c9f0b2eb564e54d950d4780dcf",
+      "review_description": true
+    },
+    "243": {
+      "cid": 4250,
+      "password": "40826495",
+      "english_name": "Dissolverock",
+      "legacy_description_sha256": "c7478062706918ee6b0a53d01f9bb4d02a41864e5a0f077dba75e4040cc1551b",
+      "review_description": true
+    },
+    "469": {
+      "cid": 4476,
+      "password": "46474915",
+      "english_name": "Magical Ghost",
+      "legacy_description_sha256": "cf56f63ef731fe0e07632fc971bec090146f33cda691955bf99d2a61aeb44712",
+      "review_description": true
+    },
+    "945": {
+      "cid": 4962,
+      "password": "81210420",
+      "english_name": "Magical Hats",
+      "legacy_description_sha256": "ec7e7359f5dfb637c3613eb955ef7fe0693504afd45a90f461eadaba86c2ab1c",
+      "review_description": false
+    },
+    "721": {
+      "cid": 4728,
+      "password": "ffffffff",
+      "english_name": "Magician of Black Chaos",
+      "legacy_description_sha256": "a7b6f203bd8321fe7c6e14bf1a263249f32001e93b9999fe402b392bb353d76f",
+      "review_description": false
+    },
+    "990": {
+      "cid": 4834,
+      "password": "96008713",
+      "english_name": "Magic-Arm Shield",
+      "legacy_description_sha256": "139fa5386629e9e5dd853da578779781fac0eccf32a838b5567f776d72a199cd",
+      "review_description": false
+    },
+    "1029": {
+      "cid": 4862,
+      "password": "77414722",
+      "english_name": "Magic Jammer",
+      "legacy_description_sha256": "643109844e43d06d56bfbb0e71ceccc89b5941a0305cc9345365639de16c3d60",
+      "review_description": false
+    },
+    "1214": {
+      "cid": 5124,
+      "password": "62279055",
+      "english_name": "Magic Cylinder",
+      "legacy_description_sha256": "a5745a34f14b2e44ee7f17d4f0bda325167cd730c6c229379af17a0210b6c840",
+      "review_description": false
+    },
+    "1321": {
+      "cid": 5133,
+      "password": "59344077",
+      "english_name": "Magic Drain",
+      "legacy_description_sha256": "da4de7f005ec298b3e456e969767935494e04bc340a816d624875112c6b11396",
+      "review_description": false
+    },
+    "1243": {
+      "cid": 5238,
+      "password": "54912977",
+      "english_name": "Ancient Lamp",
+      "legacy_description_sha256": "6b23ea7000db54a901b9ee46f8537fee3d39ce19851467be6ba5da31fff2fdf4",
+      "review_description": false
+    },
+    "318": {
+      "cid": 4325,
+      "password": "36607978",
+      "english_name": "Mystical Moon",
+      "legacy_description_sha256": "4ad26448604ea1d0141fdbe35005b02e91fbf1376706b3a76c7ae13c58bec0a5",
+      "review_description": false
+    },
+    "135": {
+      "cid": 4142,
+      "password": "36304921",
+      "english_name": "Witty Phantom",
+      "legacy_description_sha256": "00540fe481d53e618cd168d78f4bcd3f8dcbb4eeacac3a5d184615f02cbe2e35",
+      "review_description": true
+    },
+    "193": {
+      "cid": 4200,
+      "password": "63308047",
+      "english_name": "Terra the Terrible",
+      "legacy_description_sha256": "6ab36d9e7dc40bef2e5c4b3970998b5ae56d90400455b135237d8586707984cd",
+      "review_description": true
+    },
+    "293": {
+      "cid": 4300,
+      "password": "70681994",
+      "english_name": "Dragoness the Wicked Knight",
+      "legacy_description_sha256": "cc8b53b6305bb1b20377238610d1b517e2997086f6804ab34d3faef3d40b4609",
+      "review_description": true
+    },
+    "552": {
+      "cid": 4559,
+      "password": "93900406",
+      "english_name": "Mushroom Man #2",
+      "legacy_description_sha256": "f2cc74a882aecf600c72e9701be08a5e6c2a028fb9a2b5f2acfea60209211859",
+      "review_description": true
+    },
+    "1157": {
+      "cid": 4963,
+      "password": "71044499",
+      "english_name": "Nobleman of Crossout",
+      "legacy_description_sha256": "637ae6f88df38b9bd3ed708501ffe93d5e4e00abf2079c8b25f2de3899925e68",
+      "review_description": false
+    },
+    "174": {
+      "cid": 4181,
+      "password": "42431843",
+      "english_name": "Ancient Brain",
+      "legacy_description_sha256": "058bda8b820360315390ee94a3cb041867204238e6f0f9058fccf8bdc5d2e19a",
+      "review_description": true
+    },
+    "1350": {
+      "cid": 4761,
+      "password": "66362965",
+      "english_name": "The Fiend Megacyber",
+      "legacy_description_sha256": "34c57ee655ee8fd1369e20818e1e68438c7904263b794aab87cd097d984dbf4f",
+      "review_description": false
+    },
+    "388": {
+      "cid": 4395,
+      "password": "51828629",
+      "english_name": "Giltia the D. Knight",
+      "legacy_description_sha256": "b67af1bff5afdd4cb10492600ae9f6e9ce5a69c099f735890e57dca21af4e2e6",
+      "review_description": true
+    },
+    "1450": {
+      "cid": 5213,
+      "password": "83746708",
+      "english_name": "Mage Power",
+      "legacy_description_sha256": "854e3aace2243344f2327148bbf1297a31766e2c60f282de28d1415289a37585",
+      "review_description": false
+    },
+    "492": {
+      "cid": 4499,
+      "password": "93013676",
+      "english_name": "Maha Vailo",
+      "legacy_description_sha256": "4c4a350facdf02a1841863e166ad6cc5185cec9eeef443537a235790b8fa04a1",
+      "review_description": false
+    },
+    "1180": {
+      "cid": 5008,
+      "password": "58921041",
+      "english_name": "Anti-Spell Fragrance",
+      "legacy_description_sha256": "42185131346783b28d17dfdc60803cfed709d1f68f757a248005699473884b78",
+      "review_description": false
+    },
+    "1050": {
+      "cid": 4881,
+      "password": "50930991",
+      "english_name": "Neo the Magic Swordsman",
+      "legacy_description_sha256": "ef3fa24dba7c245506848eaa8e8d4b20abdae116c0bd25bc1e240b4598ebc01b",
+      "review_description": true
+    },
+    "1009": {
+      "cid": 4843,
+      "password": "19159413",
+      "english_name": "De-Spell",
+      "legacy_description_sha256": "f53a29e56e01e69eca0db03743270454cbd3d1688fb6722448ac5fe570db26e1",
+      "review_description": false
+    },
+    "1138": {
+      "cid": 4944,
+      "password": "49251811",
+      "english_name": "Mystic Probe",
+      "legacy_description_sha256": "2db78a53de667d9b6f324c86aab7a9fadc3baa5686a3c7dc5cb3149c4b240c6c",
+      "review_description": false
+    },
+    "386": {
+      "cid": 4393,
+      "password": "98049915",
+      "english_name": "Mystic Lamp",
+      "legacy_description_sha256": "2b9a921187d21dd4cb3c8576277e71710d29ecc09b293cc37b134d5d82f1242a",
+      "review_description": false
+    },
+    "65": {
+      "cid": 4072,
+      "password": "01184620",
+      "english_name": "Kojikocy",
+      "legacy_description_sha256": "8313cf6669b065ea683a8590fc41c146494190bdd9e39cefb0b915d44fa30448",
+      "review_description": true
+    },
+    "1525": {
+      "cid": 5260,
+      "password": "71466592",
+      "english_name": "Maryokutai",
+      "legacy_description_sha256": "bafcc8dc6a5c40edecef965e04375ed0cae4b0820c53174fc0236a008ca55554",
+      "review_description": false
+    },
+    "1078": {
+      "cid": 4908,
+      "password": "79323590",
+      "english_name": "Chain Energy",
+      "legacy_description_sha256": "55b8df0971c543b7f36095e684be6872bd830c3d6808a05b15a32afcdc33c41a",
+      "review_description": false
+    },
+    "1038": {
+      "cid": 4870,
+      "password": "53119267",
+      "english_name": "Magic Thorn",
+      "legacy_description_sha256": "005d647c268c609b57c8829eb7d3e6df2e8e983d128d1e2ac5d3650e1ae6d38c",
+      "review_description": false
+    },
+    "1417": {
+      "cid": 5104,
+      "password": "20765952",
+      "english_name": "Mask of Dispel",
+      "legacy_description_sha256": "562af2c09f2ac8c517a7466252652cb7d4e0aebdcf4bc5f322ef0b86e50b3d52",
+      "review_description": false
+    },
+    "157": {
+      "cid": 4164,
+      "password": "93553943",
+      "english_name": "Man Eater",
+      "legacy_description_sha256": "5c1076a9ac48ce44f2c0851a655a0744d66436a8ff7d799cc77e8c34c7bdbd51",
+      "review_description": true
+    },
+    "317": {
+      "cid": 4324,
+      "password": "90219263",
+      "english_name": "Elegant Egotist",
+      "legacy_description_sha256": "78ff4568dfd1ca14b999c2d0cb8b3437ea8f137507e95d8ce516d07d731e7a8a",
+      "review_description": false
+    },
+    "58": {
+      "cid": 4065,
+      "password": "40374923",
+      "english_name": "Mammoth Graveyard",
+      "legacy_description_sha256": "430ad2beafcb30df4e722a6e19153f34da4a780c1a365d82f8a05747d2398708",
+      "review_description": true
+    },
+    "1431": {
+      "cid": 5194,
+      "password": "65475294",
+      "english_name": "The Unfriendly Amazon",
+      "legacy_description_sha256": "6d14ae015b5c78fd1004e80a963788b8c4d15c6719d82dda503a7a08692e512b",
+      "review_description": false
+    },
+    "967": {
+      "cid": 4811,
+      "password": "52097679",
+      "english_name": "Shield & Sword",
+      "legacy_description_sha256": "97c807753fb8b02b02eb527eaeb6a4b8b857a95db37fbaaa53ede768347c2d7e",
+      "review_description": false
+    },
+    "1168": {
+      "cid": 4974,
+      "password": "31477025",
+      "english_name": "Mr. Volcano",
+      "legacy_description_sha256": "c319a14d26e909fd32c2dbf4efc20d3f7ef66ca0cd7edbb101348b03bfea7e22",
+      "review_description": true
+    },
+    "416": {
+      "cid": 4423,
+      "password": "70138455",
+      "english_name": "Blast Juggler",
+      "legacy_description_sha256": "0d4ba3135d6838c6d61285b13df8ced708bc7f95c4d89acb6ed1a67f6d98a5e7",
+      "review_description": false
+    },
+    "248": {
+      "cid": 4255,
+      "password": "02483611",
+      "english_name": "Water Omotics",
+      "legacy_description_sha256": "af1be1f9c03098a107497f2d169e260d722bf08965d41370aca582adec902fd2",
+      "review_description": true
+    },
+    "1517": {
+      "cid": 5253,
+      "password": "40916023",
+      "english_name": "Aqua Spirit",
+      "legacy_description_sha256": "070cc8ffa810c63b6357ea4cad240bee667ea03918d6a6e6eec32e20e95b9284",
+      "review_description": false
+    },
+    "429": {
+      "cid": 4436,
+      "password": "93343894",
+      "english_name": "Water Magician",
+      "legacy_description_sha256": "57532d0aeb89d9114329a4558728046d628534fa54892090fa90af9774f575de",
+      "review_description": true
+    },
+    "623": {
+      "cid": 4630,
+      "password": "54579801",
+      "english_name": "High Tide Gyojin",
+      "legacy_description_sha256": "5bf976ae508a332307773b329e34fac0548c65c688fad1ebfc42ae0608859395",
+      "review_description": true
+    },
+    "1301": {
+      "cid": 4939,
+      "password": "37580756",
+      "english_name": "Michizure",
+      "legacy_description_sha256": "1a2967d4c29edf63a899a19b8fb0163ff3c665b6edeccf29e262ee58606df13a",
+      "review_description": false
+    },
+    "745": {
+      "cid": 4752,
+      "password": "78423643",
+      "english_name": "Three-Headed Geedo",
+      "legacy_description_sha256": "692b58bfeafedbf33ac2f1fa6ad0352d0bfc9b78ff83808bc69e07d7a2a18aa2",
+      "review_description": true
+    },
+    "627": {
+      "cid": 4634,
+      "password": "80741828",
+      "english_name": "Witch's Apprentice",
+      "legacy_description_sha256": "9741d16a49b8ff126425982eefa29a2573fb00bb69e200a4deb5eee7d40a5f3b",
+      "review_description": true
+    },
+    "91": {
+      "cid": 4098,
+      "password": "ffffffff",
+      "english_name": "Rabid Horseman",
+      "legacy_description_sha256": "415d75f1609c3a2839946ca5c3015cd0cef5167aaf2ba8c98797ac55472ee997",
+      "review_description": true
+    },
+    "25": {
+      "cid": 4032,
+      "password": "05053103",
+      "english_name": "Battle Ox",
+      "legacy_description_sha256": "a461b9455814d0cfd40eff1fac0edd2979b5c52783fb65c3fea14ec293c362ee",
+      "review_description": true
+    },
+    "494": {
+      "cid": 4501,
+      "password": "56907389",
+      "english_name": "Musician King",
+      "legacy_description_sha256": "a4f4fe52f4ab09e6b813342549151e45e108512e60f3e15f21bd8ae0a4fc6f01",
+      "review_description": true
+    },
+    "185": {
+      "cid": 4192,
+      "password": "02863439",
+      "english_name": "Fiend Reflection #2",
+      "legacy_description_sha256": "552e4bf10a55fc759ff5d5d13d92ef1cc5581189c5fbd417012b32acdabc51bc",
+      "review_description": true
+    },
+    "526": {
+      "cid": 4533,
+      "password": "07489323",
+      "english_name": "Milus Radiant",
+      "legacy_description_sha256": "c50977171ef8ebdb4eea6ee537941f5826aa43a58669f7e0d50b169f7f8916ca",
+      "review_description": true
+    },
+    "515": {
+      "cid": 4522,
+      "password": "46657337",
+      "english_name": "Muka Muka",
+      "legacy_description_sha256": "bbf7fede670ca090a49726bc4c57ca54bd9969e5f1557b8cc3d0ede41aa9cba6",
+      "review_description": false
+    },
+    "1427": {
+      "cid": 5121,
+      "password": "94163677",
+      "english_name": "Infinite Cards",
+      "legacy_description_sha256": "ac5ecf2331c0723e02217caf46364ffc1aa9c486612a620cc2043531784685a6",
+      "review_description": false
+    },
+    "1536": {
+      "cid": 5268,
+      "password": "32015116",
+      "english_name": "Blind Destruction",
+      "legacy_description_sha256": "60ef5aa1c19ab60d2f10a6da5bda3946db55a6dc03a26c904a45ce4a5e3ab07e",
+      "review_description": false
+    },
+    "1352": {
+      "cid": 4832,
+      "password": "23615409",
+      "english_name": "Insect Barrier",
+      "legacy_description_sha256": "f1780e74b3f1270eb9bf5cbfb53e9568a711c296617c8a26cf46c1ce1f985933",
+      "review_description": false
+    },
+    "1502": {
+      "cid": 5220,
+      "password": "68049471",
+      "english_name": "The Gross Ghost of Fled Dreams",
+      "legacy_description_sha256": "ee80135135118a7512e0cfc6b67bd8c82ff560522a9091f3db4e54603bc63519",
+      "review_description": true
+    },
+    "321": {
+      "cid": 4328,
+      "password": "15052462",
+      "english_name": "Violet Crystal",
+      "legacy_description_sha256": "a0868d96a238b37558b0dde865b737897dce989bf8c6f4e55e3411b52480874f",
+      "review_description": false
+    },
+    "235": {
+      "cid": 4242,
+      "password": "89272878",
+      "english_name": "Guardian of the Labyrinth",
+      "legacy_description_sha256": "37b6f169a84c87bf08ee5fa04eb2caee1d24c92e4c577b0a2779376174b3bee8",
+      "review_description": true
+    },
+    "369": {
+      "cid": 4376,
+      "password": "99551425",
+      "english_name": "Labyrinth Tank",
+      "legacy_description_sha256": "41386a6222cf5044bcf7e0d21f154a3f1f0c574e7c902e395d259dc267de8dd4",
+      "review_description": true
+    },
+    "365": {
+      "cid": 4372,
+      "password": "ffffffff",
+      "english_name": "Labyrinth Wall",
+      "legacy_description_sha256": "f2d5c141119d6c4eec84ace4824a13e516fd83434c8aff6c4e84c7e1c27e3589",
+      "review_description": true
+    },
+    "651": {
+      "cid": 4658,
+      "password": "64389297",
+      "english_name": "Magical Labyrinth",
+      "legacy_description_sha256": "7bee2c533a24e167fdb12090318a7365f347696cace6afd5dd7abbdde00eb289",
+      "review_description": false
+    },
+    "507": {
+      "cid": 4514,
+      "password": "89112729",
+      "english_name": "Cyber Saurus",
+      "legacy_description_sha256": "26326ca8605d7b5e627300ab3ce0dbc1b1160bc0956fdaa8b93975ee53f4c39e",
+      "review_description": true
+    },
+    "536": {
+      "cid": 4543,
+      "password": "21817254",
+      "english_name": "Mega Thunderball",
+      "legacy_description_sha256": "64e3d484106a977e5601f124e51305773108af2d074ad0490de78423c879545a",
+      "review_description": true
+    },
+    "354": {
+      "cid": 4361,
+      "password": "07562372",
+      "english_name": "Megasonic Eye",
+      "legacy_description_sha256": "f2c5da579fb02c2da88ddedb416627a0722398ca2d69ac30c4f75a20c71121c7",
+      "review_description": true
+    },
+    "584": {
+      "cid": 4591,
+      "password": "34442949",
+      "english_name": "Mechanical Snail",
+      "legacy_description_sha256": "108fdd4db86906978924538902c8c32b89fdf72b00ee58f6c42c54fb8be50101",
+      "review_description": true
+    },
+    "414": {
+      "cid": 4421,
+      "password": "07359741",
+      "english_name": "Mechanicalchaser",
+      "legacy_description_sha256": "4ccf3d42a9a42591568cbd9b0981e55ec3f10d02591a3e5e478f2efcd0089003",
+      "review_description": true
+    },
+    "1171": {
+      "cid": 4977,
+      "password": "30655537",
+      "english_name": "Cyber Falcon",
+      "legacy_description_sha256": "6275132405343ce06fe86b80b65b091c480c4abf3f8436cb0a9ff2c3bb86aa8c",
+      "review_description": true
+    },
+    "1315": {
+      "cid": 5151,
+      "password": "66719324",
+      "english_name": "Rain of Mercy",
+      "legacy_description_sha256": "8f1b01adf8cf2dbbaf44e2e7414543cc2b5766438c93b3396ebdef5d47077b20",
+      "review_description": true
+    },
+    "1322": {
+      "cid": 5112,
+      "password": "54109233",
+      "english_name": "Infinite Dismissal",
+      "legacy_description_sha256": "2708a4f9664e80673bda1d3962d07d69f042b95768985b6cd7b070e56173848c",
+      "review_description": false
+    },
+    "1413": {
+      "cid": 5096,
+      "password": "12953226",
+      "english_name": "Nuvia the Wicked",
+      "legacy_description_sha256": "98d5cc9c54c1079028cd552dd35edd6abb7e66967fadb65db490ea60b8548a42",
+      "review_description": false
+    },
+    "590": {
+      "cid": 4597,
+      "password": "33508719",
+      "english_name": "Morphing Jar",
+      "legacy_description_sha256": "900f02aa75d1e29a6d66046994bef0ac0da81955a9965bd8db6b76bcc28f0301",
+      "review_description": false
+    },
+    "657": {
+      "cid": 4664,
+      "password": "68540058",
+      "english_name": "Metalmorph",
+      "legacy_description_sha256": "e7686a8c7bf274ed41269ae90e38f0f31e9b66d153773fb5d1271b0238d436cf",
+      "review_description": false
+    },
+    "391": {
+      "cid": 4398,
+      "password": "50705071",
+      "english_name": "Metalzoa",
+      "legacy_description_sha256": "2a3108fce79b381ae93a000acfef9a21809a35c87dd50e99fb7d1b4bf89d7fec",
+      "review_description": false
+    },
+    "408": {
+      "cid": 4415,
+      "password": "09293977",
+      "english_name": "Metal Dragon",
+      "legacy_description_sha256": "d0062f0049964fd86178f6cb418a1cf1d26c30b69a3402cdb25880904f0f5a6b",
+      "review_description": true
+    },
+    "437": {
+      "cid": 4444,
+      "password": "55998462",
+      "english_name": "Metal Fish",
+      "legacy_description_sha256": "4678717e01b68ced409e2107925d26b8c2e4d728c735dd5f8ffc0be791b8f8ae",
+      "review_description": true
+    },
+    "1313": {
+      "cid": 5128,
+      "password": "97687912",
+      "english_name": "Fairy Meteor Crush",
+      "legacy_description_sha256": "8146bdb581b7b3c79425f0bc40e425ab07c1e0dc19f86688c0cb86e733b83711",
+      "review_description": false
+    },
+    "1412": {
+      "cid": 5095,
+      "password": "86569121",
+      "english_name": "Melchid the Four-Face Beast",
+      "legacy_description_sha256": "16ad76e2fccb394466cc8edeac9e75a9c6f4922be8c844cd31beefdac49f7c07",
+      "review_description": true
+    },
+    "307": {
+      "cid": 4314,
+      "password": "46009906",
+      "english_name": "Beast Fangs",
+      "legacy_description_sha256": "15847e7951dc7540f3f99e74eab9b017f03882ca77edb9ffd889ee3e5b91fe72",
+      "review_description": true
+    },
+    "1341": {
+      "cid": 5142,
+      "password": "79870141",
+      "english_name": "Mad Sword Beast",
+      "legacy_description_sha256": "002c6285297ec9f9cb7b83acc3956b7ebf573fa20e2340dd31d6dfc40f8f620a",
+      "review_description": false
+    },
+    "1135": {
+      "cid": 4941,
+      "password": "00473469",
+      "english_name": "Driving Snow",
+      "legacy_description_sha256": "6cc756ce4bfed2523cbbf34f926ed6cd1bdf05bf703cd4e21577ca2d61964069",
+      "review_description": false
+    },
+    "1311": {
+      "cid": 5126,
+      "password": "24294108",
+      "english_name": "Burning Land",
+      "legacy_description_sha256": "e9bc7f22e96e7c8c244ac091760c00d52e7d172aec4449840871132ab2282bca",
+      "review_description": false
+    },
+    "1246": {
+      "cid": 4795,
+      "password": "26376390",
+      "english_name": "Copycat",
+      "legacy_description_sha256": "c6b9770b537021c210470b5b32bde04b1be1297d7333db39290d7f1d1b73b472",
+      "review_description": false
+    },
+    "329": {
+      "cid": 4336,
+      "password": "87430998",
+      "english_name": "Forest",
+      "legacy_description_sha256": "1930c0c1048051203a7a787690de4259382e6da05672b79746d4a6f1b987f68d",
+      "review_description": false
+    },
+    "234": {
+      "cid": 4241,
+      "password": "42883273",
+      "english_name": "Wodan the Resident of the Forest",
+      "legacy_description_sha256": "a1d67c2b67541d213da52bf0915c001f39fa3b28e2da0d142a2a1869199e094f",
+      "review_description": true
+    },
+    "497": {
+      "cid": 4504,
+      "password": "55784832",
+      "english_name": "Morinphen",
+      "legacy_description_sha256": "522d0b5def5ad8e0378655bbafa80f157c8d124fc6580562c58b2a8b0210a455",
+      "review_description": true
+    },
+    "146": {
+      "cid": 4153,
+      "password": "36121917",
+      "english_name": "Monster Egg",
+      "legacy_description_sha256": "09ad80dba0bb76fb187169290c4fb0c24f3daf6b3667989473efbc536ebb9ed7",
+      "review_description": true
+    },
+    "1316": {
+      "cid": 5152,
+      "password": "93108433",
+      "english_name": "Monster Recovery",
+      "legacy_description_sha256": "c92e5211b9f425c0d808fa637e417c44055aaf3472f5d3bdccb4e03f56d37b03",
+      "review_description": false
+    },
+    "1424": {
+      "cid": 5113,
+      "password": "21598948",
+      "english_name": "Fairy Box",
+      "legacy_description_sha256": "3d55527b761336071c6e5daeadbe5cc81ca05fe331eaa5e0151a29e63c1e0aca",
+      "review_description": false
+    },
+    "496": {
+      "cid": 4503,
+      "password": "29380133",
+      "english_name": "Yado Karu",
+      "legacy_description_sha256": "8ed8a6349375339de46eb8275254664a6354688fc092cfd8536e493a0808b31c",
+      "review_description": true
+    },
+    "331": {
+      "cid": 4338,
+      "password": "50913601",
+      "english_name": "Mountain",
+      "legacy_description_sha256": "0ee530b6f160a5d412af8155e88c83f0021ae4ea1f84dd5c50f786f1b47d6099",
+      "review_description": false
+    },
+    "356": {
+      "cid": 4363,
+      "password": "70345785",
+      "english_name": "Yamadron",
+      "legacy_description_sha256": "4d1c2c6810fa0dc1579aa3d0073c47d18d4760c4d3dc202e4f395e4430bf9ca1",
+      "review_description": true
+    },
+    "334": {
+      "cid": 4341,
+      "password": "59197169",
+      "english_name": "Yami",
+      "legacy_description_sha256": "0059cc7444950f22618879ab2b72a7dd486d36cb8da5dc637a811b10e4f42fa7",
+      "review_description": false
+    },
+    "302": {
+      "cid": 4309,
+      "password": "04614116",
+      "english_name": "Dark Energy",
+      "legacy_description_sha256": "975f37e24471e0c5d0e7956eaf7d271722be2d4780092f38953195ceffa707fb",
+      "review_description": false
+    },
+    "82": {
+      "cid": 4089,
+      "password": "00062121",
+      "english_name": "Castle of Dark Illusions",
+      "legacy_description_sha256": "8a7ef4765e6008d5c678d16e14ba919b2e0c027467a392bfb67fd1b4a24b4632",
+      "review_description": false
+    },
+    "33": {
+      "cid": 4040,
+      "password": "66602787",
+      "english_name": "Saggi the Dark Clown",
+      "legacy_description_sha256": "d3313061e1dcaa0c84f9b9abdb2313d31feda020dbaaef261fab871997ced9c9",
+      "review_description": true
+    },
+    "1072": {
+      "cid": 4902,
+      "password": "80168720",
+      "english_name": "Darkness Approaches",
+      "legacy_description_sha256": "b1f22d77b3499104ff9c044e075028a845af1b70c4e8ca98025a67c79bd080d6",
+      "review_description": false
+    },
+    "101": {
+      "cid": 4108,
+      "password": "28933734",
+      "english_name": "Mask of Darkness",
+      "legacy_description_sha256": "3466eb6cece5c9a84d2eb44fda274d8a036cee04cfe9f435af33ed932811eaeb",
+      "review_description": false
+    },
+    "301": {
+      "cid": 4308,
+      "password": "37120512",
+      "english_name": "Sword of Dark Destruction",
+      "legacy_description_sha256": "70d097f59d758202d86a42f33c73c8c29550bc1086b879d76ffbdaed5ffab0eb",
+      "review_description": false
+    },
+    "84": {
+      "cid": 4091,
+      "password": "69455834",
+      "english_name": "King of Yamimakai",
+      "legacy_description_sha256": "aac2d5dea9a09a4ac2dff083700961294a013efaadf8822a844d7ac7327ef2f9",
+      "review_description": true
+    },
+    "349": {
+      "cid": 4356,
+      "password": "45895206",
+      "english_name": "Dark-Piercing Light",
+      "legacy_description_sha256": "89e71db59caedcd55727d22755bdfa37c2b028765f454958d2471c2e57eeea3a",
+      "review_description": false
+    },
+    "350": {
+      "cid": 4357,
+      "password": "71280811",
+      "english_name": "Yaranzo",
+      "legacy_description_sha256": "811e08f09afe975b89c83c5794d93b4f9ef26a19587a9da7b78f80ecf4a9bfe2",
+      "review_description": true
+    },
+    "1054": {
+      "cid": 4885,
+      "password": "85602018",
+      "english_name": "Last Will",
+      "legacy_description_sha256": "5e53eb3927714fdc05d3b9e1cc59888cafe04fdc4275afa93aaef7f7d89b594b",
+      "review_description": false
+    },
+    "1003": {
+      "cid": 4837,
+      "password": "24094653",
+      "english_name": "Polymerization",
+      "legacy_description_sha256": "ab7199ce2770e24725fc947e7aea97e95ca7c875aefbd1ff3e689e7981ba4212",
+      "review_description": false
+    },
+    "1546": {
+      "cid": 5118,
+      "password": "95286165",
+      "english_name": "De-Fusion",
+      "legacy_description_sha256": "44d8eec4e58152df466b2e38d491f1148729407f14c25a733ff47386e10c0b01",
+      "review_description": false
+    },
+    "1040": {
+      "cid": 4872,
+      "password": "26902560",
+      "english_name": "Fusion Sage",
+      "legacy_description_sha256": "09d86abdceff1e1bfe3b0abb160fc4117d40e1084ad0918f1328527f8c4a1e69",
+      "review_description": false
+    },
+    "1110": {
+      "cid": 4917,
+      "password": "60806437",
+      "english_name": "UFO Turtle",
+      "legacy_description_sha256": "851fca221f25c04da94166c18468f7cc429ba38e35773cdc5963d8d906298672",
+      "review_description": false
+    },
+    "1241": {
+      "cid": 4756,
+      "password": "04796100",
+      "english_name": "Chimera the Flying Mythical Beast",
+      "legacy_description_sha256": "bcad2807f2421d0c18a067a8f0646eee89b8d4c6aa11f277cdde8fd82eeaab01",
+      "review_description": false
+    },
+    "1325": {
+      "cid": 5135,
+      "password": "58621589",
+      "english_name": "Shadow of Eyes",
+      "legacy_description_sha256": "559427b68c538f471c4bedbb362a53c4548ddd84ca1a64f29f804d6a3c6fd64d",
+      "review_description": false
+    },
+    "724": {
+      "cid": 4731,
+      "password": "65570596",
+      "english_name": "Red Archery Girl",
+      "legacy_description_sha256": "7d6bc3e63ec9b78c8b2ab6f5fc9ef1327b02b76a04f20e119ee7c0c706f57fc9",
+      "review_description": true
+    },
+    "1025": {
+      "cid": 4858,
+      "password": "41142615",
+      "english_name": "The Cheerful Coffin",
+      "legacy_description_sha256": "32ccaadb449c13353d529cce405d28dc85e1373ee81d78817dec313df04af209",
+      "review_description": false
+    },
+    "362": {
+      "cid": 4369,
+      "password": "68401546",
+      "english_name": "Fairy's Gift",
+      "legacy_description_sha256": "11b2f5229f824673c1175054a49ecb40b7b62d466622ddb86f0e73d90dad5cdc",
+      "review_description": true
+    },
+    "95": {
+      "cid": 4102,
+      "password": "20277860",
+      "english_name": "Armored Zombie",
+      "legacy_description_sha256": "98daf4f072425a33be2f898abe50ccca8aef9551b62f5057ac57d3562ef626b9",
+      "review_description": true
+    },
+    "397": {
+      "cid": 4404,
+      "password": "58861941",
+      "english_name": "Ooguchi",
+      "legacy_description_sha256": "2b9a921187d21dd4cb3c8576277e71710d29ecc09b293cc37b134d5d82f1242a",
+      "review_description": true
+    },
+    "154": {
+      "cid": 4161,
+      "password": "94675535",
+      "english_name": "Larvas",
+      "legacy_description_sha256": "876afaa6b1336b2508d1fab5152da10bd9dfe1a61432110a4fd3f697a317da4a",
+      "review_description": true
+    },
+    "55": {
+      "cid": 4062,
+      "password": "ffffffff",
+      "english_name": "Larvae Moth",
+      "legacy_description_sha256": "b175ff8be6ee2e7180edc8ea70fed58767d37945b292ca5abad77859a27f72c6",
+      "review_description": false
+    },
+    "457": {
+      "cid": 4464,
+      "password": "09653271",
+      "english_name": "Kaminari Attack",
+      "legacy_description_sha256": "c9a94a099750a93118d5441a229016ffbecad7a27a074e13ff74ddda90ef036a",
+      "review_description": true
+    },
+    "370": {
+      "cid": 4377,
+      "password": "ffffffff",
+      "english_name": "Sanga of the Thunder",
+      "legacy_description_sha256": "cebd8cc06d01e2e4bd982363aefc3f206ea621fccdbe08788652a5935c908328",
+      "review_description": false
+    },
+    "1007": {
+      "cid": 4841,
+      "password": "56260110",
+      "english_name": "Raimei",
+      "legacy_description_sha256": "7e0172e8a7123b04ca72028088feebdcdcb57d1a8e8a306a7bc2b28dd29298df",
+      "review_description": true
+    },
+    "1401": {
+      "cid": 4759,
+      "password": "03573512",
+      "english_name": "Swordsman of Landstar",
+      "legacy_description_sha256": "b8aa448c678ab6694bd9c947b16617485113ead54b1add7fe6583754fb50faaf",
+      "review_description": true
+    },
+    "378": {
+      "cid": 4385,
+      "password": "97590747",
+      "english_name": "La Jinn the Mystical Genie of the Lamp",
+      "legacy_description_sha256": "2bc72da98356b01c8bda2f8bc6ae8a69926964455db95b5949f60696d8c85dae",
+      "review_description": false
+    },
+    "604": {
+      "cid": 4611,
+      "password": "93108297",
+      "english_name": "Liquid Beast",
+      "legacy_description_sha256": "f65d29c2a3aa8b0590988f860a23bef62df2f4b3ba7c9d00fa09d2f2d41c7ef3",
+      "review_description": true
+    },
+    "274": {
+      "cid": 4281,
+      "password": "58314394",
+      "english_name": "Ground Attacker Bugroth",
+      "legacy_description_sha256": "522a9cd36a15050ab6cf06de5065ae1d3bffc9548a60ca21f00c9b42fedb6b8b",
+      "review_description": true
+    },
+    "1256": {
+      "cid": 5044,
+      "password": "39180960",
+      "english_name": "Rigras Leever",
+      "legacy_description_sha256": "aef7a93169ff83b076ebf6ff762a18d6c54f8d82f6faf6bbf1a5262c8c07bb68",
+      "review_description": false
+    },
+    "597": {
+      "cid": 4604,
+      "password": "68658728",
+      "english_name": "Little Chimera",
+      "legacy_description_sha256": "860d46082acf5f829306b6a9bf8f9cc208b4ad8cb79366b341da0b44755ffc3d",
+      "review_description": false
+    },
+    "1405": {
+      "cid": 5063,
+      "password": "31709826",
+      "english_name": "Revival Jam",
+      "legacy_description_sha256": "8b1c0e042f50d6d27c45a12202ad1648ed7af78cc0603604853145baeb306b56",
+      "review_description": false
+    },
+    "1095": {
+      "cid": 4989,
+      "password": "97077563",
+      "english_name": "Call Of The Haunted",
+      "legacy_description_sha256": "c7987ec74825db6f3a3f91ee0d988059e63ef68ab1317482aeffa844a42dead0",
+      "review_description": false
+    },
+    "742": {
+      "cid": 4749,
+      "password": "81480460",
+      "english_name": "Barrel Dragon",
+      "legacy_description_sha256": "de10b7c6b024d7236c8dea28abeb553fafe8b91a1e44dd0609272802d78320e4",
+      "review_description": false
+    },
+    "1314": {
+      "cid": 5129,
+      "password": "23171610",
+      "english_name": "Limiter Removal",
+      "legacy_description_sha256": "5871f0b91909fa19e7c3d30326f1224fd8cc6f15a172c7c140ad45cf23499f9d",
+      "review_description": false
+    },
+    "36": {
+      "cid": 4043,
+      "password": "66889139",
+      "english_name": "Gaia the Dragon Champion",
+      "legacy_description_sha256": "23a91bc867d1117519da1931f1d23bff932d3b167181c1e9ec966b6bacaefa56",
+      "review_description": true
+    },
+    "1182": {
+      "cid": 5010,
+      "password": "61405855",
+      "english_name": "Sword of Dragon's Soul",
+      "legacy_description_sha256": "40cab290100d42f036d25f665abd3db22fd694b484343af525875b32c90f0ec9",
+      "review_description": false
+    },
+    "684": {
+      "cid": 4691,
+      "password": "41356845",
+      "english_name": "Acid Trap Hole",
+      "legacy_description_sha256": "efd80b741913258ad6f7678cea5be4f0fb5fdead6fef8758ed0d84ccf3e334c8",
+      "review_description": false
+    },
+    "273": {
+      "cid": 4280,
+      "password": "22910685",
+      "english_name": "Green Phantom King",
+      "legacy_description_sha256": "a006c74442f537d6944e94695ebfb0d42aede59a9e75eb46d4bb3e737dd26755",
+      "review_description": true
+    },
+    "26": {
+      "cid": 4033,
+      "password": "32452818",
+      "english_name": "Beaver Warrior",
+      "legacy_description_sha256": "8770c27b2b7996c01d0233748abaac6c8c9ff6f9e12f66161e1c52fdc1d3f046",
+      "review_description": true
+    },
+    "246": {
+      "cid": 4253,
+      "password": "39004808",
+      "english_name": "Root Water",
+      "legacy_description_sha256": "dd5aaab702c0697aa36f64d369d0032f50b24f76753193a0a738606fd2008800",
+      "review_description": true
+    },
+    "1551": {
+      "cid": 5280,
+      "password": "69832741",
+      "english_name": "Spirit Elimination",
+      "legacy_description_sha256": "1c4999c6612f77c1a8e0d30904a88308398101b81fc48ec260d473508bb74c06",
+      "review_description": true
+    },
+    "1511": {
+      "cid": 5248,
+      "password": "88240808",
+      "english_name": "Kycoo the Ghost Destroyer",
+      "legacy_description_sha256": "4b801a1f3c36ebfb9901e7fb3d8832f0a2cfd72c2d6e3a46553a3d3e2fa545f3",
+      "review_description": false
+    },
+    "439": {
+      "cid": 4446,
+      "password": "23771716",
+      "english_name": "7 Colored Fish",
+      "legacy_description_sha256": "6c0874e83b5d044d2c1f795313fcf81f87415191374596b7b582b3e93219edab",
+      "review_description": true
+    },
+    "487": {
+      "cid": 4494,
+      "password": "21347810",
+      "english_name": "Rainbow Flower",
+      "legacy_description_sha256": "2b9a921187d21dd4cb3c8576277e71710d29ecc09b293cc37b134d5d82f1242a",
+      "review_description": true
+    },
+    "304": {
+      "cid": 4311,
+      "password": "77007920",
+      "english_name": "Laser Cannon Armor",
+      "legacy_description_sha256": "3e596465c85b600d22f74b4b93e4abe3bc9590f7302c4e9a3b967fc1ea04f973",
+      "review_description": false
+    },
+    "402": {
+      "cid": 4409,
+      "password": "10538007",
+      "english_name": "Leogun",
+      "legacy_description_sha256": "9b5a1279df0cfb4ca00d69fa8513dcd90288559e5e1646b520661a10db79a642",
+      "review_description": true
+    },
+    "396": {
+      "cid": 4403,
+      "password": "12472242",
+      "english_name": "Leghul",
+      "legacy_description_sha256": "2b9a921187d21dd4cb3c8576277e71710d29ecc09b293cc37b134d5d82f1242a",
+      "review_description": true
+    },
+    "560": {
+      "cid": 4567,
+      "password": "55444629",
+      "english_name": "Lesser Dragon",
+      "legacy_description_sha256": "ac952c3a22bbb626aefad9eda36264d7998f4d91d8c4c157b0b91401e463c860",
+      "review_description": true
+    },
+    "81": {
+      "cid": 4088,
+      "password": "74677422",
+      "english_name": "Red-Eyes B. Dragon",
+      "legacy_description_sha256": "d2ca11a658ca1b03ae86d64d7121d49b3979c39e08f9e6965d9512d2af340fb1",
+      "review_description": true
+    },
+    "741": {
+      "cid": 4748,
+      "password": "64335804",
+      "english_name": "Red-Eyes Black Metal Dragon",
+      "legacy_description_sha256": "8d2664ef96ca29d5d36dbd16f4f03a99bd0e1715354576010038dd581d90c5a6",
+      "review_description": false
+    },
+    "554": {
+      "cid": 4561,
+      "password": "56789759",
+      "english_name": "Tyhone #2",
+      "legacy_description_sha256": "8e93b491a22953cdf93230332e21d0307fbbb438e3c310c860e1be1be330878e",
+      "review_description": true
+    },
+    "338": {
+      "cid": 4345,
+      "password": "38199696",
+      "english_name": "Red Medicine",
+      "legacy_description_sha256": "252987cdcee08a97f54fb7d05a493ac383da2a13cbad72db1554ab3a23eeeca2",
+      "review_description": false
+    },
+    "1430": {
+      "cid": 5193,
+      "password": "38480590",
+      "english_name": "Lady Panther",
+      "legacy_description_sha256": "825fc3bcb709201ee7f902bb187fe349f29cc9b852e6a5612f84588e0a376a06",
+      "review_description": false
+    },
+    "703": {
+      "cid": 4710,
+      "password": "ffffffff",
+      "english_name": "Skull Guardian",
+      "legacy_description_sha256": "1c63ac317793c1ed1a9b0fd332e9e2f7640b1659b221a781255e767dfd079ab4",
+      "review_description": true
+    },
+    "740": {
+      "cid": 4747,
+      "password": "17985575",
+      "english_name": "Lord of D.",
+      "legacy_description_sha256": "0556289f02689c6daa6d425fddacd6f6849619fbf5945ba27671e91bc5d2452d",
+      "review_description": false
+    },
+    "678": {
+      "cid": 4685,
+      "password": "ffffffff",
+      "english_name": "Novox's Prayer",
+      "legacy_description_sha256": "98e25324b5616a1fd5ca3b6fb1cdba87859bf99e787ccb15b8a64a8d296e4781",
+      "review_description": true
+    },
+    "348": {
+      "cid": 4355,
+      "password": "18807108",
+      "english_name": "Spellbinding Circle",
+      "legacy_description_sha256": "17779dc9055b92625869a887b0ac96c6a7a4a849f39ea963af81b79fb75da2dc",
+      "review_description": false
+    },
+    "1231": {
+      "cid": 5067,
+      "password": "30860696",
+      "english_name": "Rocket Warrior",
+      "legacy_description_sha256": "19304a7ab3abb8dad6d587abcbfe3a67030428ca7725ac02fc4da1e104b35d09",
+      "review_description": false
+    },
+    "1403": {
+      "cid": 5061,
+      "password": "73216412",
+      "english_name": "Worm Drake",
+      "legacy_description_sha256": "f78e922be9b51f8ebde39a623fcc3e085d56955bf80cd3421e4fded330958a79",
+      "review_description": true
+    },
+    "1319": {
+      "cid": 5132,
+      "password": "22959079",
+      "english_name": "Dimensionhole",
+      "legacy_description_sha256": "ba805b0e2af135d43aac784d2bc8d923a66e84b2c378010126f82a9310883280",
+      "review_description": false
+    },
+    "23": {
+      "cid": 4030,
+      "password": "32274490",
+      "english_name": "Skull Servant",
+      "legacy_description_sha256": "82cf7a69f7630b62565ad095b7de549d2fd33986d5e8f657fc37535d80e5d5b2",
+      "review_description": true
+    },
+    "551": {
+      "cid": 4558,
+      "password": "57405307",
+      "english_name": "Winged Dragon, Guardian of the Fortress #2",
+      "legacy_description_sha256": "9ffc40e15a859fa5f9abc730793c7c5675d8bd2641356f2a30bb1108e1e6047d",
+      "review_description": true
+    },
+    "760": {
+      "cid": 4767,
+      "password": "64428736",
+      "english_name": "Alligator's Sword",
+      "legacy_description_sha256": "db0736dcef5ed31050a4990f28f0544348dd8bfd7a97c353ce634418e5bbf400",
+      "review_description": false
+    },
+    "79": {
+      "cid": 4086,
+      "password": "01784619",
+      "english_name": "Uraby",
+      "legacy_description_sha256": "3b3f46f09dd10e95765873dab81f896f731035b85d9714409a10801b5cb857d7",
+      "review_description": true
+    },
+    "1004": {
+      "cid": 4838,
+      "password": "51482758",
+      "english_name": "Remove Trap",
+      "legacy_description_sha256": "986ad04b82924704646f06b776b553ac81195996383b1824093c154d7687dd3c",
+      "review_description": false
+    },
+    "1055": {
+      "cid": 4886,
+      "password": "12607053",
+      "english_name": "Waboku",
+      "legacy_description_sha256": "1e2ea83c5b88e3a414bab4e49280e794c968396ccf7134552c692326ba9d7af0",
+      "review_description": false
+    },
+    "295": {
+      "cid": 4302,
+      "password": "33064647",
+      "english_name": "One-Eyed Shield Dragon",
+      "legacy_description_sha256": "7a3ceecf05313276ca7874fd961c8ec9055bd1b14bb8a82f6e887574309629f6",
+      "review_description": true
+    },
+    "1901": {
+      "cid": 4064,
+      "password": "ffffffff",
+      "english_name": "Kuriboh",
+      "legacy_description_sha256": "0ab2f49b745cb99a61413ac4649745792403db97a0dc287df9434a7efa233b46",
+      "review_description": false
+    },
+    "1902": {
+      "cid": 4818,
+      "password": "ffffffff",
+      "english_name": "Scapegoat",
+      "legacy_description_sha256": "6a3724967c09e25760eabfc6c889d76520729996f0818bf815d3bfe4ca686a03",
+      "review_description": false
+    }
+  }
+}

@@ -45,11 +45,16 @@ Abre el **engranaje** del launcher para elegir cómo jugar:
 | FPS | **30**, **60** o **Display**, que sigue la frecuencia del monitor actual. |
 | Simulación | **Normal** o **2×**. La velocidad de simulación es independiente del límite de FPS. |
 | Juego rápido | Omite las escenas de entrada y salida, reacciones con retrato, voces y barridos entre escenas en **Yugi, Kaiba y Joey**. Conserva la música y los efectos de sonido. |
+| Traducciones mejoradas | Mejoras iniciales y parciales de nombres y descripciones en español desde la base oficial de Yu-Gi-Oh! Descarga los textos disponibles al activarlo y consérvalos localmente. |
+
+**Valores por defecto:** FPS del display, velocidad normal y juego rápido desactivado.
 
 Las preferencias se recuerdan al volver a abrir el launcher. Juego rápido es opcional
 y viene **desactivado**; desactívalo para recuperar la presentación original. El launcher
 se abre maximizado desde el principio y puedes redimensionar la ventana o usar
 **F11 / Alt+Enter** para alternar la pantalla completa.
+
+**Traducciones mejoradas** viene desactivado y ofrece, por ahora, cobertura parcial en español para nombres y descripciones de cartas. Las cartas y los campos pendientes de revisión o descarga conservan su texto importado. Las descripciones solo cambian cuando el texto inglés oficial actual coincide con el del juego original; los menús y las reglas se conservan. La descarga comienza al activar la opción expresamente. Los textos guardados funcionan sin conexión y abrir de nuevo el launcher no inicia otra descarga. Si el servidor limita el acceso, se detiene la descarga y se conserva lo guardado; puedes reintentar más tarde desactivando y activando la opción. Desactívala cuando quieras para recuperar los textos importados.
 
 ## Tus ISO → PC o APK para Android
 

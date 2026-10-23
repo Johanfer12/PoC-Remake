@@ -55,6 +55,9 @@ func name_of(internal_id: int, lang := "") -> String:
 func text(card: Dictionary, field: String, language := "") -> String:
 	if language == "":
 		language = Assets.text_language()
+	var improved := CardTranslations.text(card, field, language)
+	if improved != "":
+		return improved
 	var values: Dictionary = card.get(field, {})
 	return str(values.get(language, values.get("eng", values.get("spa", ""))))
 
