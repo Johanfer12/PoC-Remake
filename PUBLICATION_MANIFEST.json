@@ -113,7 +113,7 @@
     "game/duel/joey/joey_port_zr.gd": "22876bf04f3a4b977df410364a04f45af43b26ec92c651ae398e187ebd8b66a6",
     "game/duel/joey/joey_port_zs.gd": "7a83bb97601a26d9e4da9e78757c613b6142bc8941dd7122d523e38786ddf860",
     "game/duel/joey/joey_replay_engine.gd": "8669480f7e32a260e5a2eaadf361c5a8d5e04be1a4e9e4612fb27a07138b1045",
-    "game/export_presets.cfg": "f62ac2f0748cd88539f70b71c3c23a0b0e4485d9a0e99c8c4924d741fbd7eb41",
+    "game/export_presets.cfg": "60f1dc3b554e2f84925d9f1514f8f61d64067cf3ec7c217f081daff944c7d6c8",
     "game/project.godot": "393e0033f191464a4215ad515551d78323faf523e20d445ab26b262077eec5e3",
     "game/scenes/boot/boot.gd": "fe7c6691976a05595ba68256c5bcf18db07a1a770e183f98462567660fa73647",
     "game/scenes/boot/boot.tscn": "2df4c5e2a57ca30699cc8eb26793b61faea12a94dddca6951dc0f1d658001278",
@@ -188,8 +188,11 @@
     "README.es.md": "aab2c430d4600bcb0b73dddab9bf85702f4727d4d0e6bf017f19016e1131a09b",
     "README.md": "4eefbcb6a3782b54d18d914ed6e985a5d7d85defd3d612fdb9b076aedb95c464",
     "THIRD_PARTY_NOTICES.md": "f7b341857feba0b30a53bf69a4265d844d878dbef601db471d8022690f4ab3bc",
-    "tools/android/build_apk.py": "705ca04685d3182f52c6710420cbea6d0b23fb408dc4392d0607295ae0874b98",
-    "tools/android/pack_data.gd": "c4a314755679e4834a6b480104498c87f38e4e690f59db5d44146f5c377093e1"
+    "tools/android/build_apk.py": "52795f050fc735e55491fc2ebdce7d7336ffd0fe8deed10aa07b4b4fe2cb47b6",
+    "tools/android/pack_data.gd": "c4a314755679e4834a6b480104498c87f38e4e690f59db5d44146f5c377093e1",
+    "game/assets/icons/launcher-adaptive-background.svg": "c389a9d426c9032d8681df01c6526432a0daaff5e780649fdea6c01af8c517bc",
+    "game/assets/icons/launcher-adaptive-foreground.svg": "bd04905f35f5936321e35ca8cb7c7ae11ff4d75cbd8c88349e3214e1d4850a6c",
+    "game/assets/icons/launcher-adaptive-monochrome.svg": "07842604859fb20027b6f7780f14de4a6927227032c470dde5d64de47672edd5"
   },
   "git_history_included": false,
   "policy": "Android source allowlist; approved remake assets and launcher icon only",
