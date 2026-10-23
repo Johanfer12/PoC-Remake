@@ -6,6 +6,22 @@
 
 [English](README.md) | **Español**
 
+## Contenido
+
+- [Tus ISO → PC o APK para Android](#tus-iso--pc-o-apk-para-android)
+- [Ventajas](#ventajas)
+- [Ajustes del launcher](#ajustes-del-launcher)
+- [Capturas del launcher](#capturas-del-launcher)
+- [¿Qué es este remake?](#qué-es-este-remake)
+- [Empezar en Windows](#empezar-en-windows)
+- [Cómo funciona](#cómo-funciona)
+- [Compatibilidad y límites actuales](#compatibilidad-y-límites-actuales)
+- [Idiomas y voces](#idiomas-y-voces)
+- [Ejecutar desde el código fuente](#ejecutar-desde-el-código-fuente)
+- [Compilaciones automáticas](#compilaciones-automáticas)
+- [Estado del proyecto y avisos](#estado-del-proyecto-y-avisos)
+- [Crear tu APK Android](#crear-tu-apk-android)
+
 ## Tus ISO → PC o APK para Android
 
 Selecciona los ISO o las carpetas instaladas de tus juegos y elige:
@@ -27,7 +43,24 @@ Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye d
 - **Recursos más livianos.** Las imágenes WebP sin pérdida y el audio OGG reducen el espacio ocupado. La biblioteca de Yugi probada ocupa aproximadamente **un 44% menos** que su versión convertida sin comprimir. El ahorro depende del juego y la edición.
 - **Decoraciones para 16:9.** Los laterales decorados rodean el área de duelo original de 4:3 en las vistas compatibles de Yugi, Kaiba y Joey, cada uno con su propio fondo.
 - **Todo en uno.** Yugi the Destiny, Kaiba the Revenge y Joey the Passion comparten un launcher. Puedes empezar con uno y añadir los demás cuando quieras.
-- **Renderizado a 60 FPS y más, según la pantalla.** El renderizado sigue la frecuencia de la pantalla e interpola entre los pasos originales del juego a 30 Hz. Los FPS efectivos dependen del equipo y la pantalla; se conserva la velocidad original de juego.
+- **Elige el ritmo y la imagen.** Selecciona 30 FPS, 60 FPS o la frecuencia de tu monitor; aspecto estirado, 4:3 original o fondos decorativos; y velocidad normal o 2×.
+- **Juego rápido opcional en los tres juegos.** Omite escenas de personajes, voces y barridos, conservando la música y los efectos. [Ver ajustes del launcher](#ajustes-del-launcher).
+
+## Ajustes del launcher
+
+Abre el **engranaje** del launcher para elegir cómo jugar:
+
+| Ajuste | Opciones |
+|---|---|
+| Aspecto | **Estirado** ocupa toda la ventana; **Original sin fondo** conserva el 4:3 con bandas negras; **Overlay** añade el fondo decorativo de cada duelo alrededor del área original 4:3. |
+| FPS | **30**, **60** o **Display**, que sigue la frecuencia del monitor actual. |
+| Simulación | **Normal** o **2×**. La velocidad de simulación es independiente del límite de FPS. |
+| Juego rápido | Omite las escenas de entrada y salida, reacciones con retrato, voces y barridos entre escenas en **Yugi, Kaiba y Joey**. Conserva la música y los efectos de sonido. |
+
+Las preferencias se recuerdan al volver a abrir el launcher. Juego rápido es opcional
+y viene **desactivado**; desactívalo para recuperar la presentación original. El launcher
+se abre maximizado desde el principio y puedes redimensionar la ventana o usar
+**F11 / Alt+Enter** para alternar la pantalla completa.
 
 ## Capturas del launcher
 

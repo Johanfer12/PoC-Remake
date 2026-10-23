@@ -199,6 +199,21 @@ class ImportTests(unittest.TestCase):
             self.assertFalse(output.exists())
             self.assertEqual(list(Path(directory).iterdir()), [])
 
+    def test_public_shaders_include_their_dependencies(self):
+        import re
+        path = Path(__file__).resolve().parents[1] / "prepare_public.py"
+        spec = importlib.util.spec_from_file_location("prepare_public", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        root = path.parents[1]
+        for shader in (root / "game").rglob("*.gdshader"):
+            if not module.allowed(shader.relative_to(root)):
+                continue
+            for include in re.findall(r'#include "res://([^"\n]+)"', shader.read_text(encoding="utf-8")):
+                dependency = Path("game") / include
+                self.assertTrue((root / dependency).is_file(), str(dependency))
+                self.assertTrue(module.allowed(dependency), str(dependency))
+
     def test_public_allowlist_excludes_private_material(self):
         path = Path(__file__).resolve().parents[1] / "prepare_public.py"
         spec = importlib.util.spec_from_file_location("prepare_public", path)

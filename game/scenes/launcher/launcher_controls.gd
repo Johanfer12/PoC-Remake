@@ -18,7 +18,7 @@ const GOLD_DARK := Color(0.42, 0.27, 0.06)
 const BRONZE := Color(0.62, 0.43, 0.12)
 const STONE := Color(0.07, 0.05, 0.04)
 const OUTLINE := Color(0.35, 0.08, 0.02)
-const PANEL_SIZE := Vector2(520, 346)
+const PANEL_SIZE := Vector2(520, 394)
 const SLIDER_W := 200.0
 const KEY_STEP := 0.05
 
@@ -120,9 +120,9 @@ func _hit(pos: Vector2) -> String:
 			return "slider"
 		if _mute_rect().grow(4).has_point(pos):
 			return "mute"
-		for row in 3:
+		for row in 4:
 			if _option_rect(row).has_point(pos):
-				return ["aspect", "fps", "speed"][row]
+				return ["aspect", "fps", "speed", "fast_play"][row]
 		return "panel" if _panel_rect().has_point(pos) else "outside"
 	if pos.distance_to(_sound_center()) <= RADIUS:
 		return "sound"
@@ -176,8 +176,8 @@ func _input(event: InputEvent) -> void:
 			"mute":
 				_focused_row = 1
 				_toggle_mute()
-			"aspect", "fps", "speed":
-				_focused_row = ["aspect", "fps", "speed"].find(_hit(local_pos)) + 2
+			"aspect", "fps", "speed", "fast_play":
+				_focused_row = ["aspect", "fps", "speed", "fast_play"].find(_hit(local_pos)) + 2
 				_cycle_option(_focused_row - 2, 1)
 			"panel":
 				pass
@@ -191,9 +191,9 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_open_panel(false)
 	elif event.is_action_pressed("ui_up"):
-		_focused_row = wrapi(_focused_row - 1, 0, 5)
+		_focused_row = wrapi(_focused_row - 1, 0, 6)
 	elif event.is_action_pressed("ui_down"):
-		_focused_row = wrapi(_focused_row + 1, 0, 5)
+		_focused_row = wrapi(_focused_row + 1, 0, 6)
 	elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
 		var step := -1 if event.is_action_pressed("ui_left") else 1
 		if _focused_row == 0:
@@ -219,6 +219,8 @@ func _cycle_option(row: int, step: int) -> void:
 			LauncherSettings.frame_rate = choices[wrapi(choices.find(LauncherSettings.frame_rate) + step, 0, choices.size())]
 		2:
 			LauncherSettings.simulation_speed = 2.0 if LauncherSettings.simulation_speed == 1.0 else 1.0
+		3:
+			LauncherSettings.fast_play = not LauncherSettings.fast_play
 	LauncherSettings.save_preferences()
 	queue_redraw()
 
@@ -325,15 +327,16 @@ func _draw_panel() -> void:
 	_label(Assets.port_label(3), Vector2(r.position.x + 34, _mute_rect().get_center().y + 6))
 	_draw_checkbox()
 	var spanish := Assets.lang == "s"
-	var names := ["Aspecto", "FPS", "Simulación"] if spanish else ["Aspect", "FPS", "Simulation"]
+	var names := ["Aspecto", "FPS", "Simulación", "Juego rápido"] if spanish else ["Aspect", "FPS", "Simulation", "Quick play"]
 	var aspects := ["Estirado", "Original sin fondo", "Overlay"] if spanish else ["Stretched", "Original, no background", "Overlay"]
 	var values := [str(aspects[LauncherSettings.ASPECTS.find(LauncherSettings.aspect)]),
 		("Display (%d Hz)" % LauncherSettings.display_fps()) if LauncherSettings.frame_rate == 0 else str(LauncherSettings.frame_rate),
-		"Normal" if LauncherSettings.simulation_speed == 1.0 else "2×"]
-	for row in 3:
+		"Normal" if LauncherSettings.simulation_speed == 1.0 else "2×",
+		("Activado" if LauncherSettings.fast_play else "Desactivado") if spanish else ("On" if LauncherSettings.fast_play else "Off")]
+	for row in 4:
 		var rect := _option_rect(row)
 		_label(names[row], Vector2(r.position.x + 34, rect.get_center().y + 6))
-		draw_rect(rect, GOLD if _focused_row == row + 2 or _hover == ["aspect", "fps", "speed"][row] else GOLD_DARK)
+		draw_rect(rect, GOLD if _focused_row == row + 2 or _hover == ["aspect", "fps", "speed", "fast_play"][row] else GOLD_DARK)
 		draw_rect(rect.grow(-1), STONE)
 		_label(values[row] + "  >", rect.position + Vector2(8, 22))
 	var focus_rect := _slider_rect().grow(12) if _focused_row == 0 else _mute_rect().grow(4)

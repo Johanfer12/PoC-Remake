@@ -32,7 +32,7 @@ def allowed(relative: Path) -> bool:
     if path.startswith("game/"):
         if any(part in {".godot", "assets", "tests", "artifacts", "temp", "scenarios"} for part in relative.parts):
             return False
-        return relative.suffix in {".gd", ".tscn", ".godot", ".gdshader"}
+        return relative.suffix in {".gd", ".tscn", ".godot", ".gdshader", ".gdshaderinc"}
     if path.startswith("tools/pocx/") and len(relative.parts) == 3:
         return relative.suffix == ".py" or relative.name == "color_key_overrides.json"
     return False

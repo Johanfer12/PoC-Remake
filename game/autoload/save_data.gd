@@ -6,8 +6,10 @@ extends Node
 const FILE_NAME := "system.json"
 const VERSION := 2
 const GAMES := ["yugi", "kaiba", "joey"]
+const Store = preload("res://core/save_store.gd")
 
 var data := {}
+var persistence_error := ""
 
 
 func _ready() -> void:
@@ -35,32 +37,39 @@ func path() -> String:
 
 
 func load_or_create() -> void:
-	if FileAccess.file_exists(path()):
-		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path()))
-		if parsed is Dictionary and int(parsed.get("version", 0)) in [1, VERSION]:
-			data = parsed
-			data.get_or_add("seen", {})
-			if int(data.get("version", 0)) == 1:
-				_migrate_shared_stats()
-				data["version"] = VERSION
-				save()
-			return
-		push_warning("Partida no valida, se crea una nueva: %s" % path())
+	var loaded := Store.load_save(path())
+	persistence_error = loaded["error"]
+	if persistence_error != "":
+		push_error(persistence_error)
+		data = _new_game()
+		return # No sobrescribir una partida incompatible o que no se pudo preservar.
+	var parsed: Variant = loaded["data"]
+	if parsed is Dictionary:
+		data = parsed
+		data.get_or_add("seen", {})
+		var migrated := int(data.get("version", 0)) == 1
+		if migrated:
+			_migrate_shared_stats()
+			data["version"] = VERSION
+		if loaded["recovered"]:
+			push_warning("Partida recuperada desde %s.bak; archivos danados conservados como .damaged" % path())
+		if migrated or loaded["recovered"]:
+			save()
+		return
+	if FileAccess.file_exists(path()) or FileAccess.file_exists(path() + ".bak"):
+		push_warning("Sin partida valida; se crea una nueva tras conservar los archivos danados como .damaged: %s" % path())
 	data = _new_game()
 	save()
 
 
-func save() -> void:
-	DirAccess.make_dir_recursive_absolute(Paths.save_dir)
-	var tmp := path() + ".tmp"
-	var f := FileAccess.open(tmp, FileAccess.WRITE)
-	if f == null:
-		push_error("No se pudo guardar en %s" % Paths.save_dir)
-		return
-	f.store_string(JSON.stringify(data, "\t"))
-	f.close()
-	# escritura atomica: si se corta a mitad no se pierde la partida anterior
-	DirAccess.rename_absolute(tmp, path())
+func save() -> bool:
+	if persistence_error != "":
+		return false
+	var err := Store.write_save(path(), data)
+	if err != OK:
+		push_error("No se pudo guardar %s: %s" % [path(), error_string(err)])
+		return false
+	return true
 
 
 ## Coleccion compartida: id interno (como texto, por JSON) -> copias.
@@ -133,8 +142,7 @@ func import_system_dat(system_dat: String) -> bool:
 		if data.has(key):
 			fresh[key] = data[key]
 	data = fresh
-	save()
-	return true
+	return save()
 
 
 ## Carga de Deck.ydc al arrancar (Yugi 436e80 -> 436db0 -> 436bf0; Kaiba 437430, mismas

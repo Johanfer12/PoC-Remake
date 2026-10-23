@@ -91,7 +91,13 @@ func stop_all() -> void:
 	_music.stream = null
 
 
+func voice_disabled(rel_path: String) -> bool:
+	var path := rel_path.replace("\\", "/").to_lower()
+	return LauncherSettings.fast_play and (path.begins_with("yugi/voice/internal/yugi_") or path.begins_with("joey/voice/internal/joey_") or _is_kaiba_speech(path))
+
+
 func play_sfx(rel_path: String) -> void:
+	if voice_disabled(rel_path): return
 	if level == 0: return # 583d40/583e10: sonido deshabilitado.
 	var path := Assets.resolve(rel_path)
 	if path == "":
@@ -132,6 +138,7 @@ func _advance_speech() -> void:
 
 ## 583ed0/584290: terminado cuando el buffer ya no reproduce; sin sonido devuelve1.
 func sfx_finished(rel_path: String) -> bool:
+	if voice_disabled(rel_path): return true
 	if level == 0: return true
 	var path := Assets.resolve(rel_path)
 	for queued in _speech_queue:

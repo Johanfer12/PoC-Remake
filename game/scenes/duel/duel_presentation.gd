@@ -503,6 +503,7 @@ func enqueue(e: Dictionary, duel: Duel) -> void:
 			# 0x21) pide en esos mismos sitios la misma voz: 0x10000047/48 = Ka39/40 (0x406570) y
 			# 0x1000004a = Ka42 (0x403060).
 			var file := str(e.get("native_sound_file", voice_file(int(e.get("id", 0)))))
+			if Audio.voice_disabled("%s/voice/internal/%s.wav" % [game, file]): return
 			if kind == "sound" and e.has("native_sound_file"):
 				if file != "": Audio.play_sfx("%s/voice/internal/%s.wav" % [game, file])
 				return # 5c03d0 no crea un objeto que bloquee el motor.

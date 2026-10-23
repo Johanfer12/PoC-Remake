@@ -1,6 +1,6 @@
 # Ajustes del launcher
 
-El engranaje ofrece volumen/silencio y tres selectores. Se conserva el idioma de la
+El engranaje ofrece volumen/silencio y cuatro selectores. Se conserva el idioma de la
 esquina superior; el selector redundante del panel se ha retirado.
 
 - **Aspecto:** Estirado ocupa la ventana completa; Original sin fondo conserva 4:3
@@ -13,7 +13,12 @@ esquina superior; el selector redundante del panel se ha retirado.
   escenas, animaciones y lógica. No cambia los 30 ticks por segundo simulado del
   motor nativo. El launcher permanece a velocidad normal.
 
-Las tres preferencias se guardan en la sección `launcher` de `PoC Data/content.cfg`,
+- **Juego rápido:** opcional y desactivado por defecto. En los tres juegos omite
+  introducción, salida, barridos entre escenas, reacciones de personajes y voces.
+  Conserva música, efectos, janken, reglas y resultados. La presentación original
+  se recupera al desactivarlo.
+
+Las preferencias se guardan en la sección `launcher` de `PoC Data/content.cfg`,
 conservando los otros ajustes, incluso antes de importar recursos. Valores iniciales:
 Overlay, Display y Normal. Volumen y silencio mantienen su guardado existente.
 
@@ -59,3 +64,17 @@ Ejemplo desde PowerShell en la raíz PC (usar siempre almacenamiento de prueba):
 Para sondas con ventanas de tamaño fijo, añadir `--windowed` antes de `--script`.
 
 Los FPS son el límite solicitado; no implican una medición de rendimiento garantizado.
+
+## Publicación de shaders y juego rápido
+
+La exportación pública incluye `.gdshaderinc`: el shader del janken y el de la onda
+del cursor dependen de `native_scale.gdshaderinc`. Omitirlo deja sin renderizar las
+manos giradas pese a que los PNG y la mano del jugador estén presentes. La prueba
+`test_public_shaders_include_their_dependencies` revisa los includes de todos los
+shaders publicables y exige que sus fuentes existan y estén permitidas.
+
+`janken_hand_visibility_test.gd` compara capturas con y sin la mano del rival,
+con renderizado real y recursos del usuario. `quick_play_test.gd` comprueba en
+Yugi/Kaiba/Joey la entrada directa al janken, salida al menú, ausencia de barridos,
+retratos y esperas de voces, conservación de efectos y persistencia. El modo normal
+sigue usando las escenas originales.

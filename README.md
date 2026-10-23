@@ -6,6 +6,22 @@
 
 **English** | [Español](README.es.md)
 
+## Contents
+
+- [Your ISO → PC or Android APK](#your-iso--pc-or-android-apk)
+- [Why use it?](#why-use-it)
+- [Launcher settings](#launcher-settings)
+- [Launcher screenshots](#launcher-screenshots)
+- [What is this remake?](#what-is-this-remake)
+- [Get started on Windows](#get-started-on-windows)
+- [How it works](#how-it-works)
+- [Compatibility and current limits](#compatibility-and-current-limits)
+- [Languages and voice packs](#languages-and-voice-packs)
+- [Run from source](#run-from-source)
+- [Automatic Windows builds](#automatic-windows-builds)
+- [Project status and notices](#project-status-and-notices)
+- [Build your Android APK](#build-your-android-apk)
+
 ## Your ISO → PC or Android APK
 
 Select your ISO images or installed game folders, then choose:
@@ -27,7 +43,23 @@ Your ISO images and converted resources stay on your computer; no original game 
 - **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
 - **16:9 decorative side panels.** Widescreen decorations surround the original 4:3 duel area in the supported Yugi, Kaiba and Joey views, each with its own background.
 - **All three games in one place.** Yugi the Destiny, Kaiba the Revenge and Joey the Passion share one launcher. Import just one to start and add the others whenever you want.
-- **60 FPS rendering and higher, depending on your display.** The renderer follows the display refresh rate, with interpolation between the original 30 Hz game ticks. Actual FPS depend on your PC and display; the original gameplay speed is preserved.
+- **Choose your pace and display.** Select 30 FPS, 60 FPS or your display refresh rate, choose stretched, original 4:3 or decorative backgrounds, and play at normal or 2× speed.
+- **Optional quick play in all three games.** Skip character scenes, voices and scene wipes while keeping music and sound effects. [See launcher settings](#launcher-settings).
+
+## Launcher settings
+
+Open the **gear** in the launcher to choose how you play:
+
+| Setting | Options |
+|---|---|
+| Aspect | **Stretched** fills the window; **Original, no background** keeps 4:3 with black bars; **Overlay** adds each game's decorative duel background around the original 4:3 area. |
+| FPS | **30**, **60**, or **Display**, which follows the current monitor's refresh rate. |
+| Simulation | **Normal** or **2×**. Simulation speed is independent of the FPS limit. |
+| Quick play | Skip character introductions, outros, portrait reactions, spoken lines and scene wipes in **Yugi, Kaiba and Joey**. Music and sound effects remain enabled. |
+
+Preferences are remembered between launches. Quick play is optional and starts **off**;
+turn it off to restore the original presentation. The launcher opens maximized from
+the start, and you can still resize the window or use **F11 / Alt+Enter** for fullscreen.
 
 ## Launcher screenshots
 

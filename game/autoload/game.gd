@@ -119,7 +119,7 @@ func goto(screen: Node) -> void:
 	var effect := _scene_wipe_mode(_screen, screen)
 	var old_frame: Texture2D
 	# El launcher es propio del port; el primer arranque no tiene snapshot previo.
-	if current_game != "" and DisplayServer.get_name() != "headless" \
+	if not LauncherSettings.fast_play and current_game != "" and DisplayServer.get_name() != "headless" \
 			and is_instance_valid(_screen) and _screen.is_inside_tree() \
 			and _screen.get_script().resource_path.get_file() not in ["launcher.gd", "content_setup.gd"]:
 		var old_image := _screen.get_viewport().get_texture().get_image()
@@ -266,6 +266,9 @@ func start_normal_duel(game: String, mode := 0) -> void:
 	match_outcome = 0
 	rival_deck = choose_rival_deck(game)
 	current_game = game
+	if LauncherSettings.fast_play:
+		open_janken(game)
+		return
 	var script: GDScript = load("res://scenes/duel/bust_up_scene.gd") if game == "yugi" else load("res://scenes/duel/bust_up_rival.gd")
 	var scene: Node2D = script.new(game)
 	scene.finished.connect(open_janken.bind(game), CONNECT_ONE_SHOT)
@@ -426,6 +429,9 @@ func finish_normal_duel(game: String, winner: int) -> void:
 		Lan.close()
 	if winner == 0:
 		Audio.stop_music()
+		open_title(game, "duel")
+		return
+	if LauncherSettings.fast_play:
 		open_title(game, "duel")
 		return
 	var script: GDScript = load("res://scenes/duel/bust_up_scene.gd") if game == "yugi" else load("res://scenes/duel/bust_up_rival.gd")

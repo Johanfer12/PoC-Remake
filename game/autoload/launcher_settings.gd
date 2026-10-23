@@ -5,6 +5,7 @@ const FRAME_RATES := [30, 60, 0] # 0: frecuencia del monitor actual.
 var aspect := "overlay"
 var frame_rate := 0
 var simulation_speed := 1.0
+var fast_play := false
 var _refresh_clock := 0.0
 
 func _ready() -> void:
@@ -20,6 +21,7 @@ func reload_preferences() -> void:
 	if frame_rate not in FRAME_RATES: frame_rate = 0
 	simulation_speed = float(config.get_value("launcher", "simulation_speed", 1.0))
 	if simulation_speed not in [1.0, 2.0]: simulation_speed = 1.0
+	fast_play = bool(config.get_value("launcher", "fast_play", false))
 
 func save_preferences() -> void:
 	var config := ConfigFile.new()
@@ -27,6 +29,7 @@ func save_preferences() -> void:
 	config.set_value("launcher", "aspect", aspect)
 	config.set_value("launcher", "fps", frame_rate)
 	config.set_value("launcher", "simulation_speed", simulation_speed)
+	config.set_value("launcher", "fast_play", fast_play)
 	var error := config.save(Paths.settings_path())
 	if error != OK: push_error("No se pudieron guardar los ajustes: " + error_string(error))
 	apply_timing()
