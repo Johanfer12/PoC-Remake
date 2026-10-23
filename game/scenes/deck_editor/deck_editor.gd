@@ -1,5 +1,6 @@
 extends Node2D
 const NATIVE_SORT := preload("res://core/native_card_sort.gd")
+const CARD_LIMITS := preload("res://core/native_card_limits.gd")
 var _name_ranks := {}
 var _deck_criteria := {"main": "default", "side": "default", "fusion": "default"}
 var _sort_properties := PackedByteArray()
@@ -153,20 +154,14 @@ const MAIN_MIN := 40
 const MAIN_MAX := 80
 const SIDE_MAX := 15
 const SWAP_ARROW_EDGE := {"yugi": Vector2(800, 280), "kaiba": Vector2(798, 298), "joey": Vector2(800, 295)}
-const MAX_COPIES := 3
+const MAX_COPIES := CARD_LIMITS.MAX_COPIES
 ## IDs CARD_ID (los mismos que .ydc), extraidos de las tablas del PE.
-const OLD_FORBIDDEN := [1902, 1903, 1910, 1911, 1912, 1920, 1921, 1922, 1923]
-const OLD_LIMITED := [20, 17, 19, 16, 18, 1010, 968, 1027, 335, 336, 1008, 1056,
-	1071, 1070, 1081, 1077, 1068, 1106, 1065, 347, 1221, 573, 1154, 751, 1150,
-	1160, 1095, 1314, 47, 1061, 671, 1214, 939, 1450, 1449, 474]
-const JOEY_FORBIDDEN := [1106, 1071, 1081, 1027, 336, 671, 1154]
-const JOEY_LIMITED := [474, 47, 573, 751, 20, 17, 19, 16, 18, 1070, 1061, 1077,
-	1068, 1010, 1008, 1449, 1221, 968, 1065, 1160, 347, 335, 1450, 1056, 1150,
-	939, 1214, 1095]
+const OLD_FORBIDDEN := CARD_LIMITS.OLD_FORBIDDEN
+const OLD_LIMITED := CARD_LIMITS.OLD_LIMITED
+const JOEY_FORBIDDEN := CARD_LIMITS.JOEY_FORBIDDEN
+const JOEY_LIMITED := CARD_LIMITS.JOEY_LIMITED
 ## 448e80/44a400/4673b0: las versiones alternativas comparten copias.
-const COPY_VARIANTS := [[0, 2000], [14, 2014], [34, 1210, 2034], [37, 2037],
-	[40, 2040], [57, 1901], [61, 1249], [63, 2063], [68, 2068], [387, 2387],
-	[389, 2389], [1003, 1034]]
+const COPY_VARIANTS := CARD_LIMITS.COPY_VARIANTS
 const FADED := Color(1, 1, 1, 0x6e / 255.0)   # 44c8a0: alfa 0x6e
 const DECKS_DIR := "decks"
 ## Cursor del raton (objeto DAT_005af868, +0x114): recurso 0xd ("over") si el destino no vale.
@@ -1365,21 +1360,7 @@ func _toggle_window() -> void:
 
 ## Y53fd30/Ka542400 leen bit0 de +1178; Jo5be190 lee byte +10ee.
 func _copy_limit(id: int) -> int:
-	var native: Dictionary = SaveData.data.get("native_system", {})
-	if game == "joey":
-		if id in JOEY_FORBIDDEN:
-			var block := Marshalls.base64_to_raw(str(native.get("block", "")))
-			return 0 if block.size() > 0x10ee and block[0x10ee] != 0 else 1
-		if id in JOEY_LIMITED:
-			return 1
-		return 2 if id in [1163, 590, 1157] else MAX_COPIES
-	if id in OLD_FORBIDDEN:
-		return 0
-	if int(native.get("limit_flags", 0)) & 1:
-		return MAX_COPIES
-	if id in OLD_LIMITED:
-		return 1
-	return 2 if id in [1157, 1147, 1163, 590] else MAX_COPIES
+	return CARD_LIMITS.copy_limit(game, id, SaveData.data.get("native_system", {}))
 
 
 ## Cuenta todas las zonas del ID propio, pero solo main/side de sus variantes

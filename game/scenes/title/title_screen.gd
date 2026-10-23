@@ -622,10 +622,12 @@ func _run_selected() -> void:
 			Audio.stop_music()
 			Game.open_tutorial(game)
 		"single":
+			if not _duel_deck_ready(): return
 			_acknowledge_joey_level()
 			# Los tres menus mantienen su musica durante la entrada.
 			Game.start_normal_duel(game)
 		"tournament":
+			if not _duel_deck_ready(): return
 			_acknowledge_joey_level()
 			# Y437f40, Ka469fc4->4386a0 y Jo48ae2d->44bee0: modo1.
 			Game.start_normal_duel(game, 1)
@@ -647,8 +649,35 @@ func _run_selected() -> void:
 			Audio.play_sfx("%s/voice/internal/unable.wav" % game)
 
 
-## 0x467000 caso 7: lista de carga de repeticiones (0x434f20 + 0x4587d0(3)); con Aceptar se
-## reproduce la elegida, con Cancelar se vuelve al menu de duelo.
+## Jo48a150 ->44aa00: el duelo sólo empieza si la validación del mazo retorna cero.
+func _duel_deck_ready() -> bool:
+	if game != "joey":
+		return true
+	# Jo48a150 ->44aa00: pruning returns 0xb, as do invalid deck sizes.
+	# Keep Title/editor accessible instead of starting a duel or granting cards.
+	var deck: Dictionary = SaveData.deck(game)
+	var resolved := preload("res://core/native_deck_startup.gd").resolve_joey(
+		deck, SaveData.data.get("collection", {}), SaveData.data.get("native_system", {}))
+	if resolved.removed.is_empty() and deck.main.size() >= 40 and deck.main.size() <= 80 \
+			and deck.side.size() <= 15 and deck.fusion.size() <= 15:
+		return true
+	if _modal != null:
+		return false
+	_phase = "menu"
+	_c = 0
+	_pending_action = ""
+	Audio.play_sfx("joey/voice/internal/unable.wav")
+	var dir := "joey/deck_c/"
+	var background := Assets.layout(dir + "deckerror.txt")
+	var ok := Assets.layout(dir + "dlg_ok_ok_derr.txt")
+	var dialog := PocDialog.new(Assets.texture(dir + background.resource(0)))
+	dialog.add_button("ok", Vector2(ok.position(0)), Assets.texture(dir + ok.resource(0)), Assets.texture(dir + ok.resource(1)))
+	_modal = dialog
+	dialog.closed.connect(func(_answer: String) -> void: _modal = null)
+	add_child(dialog)
+	return false
+
+
 ## Jo48a150 caso3: al activar duelo/match se reconoce db2=db3 y se guarda.
 func _acknowledge_joey_level() -> void:
 	if game != "joey": return
@@ -658,6 +687,7 @@ func _acknowledge_joey_level() -> void:
 		SaveData.save()
 
 
+## 0x467000 caso 7: lista de repeticiones (434f20 +4587d0(3)); Cancelar vuelve al menú.
 func _open_replay_list() -> void:
 	var d: PocDialog = load("res://scenes/deck_editor/deck_file_dialog.gd").for_replay(
 			game, 3, DuelResult.replay_files(game))

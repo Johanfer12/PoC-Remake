@@ -10,6 +10,7 @@ const Store = preload("res://core/save_store.gd")
 
 var data := {}
 var persistence_error := ""
+var _startup_checked: Dictionary = {}
 
 
 func _ready() -> void:
@@ -37,6 +38,7 @@ func path() -> String:
 
 
 func load_or_create() -> void:
+	_startup_checked.clear()
 	var loaded := Store.load_save(path())
 	persistence_error = loaded["error"]
 	if persistence_error != "":
@@ -142,6 +144,7 @@ func import_system_dat(system_dat: String) -> bool:
 		if data.has(key):
 			fresh[key] = data[key]
 	data = fresh
+	_startup_checked.clear()
 	return save()
 
 
@@ -176,24 +179,10 @@ func _startup_decks(block: PackedByteArray, head: PackedByteArray, paths: Dictio
 			if not loaded.is_empty():
 				decks[game] = loaded
 			continue
-		var game_index := GAMES.find(game)
 		var deck_head := Ydc.header(paths[game])
-		var ok := not loaded.is_empty() and deck_head.size() == 8 and head.size() == 8 \
+		var header_matches := deck_head.size() == 8 and head.size() == 8 \
 				and deck_head[0] == head[0] and deck_head.decode_u32(4) == head.decode_u32(4)
-		# Con tamanos fuera de rango 436900 desborda las listas, pero el resultado de
-		# 540450 ya no decide nada: se cae al mazo inicial y 540450 lo recalcula todo.
-		ok = ok and loaded["main"].size() >= 40 and loaded["main"].size() <= 80 \
-				and loaded["fusion"].size() <= 15 and loaded["side"].size() <= 15
-		if ok:
-			_write_startup_deck(duel, loaded)
-			ok = duel.f540450(game_index) == 0
-		if not ok:
-			if game == "yugi":
-				duel.f53f8b0()
-			else:
-				_kaiba_starter(duel, Assets.read_json("kaiba/file/starter_deck.json"))
-			duel.f540450(game_index)
-		decks[game] = loaded if ok else _read_startup_deck(duel)
+		decks[game] = _resolve_startup_deck(duel, game, loaded, header_matches)
 	if duel != null:
 		var updated := block.duplicate()
 		for index in range(1, SystemDat.CARD_SLOTS):
@@ -205,6 +194,103 @@ func _startup_decks(block: PackedByteArray, head: PackedByteArray, paths: Dictio
 			SystemDat.seal(updated)
 			block = updated
 	return {"block": block, "decks": decks}
+
+
+## El mismo arranque de 436e80/437430 para importaciones y partidas del port.
+func _resolve_startup_deck(duel: Duel, game: String, loaded: Dictionary, header_matches := true) -> Dictionary:
+	var game_index := GAMES.find(game)
+	var ok: bool = header_matches and not loaded.is_empty() and loaded.get("main", []).size() >= 40 \
+		and loaded.get("main", []).size() <= 80 and loaded.get("fusion", []).size() <= 15 \
+		and loaded.get("side", []).size() <= 15
+	if ok:
+		_write_startup_deck(duel, loaded)
+		ok = duel.f540450(game_index) == 0
+	if ok:
+		return loaded
+	if game == "yugi":
+		duel.f53f8b0()
+	else:
+		_kaiba_starter(duel, Assets.read_json("kaiba/file/starter_deck.json"))
+	duel.f540450(game_index)
+	return _read_startup_deck(duel)
+
+
+## Se conserva el mazo personalizado antes de que el arranque nativo lo sustituya.
+func _preserve_startup_deck(game: String, deck_data: Dictionary, reason := "native_startup_fallback") -> bool:
+	var payload := JSON.stringify({"game": game, "reason": reason, "deck": deck_data}, "\t")
+	var directory := Paths.save_dir.path_join("recovered-decks")
+	var destination := directory.path_join("%s-%s.json" % [game, payload.sha256_text()])
+	if FileAccess.file_exists(destination):
+		return FileAccess.get_file_as_string(destination) == payload
+	if DirAccess.make_dir_recursive_absolute(directory) != OK:
+		return false
+	var file := FileAccess.open(destination + ".tmp", FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(payload)
+	var result := file.get_error()
+	file.close()
+	if result != OK or FileAccess.get_file_as_string(destination + ".tmp") != payload:
+		return false
+	return DirAccess.rename_absolute(destination + ".tmp", destination) == OK
+
+
+## Validar una vez por juego y sesion; abrir otra pantalla no vuelve a regalar cartas.
+func _ensure_startup_deck(game: String) -> bool:
+	if _startup_checked.has(game) or game not in GAMES or persistence_error != "":
+		return false
+	var by_index := {}
+	for card: Dictionary in CardDB.cards:
+		by_index[int(card["index"])] = int(card["internal_id"])
+	# El mazo se valida aparte: sus contadores pueden ser precisamente los invalidos.
+	var source := data.duplicate()
+	source["decks"] = {}
+	var block := SystemDat.from_save(source, by_index, game)
+	if block.is_empty():
+		push_warning("No se pudo proyectar la coleccion para validar el mazo de " + game)
+		return false
+	if game == "joey":
+		# 44aa00: ante 0xb se conserva la poda; no se concede el mazo inicial.
+		var native: Dictionary = data.get("native_system", {}).duplicate()
+		native["block"] = Marshalls.raw_to_base64(block)
+		var previous: Dictionary = data.decks[game]
+		var result: Dictionary = preload("res://core/native_deck_startup.gd").resolve_joey(previous, data.collection, native)
+		if result.deck == previous:
+			_startup_checked[game] = true
+			return false
+		if not _preserve_startup_deck(game, previous, "native_startup_prune"):
+			persistence_error = "No se pudo preservar el mazo anterior de " + game
+			push_error(persistence_error)
+			return false
+		data["decks"][game] = result.deck
+		_startup_checked[game] = true
+		return true
+	var duel := Duel.create(Paths.data_dir)
+	if duel == null:
+		push_warning("Sin imagen nativa para validar el mazo de " + game)
+		return false
+	for i in block.size():
+		duel.m.set_u8(0xa10120 + i, block[i])
+	var previous: Dictionary = data.decks[game]
+	var resolved := _resolve_startup_deck(duel, game, previous)
+	for i in block.size():
+		block[i] = duel.m.u8(0xa10120 + i)
+	SystemDat.seal(block)
+	var projected := SystemDat.to_save(block, by_index)
+	if resolved == previous and projected.collection == data.collection and projected.seen == data.get("seen", {}):
+		_startup_checked[game] = true
+		return false
+	if resolved != previous and not _preserve_startup_deck(game, previous):
+		persistence_error = "No se pudo preservar el mazo anterior de " + game
+		push_error(persistence_error)
+		return false
+	data["collection"] = projected.collection
+	data["seen"] = projected.seen
+	data["decks"][game] = resolved
+	var native: Dictionary = data.get_or_add("native_system", {})
+	native.merge(projected.native_system, true)
+	_startup_checked[game] = true
+	return true
 
 
 ## 436900: lee las tres listas en 0xa112c0 (principal +0x00, side +0xa0, fusion +0xbe;
@@ -272,7 +358,7 @@ func _new_game(initial_game := "") -> Dictionary:
 	for game in GAMES:
 		fresh["stats"][game] = {"wins": 0, "losses": 0, "draws": 0}
 	# Solo el primer juego elegido aporta su mazo a la coleccion (53f8b0).
-	# Los Deck.ydc de las demas instalaciones existen, pero no regalan sus cartas.
+	# Los demas mazos se validan al entrar en su juego, como los Deck.ydc originales.
 	for game in GAMES:
 		var starter: Variant = Assets.read_json("%s/file/starter_deck.json" % game)
 		if starter == null:
@@ -294,7 +380,7 @@ func _new_game(initial_game := "") -> Dictionary:
 	return fresh
 
 
-func ensure_game(game: String) -> void:
+func ensure_game(game: String, validate_startup := true) -> void:
 	if game not in GAMES or not Paths.has_game(game):
 		return
 	var changed := false
@@ -306,6 +392,12 @@ func ensure_game(game: String) -> void:
 			return
 		decks[game] = starter
 		changed = true
+		if game == "joey":
+			# 44aa00 ->5bdc50: archivo ausente, distinto de un mazo existente podado.
+			var initial := _new_game("joey")
+			for key: String in initial.collection:
+				data.collection[key] = maxi(int(data.collection.get(key, 0)), int(initial.collection[key]))
+				data.get_or_add("seen", {})[key] = true
 	for key in GAMES:
 		stats.get_or_add(key, {"wins": 0, "losses": 0, "draws": 0})
 	if data.get("starter_pending", false):
@@ -332,6 +424,8 @@ func ensure_game(game: String) -> void:
 		own["card_set_full"] = previous
 		own["limited"] = false
 		changed = true
+	if validate_startup:
+		changed = _ensure_startup_deck(game) or changed
 	if changed:
 		save()
 
@@ -387,7 +481,8 @@ func set_native_option_byte(offset: int, value: int) -> void:
 func export_system_dat(destination: String, game := "", header_key := -1) -> bool:
 	if game not in GAMES:
 		game = "yugi"
-	ensure_game(game)
+	# Exportar es serializar, no arrancar el juego ni sustituir el mazo del usuario.
+	ensure_game(game, false)
 	var head := Marshalls.base64_to_raw(str(data.get("native_system", {}).get("header", "")))
 	if header_key >= 0:
 		head.resize(8)

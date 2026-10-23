@@ -6,9 +6,9 @@
 
 **English** | [Español](README.es.md)
 
-[![Download EXE for Windows](https://img.shields.io/badge/Download_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.12/PowerOfChaos.exe)
+[![Download EXE for Windows](https://img.shields.io/badge/Download_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.13/PowerOfChaos.exe)
 
-**Direct download · Windows · v0.1.0-alpha.12 preview · No ZIP required**
+**Direct download · Windows · v0.1.0-alpha.13 preview · No ZIP required**
 
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 
@@ -36,6 +36,7 @@
 - **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
 - **16:9 decorative side panels.** Widescreen decorations surround the original 4:3 duel area in the supported Yugi, Kaiba and Joey views, each with its own background.
 - **All three games in one place.** Yugi the Destiny, Kaiba the Revenge and Joey the Passion share one launcher. Import just one to start and add the others whenever you want.
+- **Shared collection, separate decks.** Keep your cards across games with the original compatibility: Yugi uses its own catalog, Kaiba also uses Yugi cards, and Joey uses all three. Each title keeps its active deck.
 - **Choose your pace and display.** Select 30 FPS, 60 FPS or your display refresh rate, choose stretched, original 4:3 or decorative backgrounds, and play at normal or 2× speed.
 - **Optional quick play in all three games.** Skip character scenes, voices and scene wipes while keeping music and sound effects. [See launcher settings](#launcher-settings).
 
@@ -110,7 +111,7 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 
 ## Get started on Windows
 
-1. [Download **`PowerOfChaos.exe`** directly](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.12/PowerOfChaos.exe). Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
+1. [Download **`PowerOfChaos.exe`** directly](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.13/PowerOfChaos.exe). Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
 2. Put the EXE in a folder where you want to keep the launcher and its saves, then open it.
 3. In **ADD YOUR RESOURCES**, move over the game you want to add and choose **ISO** or **Folder**.
 4. Select a compatible disc image or installed game folder, then click **Extract for PC** and wait for conversion to finish.

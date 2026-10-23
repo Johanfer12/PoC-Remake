@@ -3,8 +3,8 @@ extends Node
 ##
 ## Reparto por juego, como en el original (card_pack.bin es un campo de bits):
 ## - se GANAN solo las cartas del juego al que se esta jugando;
-## - se pueden USAR las de Yugi y Kaiba en ambos juegos (comparten arte y coleccion),
-##   y en Joey todas.
+## - se pueden USAR las del juego en curso y las de los anteriores:
+##   Yugi=1, Kaiba=3, Joey=7 (mascaras acumulativas del validador nativo).
 
 ## type_id de card_prop.bin (deducido de cartas conocidas, ver INVENTARIO.md 4)
 const TYPE_NAMES := {
@@ -20,7 +20,7 @@ const KIND_SUFFIX := {"effect": "/Efecto", "fusion": "/Fusión", "ritual": "/Rit
 enum Group { NORMAL, EFFECT, SPELL, TRAP, RITUAL, FUSION }
 
 const PACK_BITS := {"yugi": 1, "kaiba": 2, "joey": 4}
-const USABLE_BITS := {"yugi": 1 | 2, "kaiba": 1 | 2, "joey": 1 | 2 | 4}
+const USABLE_BITS := {"yugi": 1, "kaiba": 1 | 2, "joey": 1 | 2 | 4}
 
 var cards: Array[Dictionary] = []
 var _by_internal_id := {}
