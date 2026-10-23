@@ -6,6 +6,12 @@ from pathlib import Path
 import shutil
 from prepare_public import ROOT, OWN_ASSETS, LAUNCHER_ART, allowed
 
+ANDROID_LAUNCHER_ART = {
+    "game/assets/icons/launcher-adaptive-foreground.svg",
+    "game/assets/icons/launcher-adaptive-background.svg",
+    "game/assets/icons/launcher-adaptive-monochrome.svg",
+}
+
 
 def prepare_android(source: Path, output: Path) -> dict:
     source, output = source.resolve(), output.resolve()
@@ -17,7 +23,7 @@ def prepare_android(source: Path, output: Path) -> dict:
             continue
         relative = path.relative_to(source)
         name = relative.as_posix()
-        if (name.startswith("game/") and allowed(relative)) or name in {
+        if (name.startswith("game/") and allowed(relative)) or name in ANDROID_LAUNCHER_ART or name in {
                 "tools/android/build_apk.py", "tools/android/pack_data.gd",
                 "game/tests/android_bundle_test.gd"}:
             if path.is_symlink() or not path.resolve().is_relative_to(source):
