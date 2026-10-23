@@ -121,7 +121,7 @@ func goto(screen: Node) -> void:
 	# El launcher es propio del port; el primer arranque no tiene snapshot previo.
 	if current_game != "" and DisplayServer.get_name() != "headless" \
 			and is_instance_valid(_screen) and _screen.is_inside_tree() \
-			and _screen.get_script().resource_path.get_file() != "launcher.gd":
+			and _screen.get_script().resource_path.get_file() not in ["launcher.gd", "content_setup.gd"]:
 		var old_image := _screen.get_viewport().get_texture().get_image()
 		if old_image != null and not old_image.is_empty():
 			old_frame = ImageTexture.create_from_image(old_image)
@@ -131,7 +131,9 @@ func goto(screen: Node) -> void:
 	elif is_instance_valid(_screen):
 		_screen.queue_free()
 	_screen = screen
-	if _is_duel_viewer(screen) and screen.game in ["yugi", "kaiba", "joey"]:
+	get_tree().root.content_scale_aspect = LauncherSettings.gameplay_aspect()
+	Engine.time_scale = LauncherSettings.simulation_speed if current_game != "" else 1.0
+	if LauncherSettings.aspect == "overlay" and _is_duel_viewer(screen) and screen.game in ["yugi", "kaiba", "joey"]:
 		_screen_host = load("res://scenes/duel/duel_margins.gd").new(screen)
 		get_tree().root.add_child.call_deferred(_screen_host)
 	else:
@@ -149,7 +151,7 @@ func _scene_wipe_mode(previous: Node, following: Node) -> int:
 	var source := script.resource_path.get_file()
 	var target: Script = following.get_script()
 	var target_name := target.resource_path.get_file() if target != null else ""
-	if source in ["bust_up_scene.gd", "bust_up_rival.gd", "launcher.gd"]:
+	if source in ["bust_up_scene.gd", "bust_up_rival.gd", "launcher.gd", "content_setup.gd"]:
 		return 0x4b
 	if source in ["tutorial_menu.gd", "tutorial_menu_kaiba.gd"] and target_name == "title_screen.gd":
 		return 0x4b

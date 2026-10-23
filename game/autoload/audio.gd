@@ -3,6 +3,10 @@ extends Node
 
 var _music := AudioStreamPlayer.new()
 var _sfx: Array[AudioStreamPlayer] = []
+## Las voces KaNN comparten un interlocutor. Las llamadas directas del motor no
+## esperan al buffer, por lo que deben conservar el orden aunque avance el duelo.
+var _speech := AudioStreamPlayer.new()
+var _speech_queue: Array[Dictionary] = []
 var _cache := {}
 var _music_path := ""
 var _music_rel_path := ""
@@ -47,6 +51,9 @@ func _setup_players() -> void:
 		var p := AudioStreamPlayer.new()
 		add_child(p)
 		_sfx.append(p)
+	add_child(_speech)
+	_speech.finished.connect(_advance_speech)
+	_sfx.append(_speech)
 
 
 func play_music(rel_path: String, loop := true) -> void:
@@ -76,6 +83,7 @@ func stop_music() -> void:
 
 func stop_all() -> void:
 	stop_music()
+	_speech_queue.clear()
 	for p in _sfx:
 		_fades.erase(p)
 		p.stop()
@@ -88,7 +96,14 @@ func play_sfx(rel_path: String) -> void:
 	var path := Assets.resolve(rel_path)
 	if path == "":
 		return
+	if _is_kaiba_speech(rel_path):
+		var stream := _load(path)
+		if stream == null: return
+		_speech_queue.append({"path": path, "rel_path": rel_path, "stream": stream})
+		if not _speech.playing: _advance_speech()
+		return
 	for p in _sfx:
+		if p == _speech: continue
 		if not p.playing:
 			_fades.erase(p)
 			p.set_meta("native_audio_class", 2 if "/voice/stream/" in rel_path else 1)
@@ -98,10 +113,30 @@ func play_sfx(rel_path: String) -> void:
 			return
 
 
+func _is_kaiba_speech(rel_path: String) -> bool:
+	var rel := rel_path.replace("\\", "/").to_lower()
+	if not rel.begins_with("kaiba/voice/internal/"): return false
+	var file := rel.get_file().get_basename()
+	return file.length() == 4 and file.begins_with("ka") and file.substr(2).is_valid_int()
+
+
+func _advance_speech() -> void:
+	if _speech_queue.is_empty(): return
+	var next: Dictionary = _speech_queue.pop_front()
+	_fades.erase(_speech)
+	_speech.set_meta("native_audio_class", 1)
+	_speech.stream = next.stream
+	_speech.volume_db = _db(next.rel_path)
+	_speech.play()
+
+
 ## 583ed0/584290: terminado cuando el buffer ya no reproduce; sin sonido devuelve1.
 func sfx_finished(rel_path: String) -> bool:
 	if level == 0: return true
-	var stream: AudioStream = _cache.get(Assets.resolve(rel_path))
+	var path := Assets.resolve(rel_path)
+	for queued in _speech_queue:
+		if queued.path == path: return false
+	var stream: AudioStream = _cache.get(path)
 	if stream == null: return true
 	for player in _sfx:
 		if player.stream == stream and player.playing: return false
@@ -113,6 +148,7 @@ func set_option_volume(v: int) -> void:
 	level = LEVELS[clampi(v, 0, 15)]
 	_music.volume_db = _db(_music_rel_path)
 	if level == 0:
+		_speech_queue.clear()
 		for p in _sfx:
 			p.stop()
 			_fades.erase(p)

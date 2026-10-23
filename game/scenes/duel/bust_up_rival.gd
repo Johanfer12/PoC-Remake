@@ -3,6 +3,23 @@ extends "res://scenes/duel/bust_up_scene.gd"
 ## vtable5da800. Salidas: Kaiba40f280/40e280/40e340(vtable59dc0c),
 ## Joey415c90/416050/416260(vtable5da820).
 
+var _scene_textures: Array[Texture2D] = []
+
+
+func _ready() -> void:
+	super._ready()
+	if _done:
+		return
+	# Cargar y decodificar antes de animar. El fondo compuesto y los cuadros de boca
+	# aparecen despues: cargarlos desde _draw interrumpia el movimiento a 60 Hz.
+	for i in _layout.items.size():
+		_scene_textures.append(super._tex(i))
+
+
+func _tex(i: int) -> Texture2D:
+	return _scene_textures[i] if i < _scene_textures.size() else super._tex(i)
+
+
 func _start_voice_path() -> String:
 	return ("kaiba/voice/internal/ka%02d.wav" if game == "kaiba" else "joey/voice/internal/joey_%02d.wav") % (_random + 1)
 

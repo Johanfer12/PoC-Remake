@@ -57,7 +57,7 @@ var _detail_icons: Node2D
 var _preview_card_id := -1
 var _preview_hover_point := Vector2(-9999, -9999)
 var _preview_hover_ticks := 0
-var _native_hand_textures := {}
+var _oriented_hand_textures := {}
 var _hover_card: Dictionary = {}
 var _hit_cards: Array[Dictionary] = []
 var _hand_positions: Dictionary = {}
@@ -375,7 +375,7 @@ func _input(event: InputEvent) -> void:
 		_pointer_pos = event.position
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			_pointer_pressed = event.pressed
-			if event.pressed and _cursor_visual != null: _cursor_visual.click(_pointer_pos)
+			if event.pressed and _cursor_visual != null: _cursor_visual.click(_pointer_pos, true)
 	if event is InputEventMouseMotion and _duel != null:
 		var hover := _hit_card(event.position)
 		if hover != _hover_card:
@@ -774,33 +774,31 @@ func _register_card(pos: Vector2, size: Vector2, p: int, loc: int, i: int, id: i
 func _card(card_id: int, center: Vector2, size: Vector2, face_up: bool, sideways: bool,
 		flipped: bool) -> Sprite2D:
 	if _visual != null and _visual.hides(center): return null
-	var mini := size == CARD_SIZE
-	var tex: Texture2D = CardDB.card_texture(card_id, mini) if face_up and card_id >= 0 \
-			else Assets.texture("common/mini/card_ura.png" if mini else "common/card/card_ura.png")
+	# Conservar el arte completo hasta el raster final: las minis y la cache de
+	# mano reducida descartan detalle antes de ampliar la ventana del duelo.
+	var tex: Texture2D = CardDB.card_texture(card_id) if face_up and card_id >= 0 \
+			else Assets.texture("common/card/card_ura.png")
 	if tex == null:
 		return null
 	var s := Sprite2D.new()
 	s.texture = tex
-	#41f130 cachea la carta grande a escala0x8000 con muestreo discreto.
-	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	s.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	s.scale = size / tex.get_size()
 	s.position = center
 	s.rotation = (PI / 2 if sideways else 0.0) + (PI if flipped else 0.0)
 	if size == HAND_SIZE and not sideways:
-		#41f130 crea primero la orientacion0/180 y despues la cache a0x8000.
-		var key := "%s:%s" % [tex.get_instance_id(),flipped]
-		if not _native_hand_textures.has(key):
-			var image: Image = tex.get_image().duplicate()
-			if flipped:
+		# Mantener la orientacion y el anclaje nativos, sin reducir la imagen.
+		if flipped:
+			var key := tex.get_instance_id()
+			if not _oriented_hand_textures.has(key):
+				var image: Image = tex.get_image().duplicate()
 				image.flip_x()
 				image.flip_y()
-			image.resize(100,145,Image.INTERPOLATE_NEAREST)
-			_native_hand_textures[key] = ImageTexture.create_from_image(image)
-		s.texture = _native_hand_textures[key]
-		s.scale = Vector2.ONE
+				_oriented_hand_textures[key] = ImageTexture.create_from_image(image)
+			s.texture = _oriented_hand_textures[key]
 		s.rotation = 0
 		s.centered = false
-		s.offset = Vector2(-50,-72)
+		s.offset = Vector2(-50,-72) / s.scale
 	_board.add_child(s)
 	return s
 

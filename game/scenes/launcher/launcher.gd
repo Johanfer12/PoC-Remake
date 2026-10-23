@@ -56,7 +56,6 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	_music.stop()
 	_music.stream = null
-	get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 
 
 func _ready() -> void:

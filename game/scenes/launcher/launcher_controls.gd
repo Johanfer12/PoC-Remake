@@ -1,8 +1,8 @@
 extends Node2D
 ## Botones propios del selector: ajustes y sonido abajo a la izquierda, salir a la derecha.
 ## Medallones dorados. La
-## configuracion abre un panel con el volumen y el silencio de la musica del selector.
-## La eleccion se guarda en la partida (SaveData.data["launcher"]) y se recupera al abrir.
+## configuracion: musica, aspecto, FPS y velocidad de simulacion.
+## Audio en SaveData; aspecto, FPS y simulacion en LauncherSettings (content.cfg).
 
 signal changed
 signal exit_requested
@@ -18,7 +18,7 @@ const GOLD_DARK := Color(0.42, 0.27, 0.06)
 const BRONZE := Color(0.62, 0.43, 0.12)
 const STONE := Color(0.07, 0.05, 0.04)
 const OUTLINE := Color(0.35, 0.08, 0.02)
-const PANEL_SIZE := Vector2(430, 236)
+const PANEL_SIZE := Vector2(520, 346)
 const SLIDER_W := 200.0
 const KEY_STEP := 0.05
 
@@ -40,6 +40,7 @@ var panel_open := false
 var _icons := {}             # nombre -> {tex, offset} (offset = centrado optico medido)
 var _hover := ""             # "sound", "settings", "close", "slider", "mute"
 var _dragging := false
+var _focused_row := 0
 var _time := 0.0
 var _font := ThemeDB.fallback_font
 
@@ -99,17 +100,16 @@ func _close_center() -> Vector2:
 
 func _slider_rect() -> Rect2:
 	var r := _panel_rect()
-	return Rect2(r.position.x + 140, r.position.y + 92, SLIDER_W, 8)
+	return Rect2(r.position.x + 215, r.position.y + 92, SLIDER_W, 8)
 
 
 func _mute_rect() -> Rect2:
 	var r := _panel_rect()
-	return Rect2(r.position.x + 140, r.position.y + 136, 22, 22)
+	return Rect2(r.position.x + 215, r.position.y + 136, 22, 22)
 
 
-func _language_rect() -> Rect2:
-	var r := _panel_rect()
-	return Rect2(r.position + Vector2(140, 182), Vector2(220, 30))
+func _option_rect(row: int) -> Rect2:
+	return Rect2(_panel_rect().position + Vector2(215, 178 + row * 48), Vector2(270, 32))
 
 
 func _hit(pos: Vector2) -> String:
@@ -120,8 +120,9 @@ func _hit(pos: Vector2) -> String:
 			return "slider"
 		if _mute_rect().grow(4).has_point(pos):
 			return "mute"
-		if _language_rect().has_point(pos):
-			return "language"
+		for row in 3:
+			if _option_rect(row).has_point(pos):
+				return ["aspect", "fps", "speed"][row]
 		return "panel" if _panel_rect().has_point(pos) else "outside"
 	if pos.distance_to(_sound_center()) <= RADIUS:
 		return "sound"
@@ -169,12 +170,15 @@ func _input(event: InputEvent) -> void:
 			"close", "outside":
 				_open_panel(false)
 			"slider":
+				_focused_row = 0
 				_dragging = true
 				_set_volume_from(local_pos.x)
 			"mute":
+				_focused_row = 1
 				_toggle_mute()
-			"language":
-				_cycle_language()
+			"aspect", "fps", "speed":
+				_focused_row = ["aspect", "fps", "speed"].find(_hit(local_pos)) + 2
+				_cycle_option(_focused_row - 2, 1)
 			"panel":
 				pass
 			_:
@@ -183,25 +187,39 @@ func _input(event: InputEvent) -> void:
 		return
 	if not panel_open:
 		return
-	# Con el panel abierto se consume todo el teclado.
-	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_accept"):
+	# Arriba/abajo eligen fila; izquierda/derecha cambian su valor.
+	if event.is_action_pressed("ui_cancel"):
 		_open_panel(false)
-	elif event.is_action_pressed("ui_left"):
-		_set_volume(volume - KEY_STEP)
-		_save()
-	elif event.is_action_pressed("ui_right"):
-		_set_volume(volume + KEY_STEP)
-		_save()
-	elif event is InputEventKey and event.pressed and event.keycode == KEY_L:
-		_cycle_language()
+	elif event.is_action_pressed("ui_up"):
+		_focused_row = wrapi(_focused_row - 1, 0, 5)
+	elif event.is_action_pressed("ui_down"):
+		_focused_row = wrapi(_focused_row + 1, 0, 5)
+	elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
+		var step := -1 if event.is_action_pressed("ui_left") else 1
+		if _focused_row == 0:
+			_set_volume(volume + KEY_STEP * step)
+			_save()
+		elif _focused_row == 1:
+			_toggle_mute()
+		else:
+			_cycle_option(_focused_row - 2, step)
+	elif event.is_action_pressed("ui_accept"):
+		if _focused_row == 1: _toggle_mute()
+		elif _focused_row >= 2: _cycle_option(_focused_row - 2, 1)
 	get_viewport().set_input_as_handled()
 
 
-func _cycle_language() -> void:
-	var languages := Assets.LANGUAGES.keys()
-	var next := (languages.find(Assets.lang) + 1) % languages.size()
-	Assets.remember_language(languages[next])
-	changed.emit()
+func _cycle_option(row: int, step: int) -> void:
+	match row:
+		0:
+			var choices := LauncherSettings.ASPECTS
+			LauncherSettings.aspect = choices[wrapi(choices.find(LauncherSettings.aspect) + step, 0, choices.size())]
+		1:
+			var choices := LauncherSettings.FRAME_RATES
+			LauncherSettings.frame_rate = choices[wrapi(choices.find(LauncherSettings.frame_rate) + step, 0, choices.size())]
+		2:
+			LauncherSettings.simulation_speed = 2.0 if LauncherSettings.simulation_speed == 1.0 else 1.0
+	LauncherSettings.save_preferences()
 	queue_redraw()
 
 
@@ -306,11 +324,20 @@ func _draw_panel() -> void:
 	_draw_slider()
 	_label(Assets.port_label(3), Vector2(r.position.x + 34, _mute_rect().get_center().y + 6))
 	_draw_checkbox()
-	_label(Assets.port_label(4), Vector2(r.position.x + 34, _language_rect().get_center().y + 6))
-	var language_rect := _language_rect()
-	draw_rect(language_rect, GOLD_DARK)
-	draw_rect(language_rect.grow(-1), STONE)
-	_label(str(Assets.LANGUAGES[Assets.lang]) + "  >", language_rect.position + Vector2(8, 21))
+	var spanish := Assets.lang == "s"
+	var names := ["Aspecto", "FPS", "Simulación"] if spanish else ["Aspect", "FPS", "Simulation"]
+	var aspects := ["Estirado", "Original sin fondo", "Overlay"] if spanish else ["Stretched", "Original, no background", "Overlay"]
+	var values := [str(aspects[LauncherSettings.ASPECTS.find(LauncherSettings.aspect)]),
+		("Display (%d Hz)" % LauncherSettings.display_fps()) if LauncherSettings.frame_rate == 0 else str(LauncherSettings.frame_rate),
+		"Normal" if LauncherSettings.simulation_speed == 1.0 else "2×"]
+	for row in 3:
+		var rect := _option_rect(row)
+		_label(names[row], Vector2(r.position.x + 34, rect.get_center().y + 6))
+		draw_rect(rect, GOLD if _focused_row == row + 2 or _hover == ["aspect", "fps", "speed"][row] else GOLD_DARK)
+		draw_rect(rect.grow(-1), STONE)
+		_label(values[row] + "  >", rect.position + Vector2(8, 22))
+	var focus_rect := _slider_rect().grow(12) if _focused_row == 0 else _mute_rect().grow(4)
+	if _focused_row < 2: draw_rect(focus_rect, Color(GOLD, 0.6), false, 1.0)
 	_medallion(_close_center(), 14.0, "close", _hover == "close")
 
 

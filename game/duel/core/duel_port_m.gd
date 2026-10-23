@@ -1244,7 +1244,7 @@ func f574d20(p: int) -> int:
 	return 0
 
 func _m_battle_destroy(owner: int, z: int, id: int, index: int, opponent: int, other_z: int, other_id: int, snapshot: int, dest: int, owner_bits: int) -> void:
-	if other_id == 0x2f9: m.set_u8(DuelMem.pl(opponent) + 0xa8, m.u8(DuelMem.pl(opponent) + 0xa8) | 8)
+	if other_id == 0x2f9: m.set_u8(DuelMem.pl(opponent) + 8, m.u8(DuelMem.pl(opponent) + 8) | 8)
 	if (id == 0x2da or id == 0x536) and f5451f0(owner, z) != -1:
 		f54e9e0(owner, z)
 		issue((owner << 15) | 0xa6, z, m.u16(snapshot), m.u16(snapshot + 2))
@@ -1281,8 +1281,9 @@ func f574420(p: int) -> int:
 	var target := (flags >> 11) & 7
 	var own_damage := m.u16(0xa114ce + p * 12)
 	var other_damage := m.u16(0xa114da - p * 12)
-	var own_prevent := m.u16(DuelMem.pl(p) + 0xa8) & 3
-	var other_prevent := m.u16(DuelMem.pl(defender) + 0xa8) & 3
+	# ASM 574420: &a1194a + jugador*d54 + 2 = base del jugador +8.
+	var own_prevent := m.u16(DuelMem.pl(p) + 8) & 3
+	var other_prevent := m.u16(DuelMem.pl(defender) + 8) & 3
 	var state := m.u8(0xa133f4)
 	match state:
 		0:
@@ -1338,7 +1339,7 @@ func f574420(p: int) -> int:
 			m.set_u8(0xa133f4, 2)
 			return 0
 		_:
-			for owner in range(2): m.set_u16(DuelMem.pl(owner) + 0xa8, m.u16(DuelMem.pl(owner) + 0xa8) & ~1)
+			for owner in range(2): m.set_u16(DuelMem.pl(owner) + 8, m.u16(DuelMem.pl(owner) + 8) & ~1)
 			if f401a70(m.u16(0xa114d2 - p * 12)) == 0x4b1 and (m.u8(0xa114d0 - p * 12) & 8) == 0 and (m.u8(DuelMem.zone(defender, target) + 6) & 1) != 0:
 				f54eed0(defender, m.u16(0xa114d2 - p * 12), target)
 				f54e660(defender, target, 0, 0)

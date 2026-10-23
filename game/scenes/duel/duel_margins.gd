@@ -7,17 +7,17 @@ const BACKGROUNDS := {
 }
 var _duel: Node
 var _background := TextureRect.new()
+var _shade := ColorRect.new()
+var _shade_material := ShaderMaterial.new()
 var _container := SubViewportContainer.new()
 var _viewport := SubViewport.new()
 var _window: Window
-var _previous_aspect: int
 
 func _init(duel: Node) -> void:
 	_duel = duel
 
 func _ready() -> void:
 	_window = get_tree().root
-	_previous_aspect = _window.content_scale_aspect
 	_window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	var path: String = BACKGROUNDS.get(_duel.game, "")
 	if path != "" and ResourceLoader.exists(path):
@@ -26,6 +26,10 @@ func _ready() -> void:
 	_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_background)
+	_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_shade.visible = false
+	_shade_material.shader = preload("res://scenes/duel/duel_start_shade.gd").SHADER
+	add_child(_shade)
 	_container.mouse_filter = Control.MOUSE_FILTER_PASS
 	_container.stretch = false
 	add_child(_container)
@@ -35,15 +39,29 @@ func _ready() -> void:
 	_window.size_changed.connect(_layout)
 	_layout()
 	_viewport.add_child(_duel)
+	_process(0.0)
+
+func _process(_delta: float) -> void:
+	# El visor puede crear su presentacion despues de cargar una repeticion.
+	if _duel._visual != null and not _duel._visual.background_shade_changed.is_connected(_sync_shade):
+		_duel._visual.background_shade_changed.connect(_sync_shade)
+		_duel._visual._render()
+
+func _sync_shade(alpha: float, band_progress: int) -> void:
+	_shade.visible = alpha > 0.0
+	_shade.color = Color(0, 0, 0, alpha)
+	_shade.material = _shade_material if band_progress >= 0 else null
+	_shade_material.set_shader_parameter("progress", band_progress)
 
 func _layout() -> void:
 	var area := _window.get_visible_rect()
 	_background.position = area.position
 	_background.size = area.size
+	_shade.position = area.position
+	_shade.size = area.size
 	_container.position = area.position + (area.size - Vector2(800, 600)) * 0.5
 	_container.size = Vector2(800, 600)
 
 func _exit_tree() -> void:
 	if is_instance_valid(_window):
 		if _window.size_changed.is_connected(_layout): _window.size_changed.disconnect(_layout)
-		_window.content_scale_aspect = _previous_aspect

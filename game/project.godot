@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Power of Chaos Remake"
-config/version="0.1.0-alpha.8"
+config/version="0.1.0-alpha.9"
 config/icon="res://assets/icons/launcher.svg"
 config/windows_native_icon="res://assets/icons/launcher.ico"
 config/description="Reimplementación en Godot de Power of Chaos (Yugi, Kaiba y Joey). Requiere los recursos de las copias del usuario."
@@ -30,6 +30,7 @@ Assets="*res://autoload/assets.gd"
 Audio="*res://autoload/audio.gd"
 CardDB="*res://autoload/card_db.gd"
 SaveData="*res://autoload/save_data.gd"
+LauncherSettings="*res://autoload/launcher_settings.gd"
 Game="*res://autoload/game.gd"
 PlatformInput="*res://autoload/platform_input.gd"
 Debug="*res://autoload/debug.gd"
@@ -44,6 +45,7 @@ file_logging/enable_file_logging.pc=false
 
 window/size/viewport_width=800
 window/size/viewport_height=600
+window/size/mode=2
 window/size/window_width_override=1200
 window/size/window_height_override=900
 window/stretch/mode="canvas_items"

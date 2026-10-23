@@ -286,6 +286,8 @@ func f539ac0(p: int, zero_attack: int) -> int:
 		m.set_u16(def + 10, m.u16(atk + 4))
 		m.set_u16(def + 8, 0)
 		_f_battle_prevent_damage(def, other)
+		_f_battle_prevent_destruction(def, other)
+		_f_battle_prevent_destruction(atk, p)
 	else:
 		var id := f401a70(m.u16(atk + 2))
 		if id == 0x1dd and f545e70(other, target) == 6:
@@ -332,15 +334,20 @@ func f539ac0(p: int, zero_attack: int) -> int:
 			m.set_u8(atk, m.u8(atk) | 0x40)
 		if defending_id == 0x4e3 and m.u16(atk + 4) > 0x76b:
 			m.set_u16(def, m.u16(def) & 0xfff7)
+		# ASM 53a04f/53a072: Waboku limpia destrucción y daño ANTES
+		# de copiar el bit 8 al indicador 0x20 en 53a0e5..53a113.
+		_f_battle_prevent_destruction(def, other)
+		_f_battle_prevent_destruction(atk, p)
 		_f_battle_prevent_damage(def, other)
 		_f_battle_prevent_damage(atk, p)
 		for out in [0xa114c4, 0xa114d0]:
 			m.set_u8(out, m.u8(out) ^ (((m.u8(out) * 4) ^ m.u8(out)) & 0x20))
-	for pair in [[def, other], [atk, p]]:
-		if (m.u8(DuelMem.pl(pair[1] & 1) + 8) & 2) != 0:
-			m.set_u16(pair[0], m.u16(pair[0]) & 0xfff7)
-			m.set_u16(pair[0] + 10, 0)
 	return 0
+
+func _f_battle_prevent_destruction(out: int, p: int) -> void:
+	if (m.u8(DuelMem.pl(p & 1) + 8) & 2) != 0:
+		m.set_u16(out, m.u16(out) & 0xfff7)
+		m.set_u16(out + 10, 0)
 
 func _f_battle_prevent_damage(out: int, p: int) -> void:
 	if m.u16(out + 10) != 0 and f542e60(p, 0x58f, -1) > 0 and f543fc0() == 0x14d:

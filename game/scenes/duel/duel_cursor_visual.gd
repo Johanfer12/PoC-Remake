@@ -94,14 +94,23 @@ func move_to(pos: Vector2) -> void:
 	visible = true
 	_refresh()
 
-func click(pos: Vector2 = pointer_position) -> void:
+func click(pos: Vector2 = pointer_position, from_input := false) -> void:
 	var sprite := Sprite2D.new()
 	sprite.centered = false
+	# 460120 dibuja las ondas existentes antes del puntero.
+	sprite.show_behind_parent = true
 	sprite.texture = Assets.texture("common/cursor/cursor_pow.yga")
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var copy := BackBufferCopy.new()
+	copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	copy.show_behind_parent = true
+	sprite.add_child(copy)
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://scenes/duel/cursor_wave.gdshader")
+	sprite.material = material
 	sprite.position = pos
 	add_child(sprite)
-	_waves.append({"sprite": sprite, "counter": 0, "origin": pos})
+	_waves.append({"sprite": sprite, "counter": 0, "origin": pos, "skip_first_tick": from_input})
 	_refresh_wave(_waves.back())
 
 func advance(delta: float) -> void:
@@ -115,7 +124,12 @@ func advance(delta: float) -> void:
 		_move_tick = mini(6, _move_tick + ticks)
 		pointer_position = move_position(_from, _to, _move_tick)
 	for i in range(_waves.size() - 1, -1, -1):
-		_waves[i]["counter"] += ticks * 16
+		# 460120 registra el clic de entrada después de actualizar/dibujar existentes.
+		var wave_ticks := ticks
+		if ticks > 0 and _waves[i]["skip_first_tick"]:
+			wave_ticks -= 1
+			_waves[i]["skip_first_tick"] = false
+		_waves[i]["counter"] += wave_ticks * 16
 		if _waves[i]["counter"] >= 256:
 			_waves[i]["sprite"].free()
 			_waves.remove_at(i)

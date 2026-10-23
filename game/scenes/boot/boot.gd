@@ -3,7 +3,7 @@ extends Node2D
 
 
 func _ready() -> void:
-	_fit_window()
+	_apply_window_override()
 	if not Paths.has_data() or Paths.storage_error:
 		Game.goto(load("res://scenes/launcher/content_setup.gd").new())
 		queue_free()
@@ -31,9 +31,9 @@ func _ready() -> void:
 	queue_free()
 
 
-## La ventana ocupa el monitor en el que se abre (maximizada): el selector aprovecha todo el
-## ancho y los juegos se ven en 4:3 centrados. --window=ANCHOxALTO fija un tamano (pruebas).
-func _fit_window() -> void:
+## El modo maximizado se configura al crear la ventana en project.godot.
+## Solo --window=ANCHOxALTO fuerza un tamano distinto para herramientas/pruebas.
+func _apply_window_override() -> void:
 	if DisplayServer.get_name() == "headless" or OS.has_feature("mobile"):
 		return
 	var forced := Paths.cmdline_value("window").split("x")
@@ -45,4 +45,3 @@ func _fit_window() -> void:
 		DisplayServer.window_set_position(DisplayServer.screen_get_position(screen)
 				+ (DisplayServer.screen_get_size(screen) - size) / 2)
 		return
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)

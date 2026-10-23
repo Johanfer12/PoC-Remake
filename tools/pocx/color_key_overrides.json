@@ -1,6 +1,7 @@
 {
  "_comentario": "Excepciones a la deteccion automatica del color clave. Clave: ruta del PNG dentro de data/. Valor: [r, g, b] para forzar ese color como transparente, o null para dejarla opaca.",
  "yugi/deck_c/kabegami/back_1_s.png": null,
+ "kaiba/janken/bg_top_r.png": null,
  "yugi/duel/dialog/tate.png": null,
  "yugi/duel/dialog/sentaku_1.png": [
   182,

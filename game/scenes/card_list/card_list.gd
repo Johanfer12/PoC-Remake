@@ -800,7 +800,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			_left_down = event.pressed
 			if event.pressed:
-				_cursor.click(_mouse)
+				_cursor.click(_mouse, true)
 			else:
 				_released = true   # vtable +0x38 de DAT_005af864: el boton se suelta
 		_cursor.update(_mouse, false, -1, _left_down)

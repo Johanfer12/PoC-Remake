@@ -269,12 +269,13 @@ func f539a60() -> int:
 ## Estados 0 y 1 del turno en modo repeticion (FUN_0053d970 y FUN_0053b790): fija el jugador
 ## del turno y pide el primer comando de la repeticion.
 func begin_replay_flow() -> void:
-	m.set_u8(0xa133ec, m.u8(0xa133ec) & 0xef)
-	m.set_u16(0xa133f2, m.u16(0xa133f2) ^ ((m.u16(0xa133f2) ^ m.u16(0xa114b0)) & 1))
-	fetch_incoming()
-	m.set_u32(0xa114b4, m.u32(0xa114b4) & 0xffffbfff)
-	# los dos estados devuelven 1: el bucle pasa al estado 2
-	m.set_u8(0xa16180, 2)
+	if f53d970() == 0:
+		return
+	m.set_u8(0xa16180, 1)
+	# 53b790 / Kaiba53de80 devuelve 0 y fija estado8 si empieza la CPU.
+	# Reutilizar los manejadores conserva esa rama y el consumo de la cola.
+	if f53b790() != 0:
+		m.set_u8(0xa16180, 2)
 
 
 ## Ejecuta fotogramas (la parte de reglas de FUN_0053dbf0) hasta que no queda nada en la cola

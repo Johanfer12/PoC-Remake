@@ -1,4 +1,5 @@
 extends Node2D
+signal background_shade_changed(alpha: float, band_progress: int)
 const FieldEffects = preload("res://scenes/duel/duel_field_visual.gd")
 const BasicEffects = preload("res://scenes/duel/duel_basic_effects.gd")
 const SpecialEffects = preload("res://scenes/duel/duel_special_effects.gd")
@@ -1351,8 +1352,9 @@ func _asset(name: String, center: Vector2, scale_factor: float = 1.0, alpha: flo
 
 func _card(id: int, pos: Vector2, face: bool, size: Vector2 = SIZE, angle: float = 0.0) -> Sprite2D:
 	var sprite := Sprite2D.new()
-	var mini := size == SIZE
-	sprite.texture = CardDB.card_texture(id, mini) if face and id >= 0 else Assets.texture("common/mini/card_ura.png" if mini else "common/card/card_ura.png")
+	# Muestrear el arte completo una sola vez al tamaño final, también durante el vuelo.
+	sprite.texture = CardDB.card_texture(id) if face and id >= 0 else Assets.texture("common/card/card_ura.png")
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	if sprite.texture == null:
 		sprite.free()
 		return null
@@ -1452,6 +1454,10 @@ func _render() -> void:
 	_clear()
 	var start_shade_draw := _start_banner_shade or _start_banner_last_draw
 	var shade_progress := _shade_draw_c if start_shade_draw else _shade_c
+	# La ilustracion exterior vive en otro viewport; comparte el estado del dibujo.
+	var margin_alpha := 0.5 * shade_progress / 256.0
+	if active.get("mode", "") == "fusion": margin_alpha = 1.0 - (1.0 - margin_alpha) * 0.5
+	background_shade_changed.emit(margin_alpha, shade_progress if start_shade_draw else -1)
 	if shade_progress > 0:
 		var shade := ColorRect.new()
 		shade.size = Vector2(800, 600)

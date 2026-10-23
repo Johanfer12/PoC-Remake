@@ -1884,7 +1884,7 @@ func _input(event: InputEvent) -> void:
 	# Onda del clic del puntero global (0x460120, +0x119 en 0x40c8c0), tambien con un cuadro
 	# abierto.
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		_cursor.click(event.position)
+		_cursor.click(event.position, true)
 
 
 func _unhandled_input(event: InputEvent) -> void:

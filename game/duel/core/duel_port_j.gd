@@ -1273,7 +1273,8 @@ func f55cb70(e: int) -> int:
 			var z: int = (descriptor >> 4) & 0x3f
 			f54cc10(owner, m.u8(0xa133f2) & 1, 1, 0, 0)
 			if (descriptor & 0xfc00) == 0x4800 and (m.u32(DuelMem.zone(owner, z)) & 0xfff) == 0:
-				m.set_u8(0xa114c4 + owner * 6, m.u8(0xa114c4 + owner * 6) & 0xf7)
+				# ASM55cc11/55cc1a: (owner * 3) * 4 = 12 bytes por registro de combate.
+				m.set_u8(0xa114c4 + owner * 12, m.u8(0xa114c4 + owner * 12) & 0xf7)
 				var zone: int = DuelMem.zone(owner, z)
 				m.set_u8(zone + 0x90, m.u8(zone + 0x90) | 4)
 				issue(descriptor << 15 | 0x79, z, 1, 0)

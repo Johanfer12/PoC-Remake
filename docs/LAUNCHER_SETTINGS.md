@@ -1,0 +1,61 @@
+# Ajustes del launcher
+
+El engranaje ofrece volumen/silencio y tres selectores. Se conserva el idioma de la
+esquina superior; el selector redundante del panel se ha retirado.
+
+- **Aspecto:** Estirado ocupa la ventana completa; Original sin fondo conserva 4:3
+  con bandas negras; Overlay conserva 4:3 y las ilustraciones exteriores actuales
+  de cada duelo. Los menús conservan su composición original en el modo Overlay.
+- **FPS:** 30, 60 o Display. Display consulta el monitor actual, usa sincronización
+  vertical y actualiza el límite al cambiar de monitor; si no informa frecuencia,
+  utiliza 60. Los límites 30/60 desactivan VSync para respetar la selección.
+- **Simulación:** Normal o 2×. Se aplica al entrar al juego y escala el tiempo de
+  escenas, animaciones y lógica. No cambia los 30 ticks por segundo simulado del
+  motor nativo. El launcher permanece a velocidad normal.
+
+Las tres preferencias se guardan en la sección `launcher` de `PoC Data/content.cfg`,
+conservando los otros ajustes, incluso antes de importar recursos. Valores iniciales:
+Overlay, Display y Normal. Volumen y silencio mantienen su guardado existente.
+
+Clic sobre un selector avanza su valor. Arriba/abajo eligen fila, izquierda/derecha
+cambian el valor, Enter activa la fila y Escape cierra el panel.
+
+La ventana PC se crea maximizada desde `project.godot`, antes del arranque de
+escenas. Ya no aparece primero a 1200×900 para maximizarse después. El aspecto
+guardado se aplica a las escenas; `--window=ANCHOxALTO` sigue permitiendo forzar
+un tamaño para las herramientas.
+
+La navegación aplica el aspecto de destino de forma centralizada; retirar la escena
+anterior no puede restaurar otro aspecto después de crear la nueva. La biblioteca
+se reconoce como launcher al salir bajo negro, evitando capturar su formato expandido
+como si fuera una pantalla original.
+
+## Validación
+
+23 de octubre de 2026, Godot 4.7.2, Windows, ANGLE/D3D11 (RTX 4060):
+
+- `launcher_settings_test.gd`: headless y renderizado; ciclos de selectores, ratón,
+  teclado, persistencia, conservación de otras secciones, los tres juegos en cada
+  aspecto, coordenadas nativas del puntero, regreso al launcher, FPS/VSync y reloj
+  nativo a 30/60 FPS con velocidades 1×/2×.
+- `duel_margins_test.gd`: headless y renderizado; fondos, sombreado, entrada,
+  redimensionado 4:3/16:9/21:9 y regreso al menú en los tres juegos.
+- `startup_window_test.gd`: renderizado en los tres aspectos guardados; modo
+  maximizado antes de boot, tamaño estable después y override explícito 1280×720.
+  Evidencia en `artifacts/startup-window/`.
+- `launcher_exit_test.gd`: renderizado; fundido negro antes del cambio de aspecto
+  al abrir los tres juegos.
+
+Las ejecuciones finales terminan con código 0. Evidencia local en
+`artifacts/launcher-settings/`: registros y capturas `settings*.png`.
+
+Ejemplo desde PowerShell en la raíz PC (usar siempre almacenamiento de prueba):
+
+```powershell
+. '..\ENTORNO.ps1'
+& $env:POC_GODOT_EXE --headless --path game --script res://tests/launcher_settings_test.gd -- '--storage=E:/PoW Remake/PortTesting/artifacts/launcher-settings/runtime'
+```
+
+Para sondas con ventanas de tamaño fijo, añadir `--windowed` antes de `--script`.
+
+Los FPS son el límite solicitado; no implican una medición de rendimiento garantizado.

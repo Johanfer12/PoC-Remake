@@ -508,7 +508,7 @@ func _input(event: InputEvent) -> void:
 		var left := PlatformInput.mouse_pressed(MOUSE_BUTTON_LEFT)
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			left = event.pressed
-			if event.pressed: _cursor.click(_mouse)
+			if event.pressed: _cursor.click(_mouse, true)
 		_cursor.update(_mouse, false, -1, left)
 
 

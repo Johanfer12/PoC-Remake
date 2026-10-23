@@ -104,7 +104,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			_cursor.update(_mouse, false, -1, event.pressed)
 			if event.pressed:
-				_cursor.click(_mouse)
+				_cursor.click(_mouse, true)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_clicked = true
 	elif event is InputEventKey and event.pressed and not event.echo:
@@ -577,6 +577,7 @@ func _pair_commands() -> void:
 
 
 func _draw() -> void:
+	NativeJankenRaster.begin(self)
 	draw_rect(Rect2(0, 0, 800, 600), Color.BLACK)
 	var t := clampf(_clock, 0.0, 1.0) if NativeClock.interpolate else 1.0
 	for j in _cmds.size():
@@ -596,33 +597,13 @@ func _draw() -> void:
 				var source: Rect2 = cmd[3]
 				draw_texture_rect_region(_tex[cmd[1]], Rect2(cmd[2], source.size), source)
 			"scaled":
-				draw_texture_rect(_tex[cmd[1]], NativeBlend.mix(Rect2(before[2]), Rect2(cmd[2]), t), false)
+				NativeJankenRaster.draw_scaled(self, _tex[cmd[1]], NativeBlend.mix(Rect2(before[2]), Rect2(cmd[2]), t))
+
+
+	NativeJankenRaster.finish(self)
 
 
 ## 0x415ec0 / 0x42d070: girada `angle` (512 por vuelta) sobre su centro; con `clip`, solo lo
 ## que cae dentro del rectangulo.
 func _draw_rotated(tex: Texture2D, center: Vector2, angle: float, clip: Rect2i) -> void:
-	if tex == null:
-		return
-	var rot := fposmod(angle, 512.0) * TAU / 512.0
-	if clip.size == Vector2i.ZERO:
-		draw_set_transform(center, rot)
-		draw_texture(tex, -tex.get_size() / 2)
-		draw_set_transform(Vector2.ZERO)
-		return
-	# Recorte: se dibuja como poligono texturizado intersecado con el rectangulo.
-	var half := tex.get_size() / 2
-	var corners := PackedVector2Array([Vector2(-half.x, -half.y), Vector2(half.x, -half.y),
-			Vector2(half.x, half.y), Vector2(-half.x, half.y)])
-	var uv := PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1)])
-	var points := PackedVector2Array()
-	for p in corners:
-		points.append(center + p.rotated(rot))
-	var clip_poly := PackedVector2Array([Vector2(clip.position), Vector2(clip.end.x, clip.position.y),
-			Vector2(clip.end), Vector2(clip.position.x, clip.end.y)])
-	var inv := Transform2D(rot, center).affine_inverse()
-	for poly in Geometry2D.intersect_polygons(points, clip_poly):
-		var puv := PackedVector2Array()
-		for q in poly:
-			puv.append((inv * q + half) / tex.get_size())
-		draw_colored_polygon(poly, Color.WHITE, puv, tex)
+	NativeJankenRaster.draw(self, tex, center, angle, clip)

@@ -21,7 +21,10 @@ void fragment() {
 		int band = y / 16;
 		int total = (600 + 17) / 16;
 		int length = min(16, ((total + 16) * progress) / 256 - band);
-		visible = progress > 0 && y % 16 < length;
+		int bottom = band * 16 + length;
+		// 52d5fb..52d606: el extremo exclusivo que excede600 se recorta a599.
+		if (bottom > 600) { bottom = 599; }
+		visible = progress > 0 && y < bottom;
 	}
 	COLOR = visible ? texture(next_frame, UV) : texture(TEXTURE, UV);
 }
@@ -105,7 +108,9 @@ static func revealed_mode(x: int, y: int, p: int, effect: int, width := 800, hei
 	if effect == 0x4b:
 		var bands := (height + 17) / 16
 		var length := mini(16, ((bands + 16) * p >> 8) - y / 16)
-		return y % 16 < length
+		var bottom := y / 16 * 16 + length
+		if bottom > height: bottom = height - 1
+		return y < bottom
 	return revealed(x, y, p, width)
 
 func _exit_tree() -> void:

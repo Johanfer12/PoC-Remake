@@ -118,7 +118,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.pressed:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				_clicked = true
-				_cursor.click(_mouse)
+				_cursor.click(_mouse, true)
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
 				_cancel = true
 	elif event is InputEventKey and event.pressed and not event.echo:
