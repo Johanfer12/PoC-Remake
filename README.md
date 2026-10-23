@@ -6,11 +6,13 @@
 
 **English** | [Español](README.es.md)
 
+**Bring your Power of Chaos games together in one modern Windows launcher.**
+
 ## Contents
 
-- [Your ISO → PC or Android APK](#your-iso--pc-or-android-apk)
 - [Why use it?](#why-use-it)
 - [Launcher settings](#launcher-settings)
+- [Your ISO → PC or Android APK](#your-iso--pc-or-android-apk)
 - [Launcher screenshots](#launcher-screenshots)
 - [What is this remake?](#what-is-this-remake)
 - [Get started on Windows](#get-started-on-windows)
@@ -21,19 +23,6 @@
 - [Automatic Windows builds](#automatic-windows-builds)
 - [Project status and notices](#project-status-and-notices)
 - [Build your Android APK](#build-your-android-apk)
-
-## Your ISO → PC or Android APK
-
-Select your ISO images or installed game folders, then choose:
-
-- **Extract for PC** to prepare the games for Windows.
-- **Create APK** to build an Android APK with the Android branch's touch controls, scrolling and dragging. The APK and its validation receipt are saved in **`PoC Data/android/apks/`**. Already prepared games can also be reused.
-
-**Android setup is handled by the launcher.** The first time you click **Create APK**, accept the SDK license and the launcher downloads, verifies and configures the official tools automatically. No Python, Android Studio, Java installation or manual path setup is needed. Everything stays in **`PoC Data/android/`** and is reused for later builds. [Build your APK](#build-your-android-apk).
-
-Your ISO images and converted resources stay on your computer; no original game data is included in the download. Joey's networking has been tested between **PC and PC**, and between **PC and Android**. This is still an alpha: feedback, bug reports and testing on other editions and devices are welcome.
-
-**Bring your Power of Chaos games together in one modern Windows launcher.**
 
 ## Why use it?
 
@@ -60,6 +49,17 @@ Open the **gear** in the launcher to choose how you play:
 Preferences are remembered between launches. Quick play is optional and starts **off**;
 turn it off to restore the original presentation. The launcher opens maximized from
 the start, and you can still resize the window or use **F11 / Alt+Enter** for fullscreen.
+
+## Your ISO → PC or Android APK
+
+Select your ISO images or installed game folders, then choose:
+
+- **Extract for PC** to prepare the games for Windows.
+- **Create APK** to build an Android APK with the Android branch's touch controls, scrolling and dragging. The APK and its validation receipt are saved in **`PoC Data/android/apks/`**. Already prepared games can also be reused.
+
+**Android setup is handled by the launcher.** The first time you click **Create APK**, accept the SDK license and the launcher downloads, verifies and configures the official tools automatically. No Python, Android Studio, Java installation or manual path setup is needed. Everything stays in **`PoC Data/android/`** and is reused for later builds. [Build your APK](#build-your-android-apk).
+
+Your ISO images and converted resources stay on your computer; no original game data is included in the download. Joey's networking has been tested between **PC and PC**, and between **PC and Android**. This is still an alpha: feedback, bug reports and testing on other editions and devices are welcome.
 
 ## Launcher screenshots
 

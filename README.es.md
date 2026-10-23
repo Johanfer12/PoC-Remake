@@ -6,11 +6,13 @@
 
 [English](README.md) | **Español**
 
+**Tus juegos de Power of Chaos reunidos en un launcher moderno para Windows.**
+
 ## Contenido
 
-- [Tus ISO → PC o APK para Android](#tus-iso--pc-o-apk-para-android)
 - [Ventajas](#ventajas)
 - [Ajustes del launcher](#ajustes-del-launcher)
+- [Tus ISO → PC o APK para Android](#tus-iso--pc-o-apk-para-android)
 - [Capturas del launcher](#capturas-del-launcher)
 - [¿Qué es este remake?](#qué-es-este-remake)
 - [Empezar en Windows](#empezar-en-windows)
@@ -21,19 +23,6 @@
 - [Compilaciones automáticas](#compilaciones-automáticas)
 - [Estado del proyecto y avisos](#estado-del-proyecto-y-avisos)
 - [Crear tu APK Android](#crear-tu-apk-android)
-
-## Tus ISO → PC o APK para Android
-
-Selecciona los ISO o las carpetas instaladas de tus juegos y elige:
-
-- **Extraer para PC** para preparar los juegos en Windows.
-- **Crear APK** para generar un APK con los controles táctiles, el scroll y el arrastre de la rama Android. El APK y su informe de validación quedan en **`PoC Data/android/apks/`**. También puedes reutilizar los juegos ya preparados.
-
-**Android se prepara desde el launcher.** La primera vez que pulses **Crear APK**, acepta la licencia del SDK y el launcher descargará, verificará y configurará las herramientas oficiales automáticamente. No necesitas instalar Python, Android Studio, Java ni configurar rutas. Todo queda dentro de **`PoC Data/android/`** y se reutiliza en las siguientes compilaciones. [Crear tu APK](#crear-tu-apk-android).
-
-Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye datos originales del juego. La conexión de Joey ya se probó entre **PC y PC**, y entre **PC y Android**. El proyecto continúa en alfa: agradecemos comentarios, errores y pruebas con otras ediciones y equipos.
-
-**Tus juegos de Power of Chaos reunidos en un launcher moderno para Windows.**
 
 ## Ventajas
 
@@ -61,6 +50,17 @@ Las preferencias se recuerdan al volver a abrir el launcher. Juego rápido es op
 y viene **desactivado**; desactívalo para recuperar la presentación original. El launcher
 se abre maximizado desde el principio y puedes redimensionar la ventana o usar
 **F11 / Alt+Enter** para alternar la pantalla completa.
+
+## Tus ISO → PC o APK para Android
+
+Selecciona los ISO o las carpetas instaladas de tus juegos y elige:
+
+- **Extraer para PC** para preparar los juegos en Windows.
+- **Crear APK** para generar un APK con los controles táctiles, el scroll y el arrastre de la rama Android. El APK y su informe de validación quedan en **`PoC Data/android/apks/`**. También puedes reutilizar los juegos ya preparados.
+
+**Android se prepara desde el launcher.** La primera vez que pulses **Crear APK**, acepta la licencia del SDK y el launcher descargará, verificará y configurará las herramientas oficiales automáticamente. No necesitas instalar Python, Android Studio, Java ni configurar rutas. Todo queda dentro de **`PoC Data/android/`** y se reutiliza en las siguientes compilaciones. [Crear tu APK](#crear-tu-apk-android).
+
+Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye datos originales del juego. La conexión de Joey ya se probó entre **PC y PC**, y entre **PC y Android**. El proyecto continúa en alfa: agradecemos comentarios, errores y pruebas con otras ediciones y equipos.
 
 ## Capturas del launcher
 
