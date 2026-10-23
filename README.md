@@ -2,7 +2,7 @@
 
 **English** | [Español](README.es.md) | [Windows launcher](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main)
 
-The Windows launcher offers **Extract for PC** and **Create APK**. It includes the Android sources and prepares the tools automatically, without installing Python or configuring SDK/JDK separately. APKs retain touch controls, scrolling, dragging and native tribute selection, with the same icon as PC.
+The Windows launcher offers **Extract for PC** and **Create APK**. It includes the Android sources and prepares the tools automatically, without installing Python or configuring SDK/JDK separately. APKs retain touch controls, scrolling, dragging and native tribute selection, with the same icon as PC. All three games have their own widescreen duel backgrounds.
 
 Everything stays in **`PoC Data/android/`**: reusable tools, signing key, build logs and APKs. Joey connections have been tested between **PC and PC**, and between **PC and Android**. This is still an alpha; feedback and bug reports are welcome.
 

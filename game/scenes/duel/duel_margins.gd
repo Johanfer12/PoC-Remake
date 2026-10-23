@@ -1,6 +1,7 @@
 extends Node2D
 ## Ilustracion exterior al viewport nativo: el duelo conserva800x600 e input local.
 const BACKGROUNDS := {
+	"kaiba": preload("res://assets/backgrounds/kaiba_duel.png"),
 	"yugi": preload("res://assets/backgrounds/yugi_duel.jpg"),
 	"joey": preload("res://assets/backgrounds/joey_duel.png"),
 }

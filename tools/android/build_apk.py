@@ -14,7 +14,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "artifacts/android"
-STAGE = OUT / "v18-project"
+STAGE = OUT / "v19-project"
 DATA = OUT / "spanish-data"
 
 
@@ -38,7 +38,7 @@ def digest(path):
 
 def verify_signing_key(tools, previous_apk, keystore):
     previous = run([str(tools / "apksigner.bat"), "verify", "--print-certs",
-                    str(previous_apk.resolve())], "v18-previous-signature.log", cwd=OUT)
+                    str(previous_apk.resolve())], "v19-previous-signature.log", cwd=OUT)
     expected = next(line.split(": ", 1)[1] for line in previous.splitlines()
                     if line.startswith("Signer #1 certificate SHA-256 digest:"))
     if signing_key_digest(keystore) != expected:
@@ -62,10 +62,10 @@ def main():
     established_key = Path(os.environ["LOCALAPPDATA"]) / "Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Roaming/Godot/keystores/debug.keystore"
     parser.add_argument("--debug-keystore", type=Path, default=established_key if established_key.is_file()
                         else Path(os.environ["APPDATA"]) / "Godot/keystores/debug.keystore")
-    parser.add_argument("--previous-apk", type=Path, default=OUT / "PowerOfChaos-tablet-v17.apk")
+    parser.add_argument("--previous-apk", type=Path, default=OUT / "PowerOfChaos-tablet-v18.apk")
     parser.add_argument("--data", type=Path, default=DATA)
     parser.add_argument("--work", type=Path, help="directorio nuevo para proyecto y evidencias")
-    parser.add_argument("--output", type=Path, default=OUT / "PowerOfChaos-tablet-v18.apk")
+    parser.add_argument("--output", type=Path, default=OUT / "PowerOfChaos-tablet-v19.apk")
     parser.add_argument("--first-build", action="store_true", help="primera instalación con tu propia firma, sin APK previo")
     args = parser.parse_args()
     # Los valores históricos siguen siendo los predeterminados del flujo Android.
@@ -95,7 +95,7 @@ def main():
                            verify_signing_key(tools, args.previous_apk, args.debug_keystore))
     shutil.copytree(ROOT / "game", STAGE, ignore=shutil.ignore_patterns(
         ".godot", "tests", "temp", "artifacts", "unused", "*.uid", "share_smoke.gd"))
-    validation = OUT / "v18-validation"
+    validation = OUT / "v19-validation"
     validation.mkdir(exist_ok=True)
     # El empaquetado solo necesita Paths, sin arrancar los autoloads del juego.
     # Permite compilar recursos nuevos incluso sin una importación previa local.
@@ -106,29 +106,29 @@ def main():
         run([args.godot, "--headless", "--path", str(STAGE), "--script",
              str(ROOT / "tools/android/pack_data.gd"), "--", f"--data={data.as_posix()}",
              f"--pack-output={(STAGE / 'bundled_data.pck').as_posix()}",
-             f"--save={(validation / 'pack-save').as_posix()}"], "v18-pack.log")
+             f"--save={(validation / 'pack-save').as_posix()}"], "v19-pack.log")
     finally:
         project.write_bytes(original_project)
-    run([args.godot, "--headless", "--path", str(STAGE), "--editor", "--import"], "v18-bootstrap.log", bootstrap=True)
-    run([args.godot, "--headless", "--path", str(STAGE), "--editor", "--import"], "v18-import.log")
-    run([args.godot, "--headless", "--path", str(STAGE), "--export-debug", "Android Tablet", str(apk)], "v18-export.log")
+    run([args.godot, "--headless", "--path", str(STAGE), "--editor", "--import"], "v19-bootstrap.log", bootstrap=True)
+    run([args.godot, "--headless", "--path", str(STAGE), "--editor", "--import"], "v19-import.log")
+    run([args.godot, "--headless", "--path", str(STAGE), "--export-debug", "Android Tablet", str(apk)], "v19-export.log")
     run([args.godot, "--headless", "--path", str(STAGE), "--script",
          str(ROOT / "game/tests/android_bundle_test.gd"), "--",
          f"--save={(validation / 'bundle-save').as_posix()}",
-         f"--report={(validation / 'bundle.json').as_posix()}"], "v18-bundle.log")
+         f"--report={(validation / 'bundle.json').as_posix()}"], "v19-bundle.log")
     # Conservar el certificado existente aunque cambie el Godot instalado.
     run([str(tools / "apksigner.bat"), "sign", "--ks", str(args.debug_keystore.resolve()),
          "--ks-key-alias", "androiddebugkey", "--ks-pass", "pass:android",
-         "--key-pass", "pass:android", str(apk)], "v18-sign.log", cwd=OUT)
-    signed = run([str(tools / "apksigner.bat"), "verify", "--verbose", "--print-certs", str(apk)], "v18-signature.log", cwd=OUT)
-    previous = "" if args.first_build else run([str(tools / "apksigner.bat"), "verify", "--print-certs", str(args.previous_apk.resolve())], "v18-previous-signature.log", cwd=OUT)
+         "--key-pass", "pass:android", str(apk)], "v19-sign.log", cwd=OUT)
+    signed = run([str(tools / "apksigner.bat"), "verify", "--verbose", "--print-certs", str(apk)], "v19-signature.log", cwd=OUT)
+    previous = "" if args.first_build else run([str(tools / "apksigner.bat"), "verify", "--print-certs", str(args.previous_apk.resolve())], "v19-previous-signature.log", cwd=OUT)
     def certificate(text):
         return next(line for line in text.splitlines() if line.startswith("Signer #1 certificate SHA-256 digest:"))
     assert certificate(signed).split(": ", 1)[1] == signing_certificate, "Unexpected signing certificate"
     if previous:
         assert certificate(signed) == certificate(previous), "Certificate changed; update would require uninstalling"
-    run([str(tools / "zipalign.exe"), "-c", "-P", "16", "-v", "4", str(apk)], "v18-alignment.log")
-    run([str(tools / "aapt.exe"), "dump", "badging", str(apk)], "v18-package.log", cwd=OUT)
+    run([str(tools / "zipalign.exe"), "-c", "-P", "16", "-v", "4", str(apk)], "v19-alignment.log")
+    run([str(tools / "aapt.exe"), "dump", "badging", str(apk)], "v19-package.log", cwd=OUT)
     with zipfile.ZipFile(apk) as archive:
         assert archive.testzip() is None
         with archive.open("assets/bundled_data.pck") as stream:
@@ -140,13 +140,13 @@ def main():
             assert digest(path) == digest(source), f"Stale source: {path}"
             source_hashes[source.relative_to(ROOT).as_posix()] = digest(path)
     data_files = [p for p in data.rglob('*') if p.is_file()]
-    report = dict(version=18, apk=apk.as_posix(), bytes=apk.stat().st_size,
+    report = dict(version=19, apk=apk.as_posix(), bytes=apk.stat().st_size,
                   sha256=digest(apk), optimized_data_files=len(data_files),
                   optimized_data_bytes=sum(p.stat().st_size for p in data_files),
                   data_format='Selected local games; lossless WebP, OGG and short WAV',
                   source_sha256=source_hashes, signature_verified=True, same_signing_certificate_as_previous=True if previous else None, alignment_16kb_verified=True,
                   signing_certificate_sha256=signing_certificate, device_tested=False)
-    (OUT / 'v18-build-manifest.json').write_text(json.dumps(report, indent=2), encoding='utf8')
+    (OUT / 'v19-build-manifest.json').write_text(json.dumps(report, indent=2), encoding='utf8')
     for temporary in [validation / 'pack-save', validation / 'bundle-save']:
         assert temporary.resolve().parent == validation.resolve()
         if temporary.exists():
