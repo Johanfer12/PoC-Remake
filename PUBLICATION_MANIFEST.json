@@ -189,8 +189,8 @@
     "game/scenes/title/yugi_title_puzzle.gd": "cc4971f85e09d6e515c050a21d4f9c4ca899adf50ba592e8abba6146e5b2c5e1",
     "game/scenes/title/yugi_title_puzzle.gdshader": "17e2b186506dde83f8e93b2369a5ecbb9c72159bf40d28b878f00203a843d52b",
     "Jugar demo.bat": "0d0e4a481a8c78294ff9cf540811ab9e6ab1659807f4dd21a1db5a9222c00efc",
-    "README.es.md": "14bc6d9590693a4c61afff6ae02bb2fd47a8fbc32d8c4ac1e63a5b99451cdcb9",
-    "README.md": "e94581563f59893f10d9c98d532ba6a098598a0adce2fb899961d18c0450c86b",
+    "README.es.md": "4369f28a7364d01c8013696ce921aebaa7a4110039d627638f146b7865ff7066",
+    "README.md": "654b0974319cf6c05fb996de249f813b7d3d972e58f68cf3960bf63e242bd479",
     "THIRD_PARTY_NOTICES.md": "fb85351d3f3c16e5eb72e84ca94f242183839a39a4d95cc65059cb8312b3f8bf",
     "tools/build_windows.py": "91e161c97b11a87ec3766479934214e6f2c1d5a6e2c694bd7539ae44c82c80a0",
     "tools/configure_android_builder.py": "7183d283addd9507b4a459d015c481d28d382c24740048e55479b4b424906e61",
@@ -214,7 +214,7 @@
     "tools/pocx/systemdat.py": "ebde3685052a3308c5681041f2ef014b790f376275536b7cc4147ec8600381e5",
     "tools/pocx/voices.py": "c3e61f554f0e09dd3641db71a5ef8d237850786e6740b080885ecd3daf02bf11",
     "tools/prepare_android_public.py": "386e6423a19a41c737f22475bc005a4b8c3cf1d117a043bd85671fed6af2f722",
-    "tools/prepare_public.py": "9afb0c5d0e8ed10916b601e88e856a9af9d71719f6d80c1dafe274816535a8c6",
+    "tools/prepare_public.py": "e842f05d0d2db1e0217ab0eb9772f2ad7f9d952482a7b8c2c63cba4698ce2eb1",
     "tools/public_android/README.es.md": "35754dbeda2b136d95480e8ea4a0bf4c5356cc8135ccdb7f0f54513cac8ee039",
     "tools/public_android/README.md": "661625bbf2130d1e545d789d7724cc03624c31c712db127fe95a28f5b9522af7",
     "tools/pyproject.toml": "c4c1fd11fdd6951cd91d604c03aafdfdbf94d3d0e2fd7f373b7c9461ab0657d0",
@@ -231,10 +231,12 @@
     "tools/tests/test_updater.py": "b5824e4b826d2c4ce607765b9ab3ffbb6d5d0a2af68597114f4d334a63c07e45",
     "tools/pocx/android_toolchain.py": "7f7386d7b361bfadcfc57f6ca1782bb6b5fc129edfe5a28a266ba59c7353d628",
     "tools/tests/test_android_toolchain.py": "a3c4fdec24e9f2a18f55ca491dce2bc2d4753b285d6218297d80f9cf7057a47c",
-    "game/assets/backgrounds/kaiba_duel.png": "3a2cf53bdc0d47c5954797dfbfd95d95a938512a561530add9ca0d2faf1da2fc"
+    "game/assets/backgrounds/kaiba_duel.png": "3a2cf53bdc0d47c5954797dfbfd95d95a938512a561530add9ca0d2faf1da2fc",
+    "docs/images/launcher-library-en.png": "1712cc3ede3c06fa20099c5161233393db416620486d742459aae3701f1a04c4",
+    "docs/images/launcher-import-en.png": "6b3ffad708b87a8f266c1f0e305a7edbafc0cea4d0ed70c7cbfc852aa604d35e"
   },
   "git_history_included": false,
-  "policy": "source allowlist, three user-confirmed remake assets, original launcher icon and user-requested logo outline geometry; no original raster/audio game media or native fixtures",
+  "policy": "source and explicit remake asset allowlist; approved launcher screenshots for documentation; no standalone original game assets or native fixtures",
   "remake_assets_confirmed_by_user": [
     "game/assets/backgrounds/joey_duel.png",
     "game/assets/backgrounds/yugi_duel.jpg",
@@ -245,5 +247,9 @@
     "game/assets/icons/launcher.svg"
   ],
   "derived_logo_outline_geometry_requested_by_user": "game/scenes/launcher/logo_contours.gd",
-  "legal_clearance": false
+  "legal_clearance": false,
+  "documentation_screenshots_requested_by_user": [
+    "docs/images/launcher-import-en.png",
+    "docs/images/launcher-library-en.png"
+  ]
 }

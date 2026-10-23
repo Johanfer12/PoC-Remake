@@ -29,6 +29,18 @@ Tus ISO y recursos convertidos permanecen en tu equipo; la descarga no incluye d
 - **Todo en uno.** Yugi the Destiny, Kaiba the Revenge y Joey the Passion comparten un launcher. Puedes empezar con uno y añadir los demás cuando quieras.
 - **Renderizado a 60 FPS y más, según la pantalla.** El renderizado sigue la frecuencia de la pantalla e interpola entre los pasos originales del juego a 30 Hz. Los FPS efectivos dependen del equipo y la pantalla; se conserva la velocidad original de juego.
 
+## Capturas del launcher
+
+**Biblioteca con los tres juegos preparados (interfaz en inglés)**
+
+![Launcher en inglés con Yugi, Kaiba y Joey listos para jugar](docs/images/launcher-library-en.png)
+
+**Importa tus recursos y elige extraer para PC o crear un APK Android**
+
+![Pantalla de importación en inglés con selección de ISO y carpeta y botones Extract for PC y Create APK](docs/images/launcher-import-en.png)
+
+Las capturas muestran el launcher Windows. Los logos aparecen después de importar tus propias copias compatibles.
+
 ## ¿Qué es este remake?
 
 Yu-Gi-Oh! Power of Chaos Remake es una reconstrucción experimental en Godot del motor de **Yugi the Destiny, Kaiba the Revenge y Joey the Passion**. Busca conservar las reglas, la presentación y la sensación de los originales, facilitando su uso y mantenimiento en PC modernos.

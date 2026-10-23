@@ -20,11 +20,12 @@ OWN_ASSETS = {"game/assets/music/launcher_theme.mp3",
               "game/assets/backgrounds/joey_duel.png",
               "game/assets/backgrounds/kaiba_duel.png"}
 LAUNCHER_ART = {"game/assets/icons/launcher.svg", "game/assets/icons/launcher.ico"}
+README_SCREENSHOTS = {"docs/images/launcher-library-en.png", "docs/images/launcher-import-en.png"}
 
 
 def allowed(relative: Path) -> bool:
     path = relative.as_posix()
-    if path in TOP or path in TOOL_TOP or path in OWN_ASSETS or path in LAUNCHER_ART:
+    if path in TOP or path in TOOL_TOP or path in OWN_ASSETS or path in LAUNCHER_ART or path in README_SCREENSHOTS:
         return True
     if path == "game/share_smoke.gd":
         return False
@@ -48,7 +49,7 @@ def prepare(output: Path) -> dict:
     for source in selected:
         if source.is_symlink() or not source.resolve().is_relative_to(ROOT):
             raise ValueError(f"Enlace no permitido: {source.relative_to(ROOT)}")
-        if source.relative_to(ROOT).as_posix() not in OWN_ASSETS | LAUNCHER_ART:
+        if source.relative_to(ROOT).as_posix() not in OWN_ASSETS | LAUNCHER_ART | README_SCREENSHOTS:
             source.read_text(encoding="utf-8-sig") # source text or explicitly approved own assets
     output.mkdir(parents=True)
     manifest = {}
@@ -57,7 +58,7 @@ def prepare(output: Path) -> dict:
         dest = output / relative
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, dest)
-        if relative.as_posix() not in OWN_ASSETS | LAUNCHER_ART:
+        if relative.as_posix() not in OWN_ASSETS | LAUNCHER_ART | README_SCREENSHOTS:
             dest.write_bytes(dest.read_bytes().replace(b"\r\n", b"\n"))
         manifest[relative.as_posix()] = hashlib.sha256(dest.read_bytes()).hexdigest()
     ignore = ("# Solo fuentes; los recursos y configuraciones privadas nunca se publican\n"
@@ -70,7 +71,8 @@ def prepare(output: Path) -> dict:
     (output / ".gitattributes").write_bytes(b"* text=auto eol=lf\n")
     manifest[".gitattributes"] = hashlib.sha256((output / ".gitattributes").read_bytes()).hexdigest()
     report = {"format": 1, "files": manifest, "git_history_included": False,
-              "policy": "source allowlist, three user-confirmed remake assets, original launcher icon and user-requested logo outline geometry; no original raster/audio game media or native fixtures",
+              "policy": "source and explicit remake asset allowlist; approved launcher screenshots for documentation; no standalone original game assets or native fixtures",
+              "documentation_screenshots_requested_by_user": sorted(README_SCREENSHOTS),
               "remake_assets_confirmed_by_user": sorted(OWN_ASSETS),
               "original_launcher_art_created_for_project": sorted(LAUNCHER_ART),
               "derived_logo_outline_geometry_requested_by_user": "game/scenes/launcher/logo_contours.gd",
