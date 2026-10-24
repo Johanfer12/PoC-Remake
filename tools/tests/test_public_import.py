@@ -15,6 +15,16 @@ from pocx.import_games import import_games, locate, ImportFailure, _publish, mai
 
 
 class ImportTests(unittest.TestCase):
+    def test_launcher_log_preserves_unicode(self):
+        import sys
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'output.log'
+            original = ['converter', '--output-log', str(path), '--out', 'unused']
+            with patch.object(sys, 'argv', original[:]), patch('pocx.import_games._main', side_effect=lambda: print('Dragón: devuélvelo; destrucción.')):
+                main()
+                self.assertEqual(sys.argv, original)
+            self.assertEqual(path.read_text(encoding='utf-8').strip(), 'Dragón: devuélvelo; destrucción.')
+
     def test_failure_identifies_each_game_and_original_source(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

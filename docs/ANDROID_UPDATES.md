@@ -1,0 +1,58 @@
+# Android release and update contract
+
+The public APK is identical for every user. Its package is
+`org.porttesting.powerofchaos`; updates retain the established signing certificate.
+Original game resources are never uploaded. The Windows launcher embeds a verified
+copy of the public APK and prepares a separate private PCK locally. Android imports
+the PCK once into app storage and retains it, saves and preferences across APK updates.
+Repacking an APK would invalidate its signature.
+
+## Release procedure
+
+1. Review shared PC changes in the separate Android checkout, preserving touch,
+   WebP/OGG readers and app storage. Record the review in `docs/ANDROID_SYNC.json`.
+   `tools/check_android_sync.py`, called by the public Windows audit, rejects changed
+   shared source hashes and unreviewed new files. Do not regenerate the record simply
+   to bypass this failure; review and test the corresponding Android changes first.
+2. Increment Android versionCode and set its build version to the intended PC release.
+   Export a fresh allowlisted Android source snapshot. Build its engine-only APK using
+   `tools/android/build_apk.py --engine-only`, the established local signing key and
+   the previous APK for certificate comparison. Keep signing keys outside Git/GitHub.
+3. Verify signature, certificate continuity, 16 KB alignment, ZIP integrity and absence
+   of original resources. Run touch, content import/persistence and native regressions.
+   Publish the signed APK, checksum and ANDROID_RELEASE.json under its Android tag.
+4. Update the Windows builder's source commit/manifest hash and public APK URL/hash.
+   The EXE embeds that exact APK; end users neither modify nor sign it. No SDK/JDK or
+   account is needed for the normal APK + PCK workflow. Explicit custom-key builds
+   retain their separate advanced configuration.
+5. Windows CI downloads the pinned signed public APK without receiving any private
+   signing material. When Android metadata names this PC release version, CI also
+   publishes the APK and its metadata with the EXE, making them visible to the Android
+   updater. A PC-only release does not masquerade as a newer Android build.
+
+## Runtime behavior
+
+Android checks trusted repository release assets, metadata, package, increasing
+versionCode and the installed build's signing certificate before offering an update.
+The update button opens the APK download in a browser. Android asks the user to
+confirm installation and enforces the APK signature. The app does not claim to
+verify browser downloads itself or perform silent installation. Do not uninstall
+or clear app storage to update. A new device or removed app needs its resource
+PCK again. Legacy APKs using another key require that original build process, or
+an explicitly chosen fresh installation of the public APK.
+
+Content imports validate the asset-only PCK namespace before mounting, use a worker
+for copying/hash verification, preserve an existing valid cache and leave recovery
+copies for invalid previous files. No application code is accepted in resource PCKs.
+The data format is version 1; resource-contract changes require a separate migration
+review rather than assuming every old PCK is compatible.
+
+## Validation scope
+
+Android20 and PC alpha.16 pass first import with the real three-game PCK, second
+startup without another import, native game regressions, 25 standard and 25 animated
+replays, touch 1x/2x and tribute selection. APK signature and alignment are verified.
+The whole workflow has not been tested on a physical Android device. Older tests
+retain documented ObjectDB exit warnings and a historical WebP/PNG comparison limit;
+these are not presented as clean passes. Sources and reports remain in the private
+Android checkout; public exports exclude original assets and native fixtures.

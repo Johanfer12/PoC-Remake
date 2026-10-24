@@ -26,7 +26,6 @@ var _error_link := LinkButton.new()
 var _error_log_button: Button
 var _error_copy_button: Button
 var _error_log_path := ""
-var _android_license := ConfirmationDialog.new()
 
 
 const COPY := {
@@ -112,7 +111,7 @@ func _ready() -> void:
 	_convert.pressed.connect(_start)
 	add_child(_convert)
 	_style_control(_apk)
-	_apk.tooltip_text = "Prepara Android automáticamente en PoC Data y crea tu APK." if Assets.lang == "s" else "Prepares Android tools in PoC Data and builds your APK."
+	_apk.tooltip_text = "Prepara la APK oficial y tus recursos privados para importarlos una vez en Android." if Assets.lang == "s" else "Prepares the official APK and your private content for one-time Android import."
 	_apk.pressed.connect(_start.bind(false, true))
 	add_child(_apk)
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -145,24 +144,7 @@ func _ready() -> void:
 	_error_link.visible = false
 	_error_link.pressed.connect(func() -> void: _error_dialog.popup_centered(Vector2i(650, 400)))
 	add_child(_error_link)
-	_android_license.title = "Android SDK"
-	_android_license.dialog_text = ("El launcher descargará las herramientas Android verificadas en PoC Data.\nAl continuar aceptas la licencia del SDK de Google.\nSolo se necesita Internet la primera vez; los juegos se procesan en tu PC." if Assets.lang == "s" else "The launcher will download verified Android tools into PoC Data.\nBy continuing you accept Google's Android SDK license.\nInternet is needed for initial setup; game files are processed on your PC.")
-	_android_license.ok_button_text = "Aceptar y crear APK" if Assets.lang == "s" else "Accept and build APK"
-	_android_license.add_button("Leer licencia" if Assets.lang == "s" else "Read license", false, "license")
-	_android_license.custom_action.connect(func(_action: StringName) -> void: OS.shell_open("https://developer.android.com/studio/terms"))
-	_android_license.confirmed.connect(func() -> void:
-		var path := _apk_directory.path_join("PoC Data/android/sdk-license.accepted")
-		if DirAccess.make_dir_recursive_absolute(path.get_base_dir()) != OK:
-			_show_import_error({"code": -1, "output": "Cannot create Android storage: " + path})
-			return
-		var accepted := FileAccess.open(path, FileAccess.WRITE)
-		if accepted == null:
-			_show_import_error({"code": -1, "output": "Cannot save Android SDK license acceptance: " + path})
-			return
-		accepted.store_string("https://developer.android.com/studio/terms\n" + Time.get_datetime_string_from_system())
-		accepted.close()
-		_start(false, true))
-	add_child(_android_license)
+
 	get_tree().root.close_requested.connect(_close)
 	get_tree().root.mouse_exited.connect(_pointer_left_window)
 	get_tree().root.mouse_entered.connect(_pointer_entered_window)
@@ -311,9 +293,6 @@ func _start(migrate := false, build_apk := false) -> void:
 	var launcher_override := Paths.cmdline_value("launcher-dir")
 	if launcher_override != "":
 		_apk_directory = launcher_override
-	if build_apk and not FileAccess.file_exists(_apk_directory.path_join("PoC Data/android/sdk-license.accepted")):
-		_android_license.popup_centered()
-		return
 	_target = Paths.resources_path()
 	var args := PackedStringArray() if _bundled_importer else PackedStringArray(["-m", "pocx.import_games"])
 	args.append_array(PackedStringArray(["--out", _apk_directory if build_apk else _target]))
@@ -339,8 +318,10 @@ func _start(migrate := false, build_apk := false) -> void:
 	_apk.disabled = true
 	_back.disabled = true
 	_python.editable = false
-	_status.text = ("Creando APK Android… Puede tardar varios minutos." if Assets.lang == "s" else "Building Android APK… This may take several minutes.") if build_apk else _copy(8)
+	_status.text = ("Preparando APK Android y paquete de recursos… Puede tardar varios minutos." if Assets.lang == "s" else "Preparing Android APK and content pack… This may take several minutes.") if build_apk else _copy(8)
 	_language.disabled = true
+	var output_log := Paths.storage_dir.path_join("converter-output.log")
+	args.append_array(PackedStringArray(["--output-log", output_log]))
 	var executable := _python.text.strip_edges()
 	var error := _thread.start(func() -> Dictionary:
 		var importer := executable
@@ -348,9 +329,12 @@ func _start(migrate := false, build_apk := false) -> void:
 			importer = BundledTools.prepare()
 			if importer == "":
 				return {"code": -1, "output": "No se pudieron preparar las herramientas de importación."}
+		if FileAccess.file_exists(output_log) and DirAccess.remove_absolute(output_log) != OK:
+			return {"code": -1, "output": "No se pudo preparar el registro de conversión. / Could not prepare conversion log."}
 		var output: Array = []
 		var code := OS.execute(importer, args, output, true)
-		return {"code": code, "output": "\n".join(output)})
+		var text := FileAccess.get_file_as_string(output_log) if FileAccess.file_exists(output_log) else "\n".join(output)
+		return {"code": code, "output": text})
 	if error != OK:
 		_finish({"code": -1, "output": "No se pudo iniciar el hilo de importación."})
 
@@ -401,7 +385,7 @@ func _finish(result: Dictionary) -> void:
 		_show_import_error(result)
 		return
 	if _building_apk:
-		_status.text = ("APK creado en PoC Data/android/apks." if Assets.lang == "s" else "APK created in PoC Data/android/apks.")
+		_status.text = ("APK y recursos listos en PoC Data/android/apks. Instala la APK e importa el archivo .pck." if Assets.lang == "s" else "APK and content ready in PoC Data/android/apks. Install the APK and import the .pck file.")
 		_status.tooltip_text = str(result["output"])
 		if DisplayServer.get_name() != "headless":
 			OS.shell_open(_apk_directory.path_join("PoC Data/android/apks"))

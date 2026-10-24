@@ -6,9 +6,11 @@
 
 **English** | [Español](README.es.md)
 
-[![Download EXE for Windows](https://img.shields.io/badge/Download_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.15/PowerOfChaos.exe)
+[![Download EXE for Windows](https://img.shields.io/badge/Download_EXE-Windows-2ea44f?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.16/PowerOfChaos.exe)
 
-**Direct download · Windows · v0.1.0-alpha.15 preview · No ZIP required**
+[![Download Android APK](https://img.shields.io/badge/Android-APK-3DDC84?style=for-the-badge)](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/android-v20/PowerOfChaos-Android.apk)
+
+**Direct download · Windows · v0.1.0-alpha.16 preview · No ZIP required**
 
 **Bring your Power of Chaos games together in one modern Windows launcher.**
 
@@ -30,7 +32,7 @@
 
 ## Why use it?
 
-- **PC extraction or Android APK from the same launcher.** Reuse your compatible games and choose the output you need; the launcher prepares the Android tools automatically.
+- **PC or Android from the same launcher.** Prepare your games for Windows, or get the public Android APK together with a private resource pack. Import the pack once on Android and keep it through app updates.
 - **Joey network duels without DirectPlay.** Modern LAN networking replaces the legacy Windows component. Connections have been tested between PC and PC, and between PC and Android.
 - **Portable.** Keep the EXE and its **`PoC Data`** folder together: your resources, saves and settings travel with them.
 - **Lighter game resources.** Lossless WebP images and OGG audio reduce storage; the tested Yugi library takes about **44% less space** than its uncompressed converted version. Savings vary by game and edition.
@@ -39,6 +41,7 @@
 - **Shared collection, separate decks.** Keep your cards across games with the original compatibility: Yugi uses its own catalog, Kaiba also uses Yugi cards, and Joey uses all three. Each title keeps its active deck.
 - **Choose your pace and display.** Select 30 FPS, 60 FPS or your display refresh rate, choose stretched, original 4:3 or decorative backgrounds, and play at normal or 2× speed.
 - **Optional quick play in all three games.** Skip character scenes, voices and scene wipes while keeping music and sound effects. [See launcher settings](#launcher-settings).
+- **The same play options on Android.** Aspect, FPS, simulation speed, quick play and improved Spanish card text accompany the existing touch controls, scrolling, dragging and tribute selection.
 
 ## Launcher settings
 
@@ -67,9 +70,9 @@ Enable it with an internet connection to prepare the local pack. The first downl
 Select your ISO images or installed game folders, then choose:
 
 - **Extract for PC** to prepare the games for Windows.
-- **Create APK** to build an Android APK with the Android branch's touch controls, scrolling and dragging. The APK and its validation receipt are saved in **`PoC Data/android/apks/`**. Already prepared games can also be reused.
+- **Create APK** to prepare two files: the unchanged public Android APK and a private **`.pck` resource pack** made from your games. Both files and their validation receipt are saved in **`PoC Data/android/apks/`**. Already prepared games can also be reused.
 
-**Android setup is handled by the launcher.** The first time you click **Create APK**, accept the SDK license and the launcher downloads, verifies and configures the official tools automatically. No Python, Android Studio, Java installation or manual path setup is needed. Everything stays in **`PoC Data/android/`** and is reused for later builds. [Build your APK](#build-your-android-apk).
+**Android setup is handled by the launcher.** It verifies the public APK and prepares the resource pack locally. No account, Android SDK, JDK, signing-key setup or author signing key is needed for this normal workflow. Install the APK, open it and select your `.pck` once. Later compatible updates keep those resources and your saves. [Prepare your Android files](#build-your-android-apk).
 
 Your ISO images and converted resources stay on your computer; no original game data is included in the download. Joey's networking has been tested between **PC and PC**, and between **PC and Android**. This is still an alpha: feedback, bug reports and testing on other editions and devices are welcome.
 
@@ -111,7 +114,7 @@ You provide a compatible copy of the game you want to play. The launcher reads i
 
 ## Get started on Windows
 
-1. [Download **`PowerOfChaos.exe`** directly](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.15/PowerOfChaos.exe). Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
+1. [Download **`PowerOfChaos.exe`** directly](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/v0.1.0-alpha.16/PowerOfChaos.exe). Development builds are also available in [Actions](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml).
 2. Put the EXE in a folder where you want to keep the launcher and its saves, then open it.
 3. In **ADD YOUR RESOURCES**, move over the game you want to add and choose **ISO** or **Folder**.
 4. Select a compatible disc image or installed game folder, then click **Extract for PC** and wait for conversion to finish.
@@ -222,6 +225,8 @@ python -m unittest discover -s tools/tests -p "test_*import.py" -v
 
 ## Automatic Windows builds
 
+Shared code changes require an Android parity review before publication; see the [Android release procedure](docs/ANDROID_UPDATES.md).
+
 Each release includes [English change notes](RELEASE_NOTES.md) describing its improvements and fixes.
 
 [Launcher Windows](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/actions/workflows/build-windows.yml) builds from the public sources:
@@ -247,25 +252,34 @@ Third-party components retain their own licenses. See [THIRD_PARTY_NOTICES.md](T
 ## Build your Android APK
 
 1. Select your ISO images/folders or reuse the library already prepared for PC.
-2. Click **Create APK**. On first setup, the launcher lets you read and accept the [Android SDK license](https://developer.android.com/studio/terms).
-3. Wait for verified downloads and the build. The launcher shows the component and download percentage. Internet is required for initial tool setup, along with free space for the tools and temporary build files.
-4. The launcher opens **`PoC Data/android/apks/`**, containing your APK and validation receipt. Copy the APK to your Android device to install it.
+2. Click **Create APK**. The launcher downloads a pinned public APK and Godot's resource packer when needed, verifies their SHA-256 checksums and prepares your private resources locally.
+3. The launcher opens **`PoC Data/android/apks/`**, containing the **APK**, its matching **`-resources.pck`** and a JSON validation receipt. Copy both the APK and PCK to your Android device.
+4. Install the APK. At first launch, choose **Select .pck resource pack** and select that PCK. Import it once; the app keeps its own copy alongside your saves.
 
-The EXE includes a pinned Android engine revision with touch controls and the same icon as PC. The launcher downloads Godot 4.7.2 and its Android templates, OpenJDK 21 and official SDK tools, verifies SHA-256 before use, and configures a portable environment. It does not download game resources.
+The normal workflow needs no account, SDK, JDK, Android Studio or personal signing key. The APK is the same public, consistently signed application for every player; the private PCK contains the resources from your games and is never uploaded. Original game resources and the author's signing key are not included in the public download. Initial preparation requires internet and free space; downloaded tools are reused.
+
+Android keeps the same display and play settings as PC, including optional improved Spanish names and descriptions for all 771 cards. Touch controls include scrolling, dragging and native selection of one or two tribute monsters.
+
+### Android updates and existing installations
+
+Use the update button in the Android launcher to check GitHub and open the APK download. Download it and confirm the update in Android's installer. **Update the installed app without uninstalling it** to retain its private resource pack, preferences and saves. Android may ask you to allow installation from the browser or file manager you use.
+
+For an older installation, prepare your resource PCK from PC before switching to the public APK. If its signing key differs, Android cannot install it as an update. You can uninstall the old app if you accept losing its app data, then install the public APK and import your PCK once. Future compatible public updates keep your resources and saves without repeating that import.
+
+Advanced users who need to retain a differently signed installation can keep their original key and optional `android-builder.json` configuration to produce matching updates. The public updater reports a signing mismatch instead of replacing the app. Saves remain in that installation while it is updated without uninstalling.
 
 Everything stays inside the data folder:
 
 | Android content | Location |
 | --- | --- |
 | Reusable tools and bundled sources | `PoC Data/android/tools/` |
-| Persistent local signing key | `PoC Data/android/signing/debug.keystore` |
-| APK and JSON validation receipt | `PoC Data/android/apks/` |
+| Verified public APK cache | `PoC Data/android/official/` |
+| Public APK, private PCK and JSON validation receipt | `PoC Data/android/apks/` |
 | Build logs and validation reports | `PoC Data/android/builds/` |
+| Existing custom-build signing key, when used | `PoC Data/android/signing/debug.keystore` |
 
-The launcher generates your own debug signing key once and preserves it. **Back up `PoC Data` with the EXE**, including that key, to update your locally built APKs without uninstalling. The developer's private key is never distributed. These local APKs are not intended for publishing on Google Play.
+The APK is copied unchanged only after its pinned checksum and the private PCK's validation receipt match. Failed preparation leaves no incomplete installable pair. Temporary converted resources are removed without modifying your PC library. Failures show details and retain `PoC Data/apk-last-error.log`. Back up `PoC Data` with the EXE, especially any existing custom-build signing key.
 
-The builder verifies the signature, 16 KB alignment, resource integrity and startup of the included games before delivering an APK. Temporary resources and the export project are removed after each attempt without modifying your PC library. Failures show details and retain `PoC Data/apk-last-error.log`.
-
-Joey connections have been tested PC↔PC and PC↔Android. This does not guarantee compatibility with every network or device. Engine fidelity and support for other configurations are still in development.
+Joey connections have previously been tested PC↔PC and PC↔Android. The new import and update workflow has been validated on the build computer; it has not yet been verified on a physical Android device. Engine fidelity and support for other configurations are still in development.
 
 For developers, `tools/configure_android_builder.py --help` allows an optional custom toolchain and Android checkout through `android-builder.json`. The distributed EXE handles its normal setup inside the launcher.

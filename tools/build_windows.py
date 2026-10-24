@@ -18,6 +18,8 @@ GODOT_VERSION = "4.7.2"
 
 
 def audit() -> None:
+    from check_android_sync import audit as audit_android_sync
+    audit_android_sync(ROOT)
     raw = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
     unexpected = [name for name in raw.decode().split("\0") if name and
                   name not in {".gitignore", "PUBLICATION_MANIFEST.json"} and not allowed(Path(name))]
@@ -127,15 +129,22 @@ def build(godot: Path, output: Path, with_android: bool = False) -> Path:
         receipt["version"] = release_version
         bundled = project/"bundled"
         bundled.mkdir()
-        from pocx.android_toolchain import bundle_source
+        from pocx.android_toolchain import bundle_source, bundle_public_apk
         android_source = work / "android-source.zip"
         bundle_source(android_source)
-        # Only source code and the small color-key configuration are visible to PyInstaller.
+        android_apk = work / "public-android.apk"
+        android_release = bundle_public_apk(android_apk)
+        if android_release.get("version") == release_version:
+            shutil.copyfile(android_apk, output / "PowerOfChaos-Android.apk")
+            (output / "PowerOfChaos-Android.apk.sha256").write_text(hashlib.sha256(android_apk.read_bytes()).hexdigest() + "  PowerOfChaos-Android.apk\n", encoding="ascii")
+            (output / "ANDROID_RELEASE.json").write_text(json.dumps(android_release, indent=2), encoding="utf-8")
+        # Bundle source, the verified public APK and the small color-key configuration.
         command([sys.executable, "-m", "PyInstaller", "--onefile", "--noupx", "--name", "pocx-import",
                  "--distpath", str(bundled), "--workpath", str(work/"pyinstaller"), "--specpath", str(work),
                  "--paths", str(source/"tools"), "--add-data",
                  str(source/"tools/pocx/color_key_overrides.json") + os.pathsep + "pocx",
                  "--add-data", str(android_source) + os.pathsep + "pocx",
+                 "--add-data", str(android_apk) + os.pathsep + "pocx",
                  str(source/"tools/importer_entry.py")], logs/"converter.log", cwd=work)
         command([str(bundled/"pocx-import.exe"), "--help"], logs/"converter-help.log")
         licenses = bundled / "licenses"

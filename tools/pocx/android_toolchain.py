@@ -12,9 +12,14 @@ import urllib.request
 import zipfile
 
 VERSION = "4.7.2"
-SOURCE_COMMIT = "beabbe76da567252b63a3645163da98df8ce536e"
-SOURCE_MANIFEST_SHA256 = "19e9f898ec2e27dfbda1f65d259420406d31702e9d5e2dbe75ee8de374d35019"
+SOURCE_COMMIT = "46218c975e8432e24e4c3ecac658cdc4145d510e"
+SOURCE_MANIFEST_SHA256 = "df138eff81d256a9564c5131dc4bf3f6490d7e71262689f5dd931b3b30960efb"
 SDK_LICENSE_URL = "https://developer.android.com/studio/terms"
+PUBLIC_APK_VERSION = "v0.1.0-alpha.16"
+PUBLIC_APK_URL = ("https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/"
+                  + "android-v20/PowerOfChaos-Android.apk")
+# Filled from the independently verified engine-only APK before releasing the launcher.
+PUBLIC_APK_SHA256 = "b22c5ae74effcc913bda0e7ff30182aed9c2f19cbe4124bd7df53ac7c4c68a61"
 GODOT_BASE = f"https://github.com/godotengine/godot-builds/releases/download/{VERSION}-stable/"
 PACKAGES = {
     "godot": (GODOT_BASE + f"Godot_v{VERSION}-stable_win64.exe.zip",
@@ -96,9 +101,109 @@ def bundle_source(target: Path) -> None:
                 if not path.resolve().is_relative_to(root.resolve()) or digest(path) != expected:
                     raise ValueError("Fuente Android no válida: " + name)
                 output.write(path, name)
+            # The launcher revalidates extracted sources before packing private data.
+            output.write(manifest, "PUBLICATION_MANIFEST.json")
 
 
-def prepare(launcher: Path) -> dict:
+def bundle_public_apk(target: Path) -> dict:
+    """Embed the unchanged signed APK; original game data is never bundled."""
+    fetch(PUBLIC_APK_URL, target, PUBLIC_APK_SHA256)
+    with urllib.request.urlopen(PUBLIC_APK_URL.rsplit('/', 1)[0] + '/ANDROID_RELEASE.json', timeout=60) as response:
+        info = json.load(response)
+    if info.get('sha256') != PUBLIC_APK_SHA256 or info.get('original_game_data_included', True):
+        raise ValueError('Invalid public Android release metadata')
+    return info
+
+
+def prepare(launcher: Path, *, private_build: bool = False) -> dict:
+    """Default: unchanged public APK plus a private, user-created resource pack.
+
+    Explicit private builds retain the older full Android SDK/signing workflow.
+    """
+    return _prepare_private(launcher) if private_build else _prepare_public(launcher)
+
+
+def _verify_source(source: Path) -> None:
+    manifest = source / "PUBLICATION_MANIFEST.json"
+    if not manifest.is_file() or digest(manifest) != SOURCE_MANIFEST_SHA256:
+        raise ValueError("Las fuentes Android no coinciden con la revisión auditada")
+    for name, expected in json.loads(manifest.read_text(encoding="utf8"))["files"].items():
+        path = source / name
+        if not path.resolve().is_relative_to(source.resolve()) or not path.is_file() or digest(path) != expected:
+            raise ValueError("Fuente Android no válida: " + name)
+
+
+def _prepare_public(launcher: Path) -> dict:
+    if len(PUBLIC_APK_SHA256) != 64 or any(c not in "0123456789abcdef" for c in PUBLIC_APK_SHA256):
+        raise ValueError("Esta compilación aún no incluye el SHA-256 auditado del APK público Android")
+    storage = launcher / "PoC Data/android"
+    root = storage / "tools/kit-1"
+    root.mkdir(parents=True, exist_ok=True)
+    progress_file = storage / "progress.json"
+
+    def status(message):
+        temporary = progress_file.with_suffix(".tmp")
+        temporary.write_text(json.dumps({"message": message}), encoding="utf8")
+        try:
+            temporary.replace(progress_file)
+        except PermissionError:
+            temporary.unlink(missing_ok=True)
+        print(message, flush=True)
+
+    try:
+        # Content-only packing needs Godot, not SDK templates, Java or a signing key.
+        godot = root / "godot" / f"Godot_v{VERSION}-stable_win64_console.exe"
+        expected = PACKAGES["godot"][1]
+        marker = godot.parent / ".verified"
+        if not godot.is_file() or not marker.is_file() or marker.read_text() != expected:
+            status("Android: preparando el empaquetador de recursos…")
+            with tempfile.TemporaryDirectory(prefix="godot-", dir=root) as temporary:
+                stage = Path(temporary)
+                archive = stage / "godot.zip"
+                fetch(PACKAGES["godot"][0], archive, expected)
+                installed = stage / "installed"
+                extract(archive, installed)
+                if not (installed / godot.name).is_file():
+                    raise ValueError("El archivo oficial no contiene Godot")
+                (installed / ".verified").write_text(expected)
+                if godot.parent.exists():
+                    assert godot.parent.resolve().is_relative_to(root.resolve())
+                    shutil.rmtree(godot.parent)
+                installed.rename(godot.parent)
+        (godot.parent / "_sc_").touch()
+        source = root / ("source-" + SOURCE_COMMIT[:12])
+        if not source.is_dir():
+            source_zip = Path(__file__).with_name("android-source.zip")
+            if not source_zip.is_file():
+                raise ValueError("Faltan las fuentes Android incluidas en esta compilación del launcher")
+            status("Android: preparando el formato privado de recursos…")
+            with tempfile.TemporaryDirectory(prefix="source-", dir=root) as temporary:
+                stage = Path(temporary) / "source"
+                extract(source_zip, stage)
+                _verify_source(stage)
+                stage.rename(source)
+        _verify_source(source)
+        public_apk = storage / "official" / f"PowerOfChaos-Android-{PUBLIC_APK_VERSION}.apk"
+        public_apk.parent.mkdir(parents=True, exist_ok=True)
+        if not public_apk.is_file() or digest(public_apk) != PUBLIC_APK_SHA256:
+            status("Android: descargando el APK público verificado…")
+            embedded = Path(__file__).with_name("public-android.apk")
+            if embedded.is_file() and digest(embedded) == PUBLIC_APK_SHA256:
+                shutil.copyfile(embedded, public_apk)
+            else:
+                fetch(PUBLIC_APK_URL, public_apk, PUBLIC_APK_SHA256)
+        if digest(public_apk) != PUBLIC_APK_SHA256:
+            raise ValueError("El APK público Android no supera SHA-256")
+        status("Android: APK público listo; preparando tus recursos privados…")
+        return dict(root=source, godot=godot, public_apk=public_apk, public_apk_sha256=PUBLIC_APK_SHA256)
+    finally:
+        try:
+            progress_file.unlink(missing_ok=True)
+        except PermissionError:
+            pass
+
+
+def _prepare_private(launcher: Path) -> dict:
     storage = launcher / "PoC Data/android"
     if not (storage / "sdk-license.accepted").is_file():
         raise ValueError("Acepta la licencia del SDK Android desde Crear APK en el launcher: " + SDK_LICENSE_URL)

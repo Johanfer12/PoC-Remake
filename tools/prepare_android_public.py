@@ -25,7 +25,7 @@ def prepare_android(source: Path, output: Path) -> dict:
         name = relative.as_posix()
         if (name.startswith("game/") and allowed(relative)) or name in ANDROID_LAUNCHER_ART or name in {
                 "tools/android/build_apk.py", "tools/android/pack_data.gd",
-                "game/tests/android_bundle_test.gd"}:
+                "game/tests/android_bundle_test.gd", "game/tests/android_engine_bundle_test.gd"}:
             if path.is_symlink() or not path.resolve().is_relative_to(source):
                 raise ValueError("Enlace no publicable: " + name)
             if name in OWN_ASSETS:

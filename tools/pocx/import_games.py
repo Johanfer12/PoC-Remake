@@ -292,8 +292,8 @@ def _publish_ready(staging: Path, output: Path, replace: bool) -> None:
         shutil.rmtree(backup)
 
 
-def main() -> None:
-    # Godot captures pipes as UTF-8, regardless of the Windows console code page.
+def _main() -> None:
+    # CLI output uses UTF-8; the launcher reads an explicit UTF-8 log on Windows.
     for stream in (sys.stdout, sys.stderr):
         if stream is not None and hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="backslashreplace")
@@ -326,6 +326,28 @@ def main() -> None:
         failure = error if isinstance(error, ImportFailure) else ImportFailure("setup", str(error))
         print("POC_IMPORT_ERROR " + json.dumps(failure.payload()), file=sys.stderr, flush=True)
         parser.exit(1, f"No se pudo importar: {error}\n")
+
+
+def main() -> None:
+    # Windows OS.execute decodes pipes using its active code page. Preserve Unicode
+    # through an explicit file, rather than guessing or repairing damaged text.
+    if "--output-log" not in sys.argv:
+        _main()
+        return
+    from contextlib import redirect_stdout, redirect_stderr
+    args = sys.argv[:]
+    index = sys.argv.index("--output-log")
+    if index + 1 >= len(sys.argv):
+        raise ValueError("--output-log requires a path")
+    target = Path(sys.argv[index + 1])
+    target.parent.mkdir(parents=True, exist_ok=True)
+    del sys.argv[index:index + 2]
+    try:
+        with target.open("w", encoding="utf-8", newline="\n") as log:
+            with redirect_stdout(log), redirect_stderr(log):
+                _main()
+    finally:
+        sys.argv = args
 
 
 if __name__ == "__main__":
