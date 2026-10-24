@@ -32,6 +32,22 @@ Repacking an APK would invalidate its signature.
    publishes the APK and its metadata with the EXE, making them visible to the Android
    updater. A PC-only release does not masquerade as a newer Android build.
 
+The installed updater only recognizes semantic tags such as
+`v0.1.0-alpha.18`. Publishing solely under `android-v22` does not expose an
+update to an installed app. Before declaring an update available, publish the
+APK and `ANDROID_RELEASE.json` together under the semantic release tag; its
+metadata `version` must equal that tag. The Android-specific tag may remain as
+the immutable download pinned by the Windows builder.
+
+For alpha.18, the compiled updater extracted from the actual alpha.17 APK
+(versionCode21) first reproduced the missing notice with only `android-v22`,
+then accepted alpha.18/versionCode22 through both the saved release response
+and the real GitHub HTTP check. Signature and package checks remain enabled.
+Reproducer: Android `game/tests/android_published_update_test.gd`; retained
+fixtures, log and result: `artifacts/android/update-alpha18/` in that checkout.
+The app checks once per process, so close it completely and reopen it after
+a release is published. This check does not claim physical-device testing.
+
 ## Runtime behavior
 
 Android checks trusted repository release assets, metadata, package, increasing
