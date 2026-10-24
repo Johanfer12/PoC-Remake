@@ -37,6 +37,7 @@ var _logos: Array[Sprite2D] = []
 var _fit: Array[float] = []              # escala que encaja cada logo en SLOT
 var _emphasis: Array[float] = []         # 0..1, animado hacia 1 en el seleccionado
 var _halo: Sprite2D
+var _glow := _radial(Color(0.42, 0.2, 0.55), 0.2, Vector2i(512, 256))
 var _time := 0.0
 var _font := ThemeDB.fallback_font
 var _screen := DESIGN                    # pantalla visible
@@ -64,11 +65,14 @@ func _ready() -> void:
 	if ResourceLoader.exists(music_path):
 		MUSIC = load(music_path)
 	_halo = Sprite2D.new()
-	_halo.texture = _halo_texture()
+	# Halo a doble resolucion, dibujado a la mitad: caida suave sin escalones.
+	_halo.texture = _radial(Color(1.0, 0.8, 0.4), 0.6, Vector2i(720, 480))
+	_halo.scale = Vector2.ONE * 0.5
 	add_child(_halo)
 	for game in Game.GAMES:
 		var logo := Sprite2D.new()
-		logo.texture = TitleArt.logo_texture(game) if Paths.has_game(game) else null
+		logo.texture = _smooth(TitleArt.logo_texture(game)) if Paths.has_game(game) else null
+		logo.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		if logo.texture != null:
 			var outline := ShaderMaterial.new()
 			outline.shader = preload("res://scenes/launcher/logo_outline.gdshader")
@@ -109,6 +113,15 @@ func _ready() -> void:
 	_layout()
 
 
+## Copia con mipmaps: los logos se dibujan reducidos y sin ellos se ven dentados.
+func _smooth(texture: Texture2D) -> Texture2D:
+	if texture == null:
+		return null
+	var image := texture.get_image()
+	image.generate_mipmaps()
+	return ImageTexture.create_from_image(image)
+
+
 func _folder_label() -> String:
 	return {"s": "Carpeta", "e": "Folder", "g": "Ordner", "f": "Dossier", "i": "Cartella", "j": "フォルダー"}.get(Assets.lang, "Folder")
 
@@ -129,14 +142,18 @@ func _update_badge() -> void:
 func _style_control(control: Control) -> void:
 	control.add_theme_color_override("font_color", GOLD_LIGHT)
 	control.add_theme_font_size_override("font_size", 14)
+	control.add_theme_color_override("font_hover_color", Color.WHITE)
+	control.add_theme_color_override("font_disabled_color", Color(GOLD_LIGHT, 0.35))
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		var style := StyleBoxFlat.new()
-		style.bg_color = Color(0.055, 0.045, 0.075, 0.95)
-		style.border_color = GOLD.darkened(0.5) if state in ["normal", "disabled"] else GOLD
+		style.bg_color = Color(0.11, 0.075, 0.12, 0.96) if state in ["hover", "pressed"] else Color(0.06, 0.045, 0.08, 0.92)
+		style.border_color = Color(GOLD, 0.25) if state == "disabled" else (GOLD.darkened(0.45) if state == "normal" else GOLD)
+		style.draw_center = state != "focus"
 		style.set_border_width_all(1)
-		style.set_corner_radius_all(5)
-		style.content_margin_left = 10
-		style.content_margin_right = 10
+		style.set_corner_radius_all(8)
+		style.anti_aliasing = true
+		style.content_margin_left = 12
+		style.content_margin_right = 12
 		style.content_margin_top = 7
 		style.content_margin_bottom = 7
 		control.add_theme_stylebox_override(state, style)
@@ -254,6 +271,9 @@ func _apply() -> void:
 func _draw() -> void:
 	draw_polygon(PackedVector2Array([Vector2.ZERO, Vector2(_screen.x, 0), _screen, Vector2(0, _screen.y)]),
 			PackedColorArray([BG_TOP, BG_TOP, BG_BOTTOM, BG_BOTTOM]))
+	# Luz tenue detras de la fila de logos para que no floten sobre un fondo plano.
+	var glow_size := Vector2(maxf(_screen.x * 1.1, 900.0), 560.0)
+	draw_texture_rect(_glow, Rect2(Vector2(_screen.x / 2.0, _origin.y + logo_y) - glow_size / 2.0, glow_size), false)
 	_draw_title()
 	for i in _logos.size():
 		if _logos[i].texture == null:
@@ -385,15 +405,22 @@ func _hit(screen_pos: Vector2) -> int:
 	return -1
 
 
-func _halo_texture() -> Texture2D:
+## Degradado radial con caida suave hasta cero (varias paradas) para evitar bandas visibles al escalar.
+static func _radial(color: Color, alpha: float, size: Vector2i) -> GradientTexture2D:
 	var gradient := Gradient.new()
-	gradient.set_color(0, Color(1.0, 0.85, 0.45, 0.45))
-	gradient.set_color(1, Color(1.0, 0.6, 0.2, 0.0))
+	var offsets := PackedFloat32Array()
+	var colors := PackedColorArray()
+	for i in 9:
+		var t := i / 8.0
+		offsets.append(t)
+		colors.append(Color(color, alpha * pow(1.0 - t, 1.6)))
+	gradient.offsets = offsets
+	gradient.colors = colors
 	var tex := GradientTexture2D.new()
 	tex.gradient = gradient
 	tex.fill = GradientTexture2D.FILL_RADIAL
 	tex.fill_from = Vector2(0.5, 0.5)
 	tex.fill_to = Vector2(1.0, 0.5)
-	tex.width = 360
-	tex.height = 240
+	tex.width = size.x
+	tex.height = size.y
 	return tex

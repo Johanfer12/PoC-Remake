@@ -193,17 +193,20 @@ func _layout() -> void:
 		var label: Label = _labels[Game.GAMES[i]]
 		label.position = _logos[i].position + Vector2(-SLOT.x / 2.0, 88)
 		label.size = Vector2(SLOT.x, 22)
-	_python.position = _origin + Vector2(250, 428)
+	# Bloque de acciones pegado a los logos y separado del pie, centrado en la pantalla real.
+	# Sin el campo de Python (version publicada) los botones suben a ocupar su hueco.
+	var actions_y := 446.0 if _python.visible else 414.0
+	_python.position = _origin + Vector2(250, 404)
 	_python.size = Vector2(300, 32)
-	_convert.position = _origin + Vector2(90, 470)
-	_convert.size = Vector2(300, 40)
-	_apk.position = _origin + Vector2(410, 470)
-	_apk.size = Vector2(300, 40)
-	_status.position = _origin + Vector2(90, 513)
-	_status.size = Vector2(620, 28)
+	_convert.position = _origin + Vector2(110, actions_y)
+	_convert.size = Vector2(280, 42)
+	_apk.position = _origin + Vector2(410, actions_y)
+	_apk.size = Vector2(280, 42)
+	_status.position = _origin + Vector2(90, actions_y + 52)
+	_status.size = Vector2(620, 24)
 	if _error_link.visible:
 		_status.size.x = 510
-	_error_link.position = _origin + Vector2(622, 518)
+	_error_link.position = _origin + Vector2(622, actions_y + 55)
 	_back.position = Vector2(24, 24)
 
 
