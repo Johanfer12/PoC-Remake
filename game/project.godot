@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Yu-Gi-Oh! Power of Chaos Remake"
-config/version="0.1.0-alpha.16"
+config/version="0.1.0-alpha.17"
 config/icon="res://assets/icons/launcher.svg"
 config/description="Remake todo en uno de Yu-Gi-Oh! Power of Chaos (Yugi, Kaiba y Joey) con los assets originales."
 run/main_scene="res://scenes/boot/boot.tscn"

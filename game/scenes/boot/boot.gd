@@ -9,7 +9,8 @@ func _ready() -> void:
 		return
 	_fit_window()
 	if not Paths.has_data():
-		_show_missing_data()
+		Game.open_launcher()
+		queue_free()
 		return
 	var start := Debug.start_override()
 	var ending := Paths.cmdline_value("scene")

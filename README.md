@@ -42,7 +42,7 @@ Preferences are saved. Quick play and improved translations start disabled; tran
 1. Download the Windows EXE from [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases). Select your ISO images or installed game folders, or reuse your prepared PC library.
 2. Click **Create APK**. The launcher verifies the public APK and prepares a private resource pack. No SDK, JDK or signing-key setup is needed for this normal flow.
 3. Copy both files from **PoC Data/android/apks/** to your Android device: the **.apk** and its **-resources.pck**.
-4. Install and open the APK. Tap **Select .pck resource pack** and select your PCK. The app checks and copies it into its own storage.
+4. Install and open the APK. On **Add your games**, tap **Select .pck resource pack**, open **Downloads** in the Android file picker and select your PCK. The app checks and copies it into its own storage. Copying the file to Downloads alone does not import it.
 
 Import the pack once. You do not need to select it again after reopening the app or installing compatible updates. The PC launcher retains tools, validation receipts and logs under **PoC Data/android/**. Back up that folder with the EXE.
 
