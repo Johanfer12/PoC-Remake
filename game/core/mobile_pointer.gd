@@ -66,7 +66,8 @@ func _process(delta: float) -> void:
 	_update_tribute_hint()
 	if not _holding or _pressed_button != MOUSE_BUTTON_NONE or _scrolling or (_scroll_kind != "" and _scroll_kind != "bag"): return
 	if _touch_card == "" and _deck_touch and _mode() == "menu": return
-	_hold_time += delta
+	# Gesture thresholds use real seconds even when gameplay simulation runs at 2x.
+	_hold_time += delta / maxf(Engine.time_scale, 0.001)
 	if _hold_time >= HOLD_SECONDS:
 		_holding = false
 		if _touch_card != "" and _selected_card != _touch_card:

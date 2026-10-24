@@ -127,7 +127,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_select(_hit(PointerGlide.hover(_mouse)))
 		_cursor.update(_mouse, selected >= 0, -1, event.pressed)
 		if event.pressed:
-			_cursor.click(_mouse)
+			_cursor.click(_mouse, true)
 			if _overlay.busy(): _overlay.accept()
 			_activate()
 	elif event.is_action_pressed("ui_up") or event.is_action_pressed("ui_left"):

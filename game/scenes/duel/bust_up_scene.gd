@@ -121,7 +121,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			_cursor.update(pos, false, -1, event.pressed)
 			if event.pressed:
-				_cursor.click(pos)
+				_cursor.click(pos, true)
 	get_viewport().set_input_as_handled()
 
 

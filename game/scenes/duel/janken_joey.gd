@@ -51,7 +51,7 @@ func _frame_draw() -> void:
 func _belt(index: int, pos: Vector2) -> void:
 	# 4226c0(90 grados): coordenada superior izquierda del rectangulo girado.
 	var size := _tex[index].get_size()
-	_cmds.append(["rot", index, pos + Vector2(size.y, size.x) / 2, 128, Rect2i()])
+	_cmds.append(["rot", index, pos + Vector2(NativeJankenRaster.top_left_center(Vector2i(size), 128)), 128, Rect2i()])
 
 
 func _command_piece(cmd: Array) -> Array:

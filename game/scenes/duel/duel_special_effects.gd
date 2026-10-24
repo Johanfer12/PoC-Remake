@@ -363,7 +363,8 @@ static func _dice(owner: Node2D, event: Dictionary, frame: int) -> void:
 
 static func _fusion(owner: Node2D, event: Dictionary, frame: int) -> void:
 	var counter := frame * 4
-	_background(owner)
+	# Mantener visible la mesa bajo el mismo velo semitransparente del resultado.
+	_background(owner, Color(0, 0, 0, 0.5))
 	var materials: Array = []
 	for id in event.get("materials",[]):
 		if id >= 0 and id != 0xffff: materials.append(id)

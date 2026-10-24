@@ -1,5 +1,6 @@
 extends Node2D
 const NATIVE_SORT := preload("res://core/native_card_sort.gd")
+const CARD_LIMITS := preload("res://core/native_card_limits.gd")
 var _name_ranks := {}
 var _deck_criteria := {"main": "default", "side": "default", "fusion": "default"}
 var _sort_properties := PackedByteArray()
@@ -42,8 +43,7 @@ var _sort_properties := PackedByteArray()
 ## (swapdeckerror) y unable.
 ## Flechas de intercambio (solo indicador: 459c10 no las pulsa): Y44ee60(800-ancho,280),
 ## Ka450330(798-ancho,298), Jo476e80(800-ancho,295). Fundido Kaiba16 ticks; Joey
-## salida20/entrada15+20.
-## Faltan las superficies con cifras internas y la transicion propia de Yugi.
+## salida10/entrada15+10. Composición interna cotejada en swap_surface_test.
 
 const CENTER_X := 210.0
 const CardMotion := preload("res://core/deck_card_motion.gd")
@@ -154,20 +154,14 @@ const MAIN_MIN := 40
 const MAIN_MAX := 80
 const SIDE_MAX := 15
 const SWAP_ARROW_EDGE := {"yugi": Vector2(800, 280), "kaiba": Vector2(798, 298), "joey": Vector2(800, 295)}
-const MAX_COPIES := 3
+const MAX_COPIES := CARD_LIMITS.MAX_COPIES
 ## IDs CARD_ID (los mismos que .ydc), extraidos de las tablas del PE.
-const OLD_FORBIDDEN := [1902, 1903, 1910, 1911, 1912, 1920, 1921, 1922, 1923]
-const OLD_LIMITED := [20, 17, 19, 16, 18, 1010, 968, 1027, 335, 336, 1008, 1056,
-	1071, 1070, 1081, 1077, 1068, 1106, 1065, 347, 1221, 573, 1154, 751, 1150,
-	1160, 1095, 1314, 47, 1061, 671, 1214, 939, 1450, 1449, 474]
-const JOEY_FORBIDDEN := [1106, 1071, 1081, 1027, 336, 671, 1154]
-const JOEY_LIMITED := [474, 47, 573, 751, 20, 17, 19, 16, 18, 1070, 1061, 1077,
-	1068, 1010, 1008, 1449, 1221, 968, 1065, 1160, 347, 335, 1450, 1056, 1150,
-	939, 1214, 1095]
+const OLD_FORBIDDEN := CARD_LIMITS.OLD_FORBIDDEN
+const OLD_LIMITED := CARD_LIMITS.OLD_LIMITED
+const JOEY_FORBIDDEN := CARD_LIMITS.JOEY_FORBIDDEN
+const JOEY_LIMITED := CARD_LIMITS.JOEY_LIMITED
 ## 448e80/44a400/4673b0: las versiones alternativas comparten copias.
-const COPY_VARIANTS := [[0, 2000], [14, 2014], [34, 1210, 2034], [37, 2037],
-	[40, 2040], [57, 1901], [61, 1249], [63, 2063], [68, 2068], [387, 2387],
-	[389, 2389], [1003, 1034]]
+const COPY_VARIANTS := CARD_LIMITS.COPY_VARIANTS
 const FADED := Color(1, 1, 1, 0x6e / 255.0)   # 44c8a0: alfa 0x6e
 const DECKS_DIR := "decks"
 ## Cursor del raton (objeto DAT_005af868, +0x114): recurso 0xd ("over") si el destino no vale.
@@ -203,6 +197,7 @@ var _dirty := false
 var _swap := false
 var _swap_initial_main := 0
 var _swap_transition := preload("res://scenes/deck_editor/swap_arrow_transition.gd").new()
+var _swap_surface_cache := {}
 var _detail_flip = preload("res://core/editor_card_flip.gd").new()
 var _detail_card := {}             # carta mostrada en el panel izquierdo
 var _trunk_sprites: Array[Sprite2D] = []   # fondo de la bolsa, sombra y barra (se mueven)
@@ -261,6 +256,7 @@ var _font_level: DigitFont
 var _text_font := SystemFont.new()
 var _trunk_name_font := SystemFont.new()
 var _detail := RichTextLabel.new()
+var _detail_reveal := preload("res://core/card_detail_reveal.gd").new()
 var _stats := Label.new()
 var _detail_clip: Control
 var _detail_scroll: NativeScrollBar
@@ -270,6 +266,7 @@ var _detail_height := 0
 
 func _init(game_id: String, mode := "edit") -> void:
 	game = game_id
+	_swap_transition.variant = game_id
 	_swap = mode == "swap"
 	_dir = "%s/deck_c/" % game
 
@@ -591,6 +588,7 @@ func _build_detail() -> void:
 	_detail.position = box.position
 	_detail.size = box.size - Vector2(0, 16)
 	_detail.bbcode_enabled = true
+	_detail.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	_detail.scroll_active = false
 	_detail.clip_contents = true
 	_detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -641,6 +639,7 @@ func _update_detail_scroll() -> void:
 
 
 func _show_detail(card: Dictionary) -> void:
+	if card == _detail_card: return
 	if _detail_scroll != null and card != _detail_card:
 		_detail_scroll.set_value(0)
 		_detail_height = -1
@@ -651,6 +650,8 @@ func _show_detail(card: Dictionary) -> void:
 	_detail_card = card
 	if card.is_empty():
 		_detail.text = ""
+		_detail_reveal.reset("", false)
+		_detail.visible_characters = 0
 		_stats.text = ""
 		queue_redraw()
 		return
@@ -660,6 +661,8 @@ func _show_detail(card: Dictionary) -> void:
 	if card["category"] == "monster":
 		_detail.text += "[color=%s]%s[/color]\n" % [c["type"], CardDB.type_text(card)]
 	_detail.text += "[color=%s]%s[/color]" % [c["body"], CardDB.text(card, "descriptions")]
+	_detail_reveal.reset(_detail.get_parsed_text(), Assets.lang == "j")
+	_detail.visible_characters = 0
 	_stats.text = "ATK/%4d DEF/%4d" % [card["atk"], card["defense"]] \
 			if card["category"] == "monster" else ""
 	SaveData.mark_seen(int(card["internal_id"]))
@@ -936,7 +939,9 @@ func _draw_swap() -> void:
 	if tex != null:
 		draw_texture(tex, back["rect"].position)
 	var index := _swap_arrow_index()
-	if game in ["yugi", "kaiba", "joey"]:
+	if game in ["kaiba", "joey"]:
+		_draw_swap_composition(self)
+	elif game == "yugi":
 		var width := _script_tex("kaban_swap", 2).get_width()
 		var blend: NativeBlend = _swap_transition.blend
 		for layer in _swap_transition.layers(game, width):
@@ -955,6 +960,43 @@ func _draw_swap() -> void:
 		draw_texture(_script_tex("kaban_swap", index), buttons["swap_arrow"]["rect"].position)
 	_draw_top(self)
 	_draw_rect_selection()
+
+
+func _draw_swap_composition(canvas: CanvasItem) -> void:
+	var width := _script_tex("kaban_swap", 2).get_width()
+	var commands: Array = _swap_transition.composition(game, width)
+	for command: Dictionary in commands:
+		if game == "kaiba" and command.kind == "number": continue
+		var at: Vector2 = _swap_transition.blend.at([_swap_transition.generation, command.key], command.position)
+		var tint := Color(1, 1, 1, float(command.alpha)/255.0)
+		if command.kind == "number":
+			var strip := _tex(_scripts["font"].resource(12))
+			var pitch := int(command.pitch)
+			canvas.draw_texture_rect_region(strip, Rect2(at, Vector2(pitch, strip.get_height())),
+				Rect2((int(command.value)-1)*pitch, 0, pitch, strip.get_height()), tint)
+			continue
+		var texture := _script_tex("kaban_swap", int(command.index))
+		if game == "kaiba" and command.has("group"):
+			var numbers: Array = commands.filter(func(op: Dictionary) -> bool: return op.kind == "number" and op.group == command.group)
+			if not numbers.is_empty():
+				var number: Dictionary = numbers[0]
+				var cache_key := Vector2i(int(command.index), int(number.value))
+				if not _swap_surface_cache.has(cache_key):
+					# El original compone cifra y fondo ANTES de aplicar el alfa de superficie.
+					var image := texture.get_image()
+					image.convert(Image.FORMAT_RGBA8)
+					var strip := _tex(_scripts["font"].resource(12)).get_image()
+					strip.convert(Image.FORMAT_RGBA8)
+					image.blend_rect(strip, Rect2i((int(number.value)-1)*24, 0, 24, strip.get_height()), Vector2i(number.position-command.position))
+					_swap_surface_cache[cache_key] = ImageTexture.create_from_image(image)
+				texture = _swap_surface_cache[cache_key]
+		var bounds: Array = command.get("rect", [])
+		if bounds.is_empty(): canvas.draw_texture(texture, at, tint)
+		else:
+			var region := Rect2(int(bounds[0]), int(bounds[1]), int(bounds[2])-int(bounds[0]), int(bounds[3])-int(bounds[1]))
+			var clipped := region.intersection(Rect2(Vector2.ZERO, texture.get_size()))
+			if clipped.has_area():
+				canvas.draw_texture_rect_region(texture, Rect2(at+clipped.position-region.position, clipped.size), clipped, tint)
 
 
 func _draw_detail_card() -> void:
@@ -1028,6 +1070,7 @@ func _draw_top(canvas: CanvasItem) -> void:
 	var top: Array = _deck_entries()["top"]
 	if not _swap:
 		_draw_trunk(top)
+		_draw_trunk_limits(canvas)
 	for e in top:
 		if e["zone"] == BAG:
 			_draw_bag_card(e, false)
@@ -1137,30 +1180,71 @@ func _draw_trunk_details(card: Dictionary, thumb_pos: Vector2) -> void:
 	# 44ce00: el cache de la bolsa empieza cuatro pixeles antes de kaban.bmp.
 	var cache_x := _kaban_x() - 4
 	var row_y := thumb_pos.y - (40 if game == "joey" else 39)
-	var font: Layout = _scripts["font"]
-	draw_string(_trunk_name_font, Vector2(cache_x + 52, row_y + 48 + _trunk_name_font.get_ascent(13)), str(CardDB.text(card, "names")),
-			HORIZONTAL_ALIGNMENT_LEFT, 130, 13, TRUNK_NAME_COLOR[game])
-	var icon_y := row_y + 66
+	var name_size := 14 if game == "joey" else 13
+	var name_color: Color = TRUNK_NAME_COLOR[game]
+	if game == "joey": name_color = Color8(244,0,0) if _copy_limit(int(card.internal_id)) == 0 else Color8(255,218,71)
+	draw_string(_trunk_name_font, Vector2(cache_x + 52, row_y + 48 + _trunk_name_font.get_ascent(name_size)), str(CardDB.text(card, "names")),
+			HORIZONTAL_ALIGNMENT_LEFT, 138 if game == "joey" else 130, name_size, name_color)
 	var number_y := row_y + (67 if game == "joey" else 68)
 	if card["category"] == "monster":
 		_font_stats.draw_right(self, str(int(card["atk"])), Vector2(cache_x + 75, number_y))
 		_font_stats.draw(self, "/", Vector2(cache_x + 75, number_y))
 		_font_stats.draw_right(self, str(int(card["defense"])), Vector2(cache_x + 105, number_y))
-		var attr := ["light", "dark", "water", "fire", "earth", "wind"].find(str(card["attribute"]))
-		if attr != -1:
-			_draw_icon(_tex(font.resource(7)), attr, 16, Vector2(cache_x + 111, icon_y))
-		_draw_icon(_tex(font.resource(8)), int(card["type_id"]) - 1, 16, Vector2(cache_x + 128, icon_y))
-		var star := _tex(_scripts["kaban_list"].resource(5))
-		draw_texture(star, Vector2(cache_x + (151 if game == "joey" else 148), icon_y))
-		var level := int(card["level"])
-		if level >= 1 and level <= 12:
-			var stars := _tex(font.resource(6))
-			var w := stars.get_width() / 12.0
-			draw_texture_rect_region(stars, Rect2(Vector2(cache_x + 167, icon_y + 2), Vector2(w, stars.get_height())),
-					Rect2((level - 1) * w, 0, w, stars.get_height()))
-	else:
-		# icon_zokusei: los iconos 7 y 8 son "magia" y "trampa"
-		_draw_icon(_tex(font.resource(7)), 7 if card["category"] == "spell" else 8, 16, Vector2(cache_x + 111, icon_y))
+	_draw_trunk_icons(self,card,thumb_pos)
+
+
+## Y457ae0/4538a0, Ka4595b0/455350 y Jo46bae0/46cee0: atlas y posiciones nativos.
+func _trunk_icon_ops(card: Dictionary, thumb_pos: Vector2) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if _sort_properties.is_empty():
+		_sort_properties = FileAccess.get_file_as_bytes(Assets.resolve("common/bin/card_prop.bin"))
+	var index := int(card.index)
+	var prop := _sort_properties.decode_u32(index*4)
+	var kind := (prop >> 20) & 31
+	var attribute := 9 if kind == 21 else 8 if kind == 22 else prop >> 29
+	var subtype := (prop >> 17) & 7 if kind in [21,22] else 0
+	var origin := Vector2(_kaban_x()-4, thumb_pos.y-(40 if game == "joey" else 39))
+	result.append({"font":7,"index":attribute-1,"pitch":16,"position":origin+Vector2(113 if game == "joey" else 111,66)})
+	if kind > 0 and kind < 21:
+		result.append({"font":8,"index":kind-1,"pitch":16,"position":origin+Vector2(129 if game == "joey" else 128,66)})
+		result.append({"font":-1,"index":0,"pitch":19,"position":origin+Vector2(151 if game == "joey" else 148,66)})
+		result.append({"font":6,"index":((prop >> 25)&15)-1,"pitch":14 if game == "yugi" else 11,"position":origin+Vector2(169 if game == "joey" else 167,68 if game == "yugi" else 70)})
+	elif subtype > 0:
+		result.append({"font":9,"index":subtype-1,"pitch":16,"position":origin+Vector2(129 if game == "joey" else 128,66)})
+	return result
+
+
+func _draw_trunk_icons(canvas: CanvasItem, card: Dictionary, thumb_pos: Vector2) -> void:
+	for op: Dictionary in _trunk_icon_ops(card,thumb_pos):
+		var texture := _tex(_scripts["font"].resource(int(op.font))) if int(op.font)>=0 else _script_tex("kaban_list",5)
+		if int(op.index)<0: continue
+		var src := Rect2(int(op.index)*int(op.pitch),0,int(op.pitch),texture.get_height())
+		canvas.draw_texture_rect_region(texture,Rect2(op.position,src.size),src)
+
+
+## Joey46d980 consulta5be190; 46fe30 recorta icon_seigen en celdas16×16.
+## 46ddb0 coloca el objeto sobre la miniatura; conserva el límite aunque no queden copias.
+func _trunk_limit_icons() -> Array[Dictionary]:
+	var icons: Array[Dictionary] = []
+	if game != "joey" or _swap:
+		return icons
+	for row in _bag_rows():
+		var id := int(_view[_trunk_scroll + row]["internal_id"])
+		var limit := _copy_limit(id)
+		if limit == MAX_COPIES:
+			continue
+		icons.append({"row": row, "id": id,
+			"rect": Rect2(690 + _bag_shift(), 38 + row * 55, 16, 16),
+			"src": Rect2(limit * 16, 0, 16, 16)})
+	return icons
+
+
+func _draw_trunk_limits(canvas: CanvasItem) -> void:
+	if game != "joey" or _swap:
+		return
+	var strip := _tex(_scripts["font"].resource(14))
+	for icon: Dictionary in _trunk_limit_icons():
+		canvas.draw_texture_rect_region(strip, icon.rect, icon.src)
 
 
 func _draw_icon(strip: Texture2D, index: int, size: int, pos: Vector2) -> void:
@@ -1170,13 +1254,19 @@ func _draw_icon(strip: Texture2D, index: int, size: int, pos: Vector2) -> void:
 			Rect2(index * size, 0, size, strip.get_height()))
 
 
+## Fondo: Joey46ddb0 recorre39px; Y44d0c0/Ka44e610 recorre40 y acaba enY2.
+func _trunk_header_background_y() -> int:
+	var travel := 39 if game == "joey" else 40
+	return -travel + maxi(0, _bag_progress - 128) * travel / 128 + (0 if game == "joey" else 2)
+
+
 func _draw_trunk_header() -> void:
 	if _bag_progress == 0:
 		return
 	var control_y := -40 + maxi(0, _bag_progress - 128) * 40 / 128
 	var font: Layout = _scripts["font"]
 	# 44d0c0/44e610/46ddb0: fondo con gemas, fijo en620; los botones son capas On/Push.
-	draw_texture(_script_tex("kaban_list", 2), Vector2(620, control_y + (0 if game == "joey" else 2)))
+	draw_texture(_script_tex("kaban_list", 2), Vector2(620, _trunk_header_background_y()))
 	var sort_strip := _tex(font.resource(11))  # icon_sort: 14 iconos de 30
 	var active: int = SORT_ICON[_sort]
 	var sw := sort_strip.get_width() / 14.0
@@ -1204,6 +1294,7 @@ func _process(delta: float) -> void:
 	_clock += NativeClock.ticks(delta)
 	while _clock >= 1.0:
 		_clock -= 1.0
+		_detail.visible_characters = _detail_reveal.step()
 		_blend.tick()
 		_native_tick()
 	_blend.fraction = _clock
@@ -1269,21 +1360,7 @@ func _toggle_window() -> void:
 
 ## Y53fd30/Ka542400 leen bit0 de +1178; Jo5be190 lee byte +10ee.
 func _copy_limit(id: int) -> int:
-	var native: Dictionary = SaveData.data.get("native_system", {})
-	if game == "joey":
-		if id in JOEY_FORBIDDEN:
-			var block := Marshalls.base64_to_raw(str(native.get("block", "")))
-			return 0 if block.size() > 0x10ee and block[0x10ee] != 0 else 1
-		if id in JOEY_LIMITED:
-			return 1
-		return 2 if id in [1163, 590, 1157] else MAX_COPIES
-	if id in OLD_FORBIDDEN:
-		return 0
-	if int(native.get("limit_flags", 0)) & 1:
-		return MAX_COPIES
-	if id in OLD_LIMITED:
-		return 1
-	return 2 if id in [1157, 1147, 1163, 590] else MAX_COPIES
+	return CARD_LIMITS.copy_limit(game, id, SaveData.data.get("native_system", {}))
 
 
 ## Cuenta todas las zonas del ID propio, pero solo main/side de sus variantes
@@ -1796,7 +1873,7 @@ func _input(event: InputEvent) -> void:
 	# Onda del clic del puntero global (0x460120, +0x119 en 0x40c8c0), tambien con un cuadro
 	# abierto.
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		_cursor.click(event.position)
+		_cursor.click(event.position, true)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -30,6 +30,9 @@ var _ph_clock := 0.0
 var _ph_blend := NativeBlend.new()   # fundido y pulso de la ficha de la fase entre ticks
 ## Ticks nativos pendientes para el motor (un paso de 53dbf0 por tick).
 var _engine_clock := 0.0
+## El motor compartido completa op14 al emitirlo; Kaiba aun debe consumir
+## la vuelta de acuse405450 despues de retirarse el objeto.
+var _start_banner_ack := false
 var _ph_drawn := []
 var _phase_layer := Node2D.new()
 var _phase_mask: Image
@@ -73,8 +76,10 @@ func _ready() -> void:
 	add_child(bg)
 	_setup_detail()
 	_setup_field()
-	add_child(_board)
+	#481040: fases0xf0 (Kaiba/Yugi0xff), pilas0x100: las cartas tapan
+	#el fondo opaco de las fichas que alcanza los primeros pixeles de las pilas.
 	add_child(_phase_layer)
+	add_child(_board)
 	_setup_cursor()
 	_info = _label(Vector2(238, 66), Vector2(552, 22), 12)
 	_log = _label(Vector2(240, 280), Vector2(300, 60), 12)
@@ -175,33 +180,47 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if _duel == null:
 		return
-	_tick_card_stats(_delta)
+	# Ka437f80 / Jo44dd00: los objetos de mascara1 solo avanzan con
+	# sombreado apagado y contador0. El tick que crea op14 ya paso por aqui;
+	# el que termina de cerrarlo sigue congelado y se reanuda en el siguiente.
+	var mask_one_active: bool = _visual == null or not _visual._start_banner_shade
+	if mask_one_active:
+		_tick_card_stats(_delta)
 	if _visual != null:
 		_visual.pointer = _pointer_pos
 		# Esperando al jugador, la mesa puede adoptar todo lo que el motor cambio sin evento.
 		_visual.at_rest = _waiting_for_player() and _duel.dialog_open.is_empty()
-	_ph_clock += NativeClock.ticks(_delta)
-	while _ph_clock >= 1.0:
-		_ph_clock -= 1.0
-		_ph_blend.tick()
-		_phase_panel_tick()
-		if _duel.dialog_open.is_empty() and _duel.list_open.is_empty():
-			_step_pointer()
-	_ph_blend.fraction = _ph_clock
-	_draw_phase_panel()
+	if mask_one_active:
+		_ph_clock += NativeClock.ticks(_delta)
+		while _ph_clock >= 1.0:
+			_ph_clock -= 1.0
+			_ph_blend.tick()
+			_phase_panel_tick()
+			if _duel.dialog_open.is_empty() and _duel.list_open.is_empty():
+				_step_pointer()
+		_ph_blend.fraction = _ph_clock
+		_draw_phase_panel()
 	# El original llama a 53dbf0 una vez por vuelta del bucle principal (NativeClock.HZ): el
 	# motor da un paso por tick nativo, aunque la pantalla se dibuje mas a menudo.
 	_engine_clock = minf(_engine_clock + NativeClock.ticks(_delta), 4.0)
 	var steps := int(_engine_clock)
 	_engine_clock -= steps
 	if _help != null: _help.show_between(_engine_clock)
+	var start_shade: bool = _visual != null and _visual._start_banner_shade
 	var presenting := _advance_visual(_delta)
+	if game == "kaiba" and start_shade and not _visual._start_banner_shade:
+		_start_banner_ack = true
 	if _wait_label != null:
 		# 44ba10: sin cartel mientras hay objetos de presentacion activos.
 		_wait_label.waiting = not presenting and _duel.net_waiting()
 	if presenting:
 		# El motor no lee el raton mientras la presentacion lo detiene: el clic se pierde.
 		if steps > 0: _press_bits = 0
+		return
+	if _start_banner_ack:
+		if steps > 0:
+			_start_banner_ack = false
+			_press_bits = 0
 		return
 	if _finished:
 		# 53eda0 sin sesion (bit 4 de a133f2): el rival se fue; vuelta al titulo (escena 4).

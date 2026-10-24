@@ -6,6 +6,14 @@ static func base_position(p: int, loc: int) -> Vector2:
 	if loc == 14: base = Vector2(760, 366) if p == 0 else Vector2(290, 234)
 	return base
 
+## 45c140: el indice de la referencia distingue la base y la superficie de pila.
+## El mazo usa profundidad con indice0; fusion/cementerio con indice distinto de0.
+static func object_position(p: int, loc: int, index: int, count: int) -> Vector2:
+	var base := base_position(p, loc)
+	if (loc == 13 and index != 0) or (loc != 13 and index == 0): return base
+	var depth := 10 if count >= 40 else (count - 1) / 4
+	return base + Vector2(depth if base.x > 400 else -depth, -depth)
+
 static func plan(p: int, loc: int, count: int) -> Dictionary:
 	if count <= 0: return {"top": [], "draws": [], "counter": []}
 	var base := base_position(p, loc)

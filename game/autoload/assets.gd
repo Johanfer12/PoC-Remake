@@ -27,6 +27,7 @@ var _index := {}        # ruta relativa en minusculas -> ruta absoluta
 var _textures := {}     # ruta absoluta -> Texture2D
 var _layouts := {}      # ruta absoluta -> Layout
 var _missing := {}      # Un aviso por recurso ausente, aunque se solicite cada fotograma.
+var _voice_packs := {}
 
 
 func _ready() -> void:
@@ -40,6 +41,18 @@ func reindex() -> void:
 	_missing.clear()
 	if DirAccess.dir_exists_absolute(Paths.data_dir):
 		_scan(Paths.data_dir, "")
+	_voice_packs.clear()
+	var voices: Variant = read_json("voice_manifest.json")
+	if voices is Dictionary:
+		_voice_packs = voices.get("games", {})
+
+
+func voice_language(game: String) -> String:
+	var pack: Dictionary = _voice_packs.get(game, {})
+	var available: Array = pack.get("languages", [])
+	if available.has(lang):
+		return lang
+	return str(pack.get("default", ""))
 
 
 ## Preferencia del port; los originales se instalaban con un idioma fijo.
@@ -48,6 +61,29 @@ func set_language(value: String) -> bool:
 		return false
 	lang = value
 	return true
+
+
+func system_language(locale: String = OS.get_locale_language()) -> String:
+	return {"es": "s", "en": "e", "de": "g", "fr": "f", "it": "i", "ja": "j"}.get(locale.replace("-", "_").get_slice("_", 0).to_lower(), "e")
+
+
+func preferred_language() -> String:
+	var config := ConfigFile.new()
+	config.load(Paths.settings_path())
+	var value := str(config.get_value("preferences", "language", SaveData.data.get("settings", {}).get("language", system_language())))
+	return value if LANGUAGES.has(value) else system_language()
+
+
+func remember_language(value: String) -> void:
+	if not set_language(value):
+		return
+	var config := ConfigFile.new()
+	config.load(Paths.settings_path())
+	config.set_value("preferences", "language", value)
+	config.save(Paths.settings_path())
+	if Paths.has_data():
+		SaveData.data.get_or_add("settings", {})["language"] = value
+		SaveData.save()
 
 
 func text_language() -> String:
@@ -62,6 +98,16 @@ func dialog_texts() -> Variant:
 ## Ruta absoluta de un recurso, o "" si no existe.
 func resolve(rel_path: String) -> String:
 	var rel := rel_path.replace("\\", "/").to_lower()
+	var parts := rel.split("/")
+	if parts.size() == 4 and parts[1] == "voice" and parts[2] in ["stream", "internal"]:
+		var pack: Dictionary = _voice_packs.get(parts[0], {})
+		var choices: Array = [lang, pack.get("default", ""), "e"]
+		choices.append_array(pack.get("languages", []))
+		for language in choices:
+			var localized := "%s/voice/%s/%s/%s" % [parts[0], language, parts[2], parts[3]]
+			var voice := _lookup(localized)
+			if voice != "":
+				return voice
 	for ext in [".bmp", ".yga"]:
 		if rel.ends_with(ext):
 			rel = rel.trim_suffix(ext) + ".png"

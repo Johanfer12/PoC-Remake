@@ -103,3 +103,12 @@ func _process(delta: float) -> void:
 		else:
 			_modal_network_clock = 0.0
 	super._process(delta)
+	# 44dd00: 5c0000 modifica las manos antes de45c8b0; el resto de objetos
+	# se dibuja con esas coordenadas en el mismo tick de la insercion.
+	if _duel != null and _visual != null and not _visual._shade_on and _visual._shade_c == 0:
+		if super._advance_hands(delta): _redraw()
+		_show_hands(_hand_clock)
+
+func _advance_hands(_delta: float) -> bool:
+	# El padre avanza presentacion antes del motor; Joey recoloca despues.
+	return false

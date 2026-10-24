@@ -90,7 +90,7 @@ func step(lp: Array) -> void:
 	for p in 2:
 		var value := maxi(int(lp[p]), 0)
 		if _shown[p] >= 0 and value != _shown[p]:
-			# 0x45d750 / 0x45f430: cuando cambia la cantidad mostrada el agua se agita (0x1f).
+			# Yugi 0x45d750 / Kaiba 0x45f430: cuando cambia la cantidad mostrada el agua se agita (0x1f).
 			_shake[p] = 0x1f
 		_shown[p] = value
 		var speed := 1 if _game == "kaiba" else 1 + int(_shake[p] != 0)

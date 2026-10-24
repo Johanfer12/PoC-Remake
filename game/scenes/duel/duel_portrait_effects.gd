@@ -49,6 +49,8 @@ static func normalize(event: Dictionary, duel: Duel) -> Dictionary:
 	var d: Dictionary = event.duplicate(true)
 	var kind: String = d.get("kind", "")
 	var p: int = int(d.get("p", 0)) & 1
+	if LauncherSettings.fast_play and kind in ["reaction_destroy", "reaction_flip", "reaction_lp", "reaction_card", "reaction_activation", "cmd"]:
+		return {}
 	if str(d.get("game", "yugi")) == "kaiba" and kind in ["reaction_destroy", "reaction_flip", "reaction_card", "reaction_lp", "cmd"]:
 		return _kaiba(d, duel)
 	if str(d.get("game", "yugi")) == "joey" and kind in ["reaction_activation", "reaction_destroy", "reaction_flip", "reaction_card", "reaction_lp", "cmd"]:

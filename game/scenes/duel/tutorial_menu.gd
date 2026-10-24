@@ -98,7 +98,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_select(_hit(PointerGlide.hover(_mouse)))
 		_cursor.update(event.position, selected >= 0, -1, event.pressed)
 		if event.pressed:
-			_cursor.click(event.position)
+			_cursor.click(event.position, true)
 			_activate()
 	elif event.is_action_pressed("ui_up") or event.is_action_pressed("ui_left"):
 		_warp(maxi(0, selected - 1))

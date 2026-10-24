@@ -89,10 +89,12 @@ var _by_index := {}
 var _page_font: DigitFont
 var _rate_font: DigitFont
 var _text := RichTextLabel.new()
+var _detail_reveal := preload("res://core/card_detail_reveal.gd").new()
 var _stats := Label.new()
 var _text_clip := Control.new()
 var _scroll: NativeScrollBar
 var _text_rect := Rect2i()           # +0x160..+0x16c del panel
+var _text_top_padding := 0
 var _cursor = preload("res://scenes/duel/duel_cursor_visual.gd").new()
 
 
@@ -219,6 +221,7 @@ func _process(delta: float) -> void:
 
 
 func _tick() -> void:
+	_text.visible_characters = _detail_reveal.step()
 	_glide_step()
 	_blend.tick()
 	_ops.clear()
@@ -429,8 +432,11 @@ func _build_detail() -> void:
 	var tl := _num(_detail, 1)
 	var br := _num(_detail, 2)
 	_text_rect = Rect2i(tl.x + 3, tl.y + 1, br.x - 5 - (tl.x + 3), br.y - (tl.y + 1))
-	_text_clip.position = Vector2(_text_rect.position)
-	_text_clip.size = Vector2(_text_rect.size)
+	# La mascara superior de Kaiba cubre seis filas del rectangulo nativo.
+	# Reservarlas evita que el nombre empiece detras de la cabecera DESCRIPCION.
+	_text_top_padding = TEXT_EXTRA[game]
+	_text_clip.position = Vector2(_text_rect.position) + Vector2(0, _text_top_padding)
+	_text_clip.size = Vector2(_text_rect.size) - Vector2(0, _text_top_padding)
 	_text_clip.clip_contents = true
 	_text_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_text_clip)
@@ -440,6 +446,7 @@ func _build_detail() -> void:
 	bold.font_names = font.font_names
 	bold.font_weight = 700
 	_text.bbcode_enabled = true
+	_text.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	_text.scroll_active = false
 	_text.fit_content = true
 	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -496,9 +503,12 @@ func _update_detail() -> void:
 			_stats.text = "ATK/%4d DEF/%4d" % [int(card["atk"]), int(card["defense"])]
 		text += "[color=%s]%s[/color]" % [DETAIL_COLORS[game]["body"], _bb(CardDB.text(card, "descriptions"))]
 	_text.text = text
-	_text_clip.size.y = _text_rect.size.y - (1 + STATS_HEIGHT[game] if _is_monster(card) else 0)
+	_detail_reveal.reset(_text.get_parsed_text(), Assets.lang == "j")
+	_text.visible_characters = 0
+	_text_clip.size.y = _text_rect.size.y - _text_top_padding - (1 + STATS_HEIGHT[game] if _is_monster(card) else 0)
 	_scroll.set_value(0)
-	_scroll.set_range(maxi(0, int(_text.get_content_height()) + TEXT_EXTRA[game] - int(_text_clip.size.y)))
+	# El margen de la mascara ya esta descontado del area visible, una sola vez.
+	_scroll.set_range(maxi(0, int(_text.get_content_height()) + TEXT_EXTRA[game] - _text_top_padding - int(_text_clip.size.y)))
 
 
 static func _bb(text: String) -> String:
@@ -800,7 +810,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			_left_down = event.pressed
 			if event.pressed:
-				_cursor.click(_mouse)
+				_cursor.click(_mouse, true)
 			else:
 				_released = true   # vtable +0x38 de DAT_005af864: el boton se suelta
 		_cursor.update(_mouse, false, -1, _left_down)

@@ -1,10 +1,13 @@
 extends Node2D
-## Botones del selector de juego (propios del remake, no existen en el original): sonido abajo
-## a la derecha y configuracion abajo a la izquierda, como medallones dorados. La
-## configuracion incluye volumen/silencio y, solo en movil, el tipo de manejo tactil.
-## La eleccion se guarda en la partida (SaveData.data["launcher"]) y se recupera al abrir.
+## Botones propios del selector: ajustes y sonido abajo a la izquierda, salir a la derecha.
+## Medallones dorados. La
+## configuracion: musica, aspecto, FPS y velocidad de simulacion.
+## Audio en SaveData; aspecto, FPS y simulacion en LauncherSettings (content.cfg).
 
 signal changed
+signal exit_requested
+signal update_requested
+var update_available := false
 
 const RADIUS := 24.0
 const MARGIN := 18.0
@@ -15,7 +18,7 @@ const GOLD_DARK := Color(0.42, 0.27, 0.06)
 const BRONZE := Color(0.62, 0.43, 0.12)
 const STONE := Color(0.07, 0.05, 0.04)
 const OUTLINE := Color(0.35, 0.08, 0.02)
-const PANEL_SIZE := Vector2(430, 236)
+const PANEL_SIZE := Vector2(520, 394)
 const SLIDER_W := 200.0
 const KEY_STEP := 0.05
 
@@ -25,9 +28,11 @@ const SVG_SOUND := SVG_HEAD + "<polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 
 const SVG_MUTED := SVG_HEAD + "<polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'/><line x1='23' y1='9' x2='17' y2='15'/><line x1='17' y1='9' x2='23' y2='15'/></svg>"
 const SVG_GEAR := SVG_HEAD + "<circle cx='12' cy='12' r='3'/><path d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/></svg>"
 const SVG_CLOSE := SVG_HEAD + "<line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg>"
-const SVG_CHECK := SVG_HEAD + "<polyline points='20 6 9 17 4 12'/></svg>"
+const SVG_EXIT := SVG_HEAD + "<path d='M18.36 6.64a9 9 0 1 1-12.73 0'/><line x1='12' y1='2' x2='12' y2='12'/></svg>"
+const SVG_UPDATE := SVG_HEAD + "<path d='M20 7a9 9 0 1 0 1 9'/><polyline points='20 2 20 8 14 8'/></svg>"
 
-var volume := 1.0
+const DEFAULT_VOLUME := 0.5
+var volume := DEFAULT_VOLUME
 var muted := false
 var pointer_mode := "menu"
 var panel_open := false
@@ -35,6 +40,7 @@ var panel_open := false
 var _icons := {}             # nombre -> {tex, offset} (offset = centrado optico medido)
 var _hover := ""             # "sound", "settings", "close", "slider", "mute"
 var _dragging := false
+var _focused_row := 0
 var _time := 0.0
 var _font := ThemeDB.fallback_font
 
@@ -42,11 +48,11 @@ var _font := ThemeDB.fallback_font
 func _ready() -> void:
 	z_index = 10
 	var saved: Dictionary = SaveData.data.get("launcher", {})
-	volume = clampf(float(saved.get("music_volume", 1.0)), 0.0, 1.0)
+	volume = clampf(float(saved.get("music_volume", DEFAULT_VOLUME)), 0.0, 1.0)
 	muted = bool(saved.get("music_muted", false))
 	pointer_mode = str(saved.get("pointer_mode", "menu"))
 	for pair in [["sound", SVG_SOUND], ["muted", SVG_MUTED], ["gear", SVG_GEAR],
-			["close", SVG_CLOSE], ["check", SVG_CHECK]]:
+			["close", SVG_CLOSE], ["exit", SVG_EXIT], ["update", SVG_UPDATE]]:
 		_icons[pair[0]] = _rasterize(pair[1])
 
 
@@ -69,7 +75,15 @@ func _screen() -> Vector2:
 
 
 func _sound_center() -> Vector2:
+	return _settings_center() + Vector2(RADIUS * 2.0 + 14.0, 0)
+
+
+func _exit_center() -> Vector2:
 	return Vector2(_screen().x - MARGIN - RADIUS, _screen().y - MARGIN - RADIUS)
+
+
+func _update_center() -> Vector2:
+	return _exit_center() - Vector2(RADIUS * 2.0 + 14.0, 0)
 
 
 func _settings_center() -> Vector2:
@@ -77,11 +91,16 @@ func _settings_center() -> Vector2:
 
 
 func _panel_rect() -> Rect2:
-	var size := Vector2(430, 360) if _mobile_controls() else PANEL_SIZE
-	return Rect2((_screen() - size) / 2.0, size)
+	var panel_size := Vector2(520, 446) if _mobile_controls() else PANEL_SIZE
+	return Rect2((_screen() - panel_size) / 2.0, panel_size)
+
 
 func _mobile_controls() -> bool:
 	return OS.has_feature("mobile") or Paths.cmdline_value("mobile-controls") == "true"
+
+
+func _mode_rect(mode: String) -> Rect2:
+	return Rect2(_panel_rect().position + Vector2(215 + (136 if mode == "menu" else 0), 370), Vector2(132, 32))
 
 
 func _close_center() -> Vector2:
@@ -91,21 +110,11 @@ func _close_center() -> Vector2:
 
 func _slider_rect() -> Rect2:
 	var r := _panel_rect()
-	return Rect2(r.position.x + 140, r.position.y + 92, SLIDER_W, 8)
+	return Rect2(r.position.x + 215, r.position.y + 92, SLIDER_W, 8)
 
 
-func _mute_rect() -> Rect2:
-	var r := _panel_rect()
-	return Rect2(r.position.x + 140, r.position.y + 136, 22, 22)
-
-func _mode_rect(mode: String) -> Rect2:
-	var r := _panel_rect()
-	return Rect2(r.position + Vector2(26 if mode == "hold" else 222, 252), Vector2(182, 40))
-
-
-func _language_rect() -> Rect2:
-	var r := _panel_rect()
-	return Rect2(r.position + Vector2(140, 182), Vector2(220, 30))
+func _option_rect(row: int) -> Rect2:
+	return Rect2(_panel_rect().position + Vector2(215, 130 + row * 48), Vector2(270, 32))
 
 
 func _hit(pos: Vector2) -> String:
@@ -114,18 +123,21 @@ func _hit(pos: Vector2) -> String:
 			return "close"
 		if _slider_rect().grow_individual(8, 12, 8, 12).has_point(pos):
 			return "slider"
-		if _mute_rect().grow(4).has_point(pos):
-			return "mute"
-		if _language_rect().has_point(pos):
-			return "language"
 		if _mobile_controls():
 			for mode in ["hold", "menu"]:
 				if _mode_rect(mode).has_point(pos): return mode
+		for row in 5:
+			if _option_rect(row).has_point(pos):
+				return ["aspect", "fps", "speed", "fast_play", "translations"][row]
 		return "panel" if _panel_rect().has_point(pos) else "outside"
 	if pos.distance_to(_sound_center()) <= RADIUS:
 		return "sound"
 	if pos.distance_to(_settings_center()) <= RADIUS:
 		return "settings"
+	if pos.distance_to(_exit_center()) <= RADIUS:
+		return "exit"
+	if update_available and pos.distance_to(_update_center()) <= RADIUS:
+		return "update"
 	return ""
 
 
@@ -157,17 +169,22 @@ func _input(event: InputEvent) -> void:
 				_toggle_mute()
 			"settings":
 				_open_panel(true)
+			"exit":
+				exit_requested.emit()
+			"update":
+				update_requested.emit()
 			"close", "outside":
 				_open_panel(false)
 			"slider":
+				_focused_row = 0
 				_dragging = true
 				_set_volume_from(local_pos.x)
-			"mute":
-				_toggle_mute()
-			"language":
-				_cycle_language()
+			"aspect", "fps", "speed", "fast_play", "translations":
+				_focused_row = ["aspect", "fps", "speed", "fast_play", "translations"].find(_hit(local_pos)) + 1
+				_cycle_option(_focused_row - 1, 1)
 			"hold", "menu":
 				pointer_mode = _hit(local_pos)
+				_focused_row = 6
 				_save()
 			"panel":
 				pass
@@ -177,27 +194,45 @@ func _input(event: InputEvent) -> void:
 		return
 	if not panel_open:
 		return
-	# Con el panel abierto se consume todo el teclado.
-	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_accept"):
+	# Arriba/abajo eligen fila; izquierda/derecha cambian su valor.
+	if event.is_action_pressed("ui_cancel"):
 		_open_panel(false)
-	elif event.is_action_pressed("ui_left"):
-		_set_volume(volume - KEY_STEP)
-		_save()
-	elif event.is_action_pressed("ui_right"):
-		_set_volume(volume + KEY_STEP)
-		_save()
-	elif event is InputEventKey and event.pressed and event.keycode == KEY_L:
-		_cycle_language()
+	elif event.is_action_pressed("ui_up"):
+		_focused_row = wrapi(_focused_row - 1, 0, 7 if _mobile_controls() else 6)
+	elif event.is_action_pressed("ui_down"):
+		_focused_row = wrapi(_focused_row + 1, 0, 7 if _mobile_controls() else 6)
+	elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
+		var step := -1 if event.is_action_pressed("ui_left") else 1
+		if _focused_row == 0:
+			_set_volume(volume + KEY_STEP * step)
+			_save()
+		else:
+			_cycle_option(_focused_row - 1, step)
+	elif event.is_action_pressed("ui_accept"):
+		if _focused_row >= 1: _cycle_option(_focused_row - 1, 1)
 	get_viewport().set_input_as_handled()
 
 
-func _cycle_language() -> void:
-	var languages := ["s", "e"]
-	var next := (languages.find(Assets.lang) + 1) % languages.size()
-	Assets.set_language(languages[next])
-	var settings: Dictionary = SaveData.data.get_or_add("settings", {})
-	settings["language"] = Assets.lang
-	SaveData.save()
+func _cycle_option(row: int, step: int) -> void:
+	match row:
+		0:
+			var choices := LauncherSettings.ASPECTS
+			LauncherSettings.aspect = choices[wrapi(choices.find(LauncherSettings.aspect) + step, 0, choices.size())]
+		1:
+			var choices := LauncherSettings.FRAME_RATES
+			LauncherSettings.frame_rate = choices[wrapi(choices.find(LauncherSettings.frame_rate) + step, 0, choices.size())]
+		2:
+			LauncherSettings.simulation_speed = 2.0 if LauncherSettings.simulation_speed == 1.0 else 1.0
+		3:
+			LauncherSettings.fast_play = not LauncherSettings.fast_play
+		4:
+			LauncherSettings.improved_card_texts = not LauncherSettings.improved_card_texts
+		5:
+			pointer_mode = "hold" if pointer_mode == "menu" else "menu"
+			_save()
+	LauncherSettings.save_preferences()
+	if row == 4 and LauncherSettings.improved_card_texts:
+		CardTranslations.ensure_spanish_pack()
 	queue_redraw()
 
 
@@ -229,7 +264,8 @@ func _save() -> void:
 	var saved: Dictionary = SaveData.data.get("launcher", {})
 	saved.merge({"music_volume": volume, "music_muted": muted, "pointer_mode": pointer_mode}, true)
 	SaveData.data["launcher"] = saved
-	SaveData.save()
+	if Paths.has_data():
+		SaveData.save()
 	changed.emit()
 
 
@@ -238,6 +274,24 @@ func _save() -> void:
 func _draw() -> void:
 	_medallion(_settings_center(), RADIUS, "gear", _hover == "settings" or panel_open)
 	_medallion(_sound_center(), RADIUS, "muted" if muted else "sound", _hover == "sound")
+	_medallion(_exit_center(), RADIUS, "exit", _hover == "exit")
+	if update_available:
+		_medallion(_update_center(), RADIUS, "update", _hover == "update")
+		draw_circle(_update_center() + Vector2(17, -17), 5, GOLD_LIGHT)
+	if update_available and _hover == "update" and not panel_open:
+		var text := ("Actualizar desde GitHub" if Assets.lang == "s" else "Update from GitHub")
+		if update_available:
+			text += " · " + Updates.available
+		var width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
+		var pos := Vector2(_screen().x - MARGIN - width, _update_center().y - RADIUS - 12)
+		var bubble := Rect2(pos - Vector2(7, 20), Vector2(width + 14, 28))
+		draw_rect(bubble, Color(0.04, 0.03, 0.05, 0.97))
+		draw_rect(bubble, Color(GOLD, 0.45), false, 1.0)
+		_label(text, pos)
+	if _hover == "exit" and not panel_open:
+		var text: String = {"s": "Salir", "e": "Exit", "g": "Beenden", "f": "Quitter", "i": "Esci", "j": "終了"}.get(Assets.lang, "Exit")
+		var width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
+		_label(text, _exit_center() + Vector2(-width / 2.0, -RADIUS - 10))
 	if panel_open:
 		_draw_panel()
 
@@ -283,27 +337,31 @@ func _draw_panel() -> void:
 	draw_line(Vector2(r.position.x + 40, line_y), Vector2(r.end.x - 40, line_y), Color(GOLD, 0.5), 1.0)
 	_label(Assets.port_label(2), Vector2(r.position.x + 34, _slider_rect().get_center().y + 6))
 	_draw_slider()
-	_label(Assets.port_label(3), Vector2(r.position.x + 34, _mute_rect().get_center().y + 6))
-	_draw_checkbox()
-	_label(Assets.port_label(4), Vector2(r.position.x + 34, _language_rect().get_center().y + 6))
-	var language_rect := _language_rect()
-	draw_rect(language_rect, GOLD_DARK)
-	draw_rect(language_rect.grow(-1), STONE)
-	_label(str(Assets.LANGUAGES[Assets.lang]) + "  >", language_rect.position + Vector2(8, 21))
-	if _mobile_controls(): _draw_pointer_options(r)
+	var spanish := Assets.lang == "s"
+	var names := ["Aspecto", "FPS", "Simulación", "Juego rápido", "Traducciones"] if spanish else ["Aspect", "FPS", "Simulation", "Quick play", "Translations"]
+	var aspects := ["Estirado", "Original sin fondo", "Overlay"] if spanish else ["Stretched", "Original, no background", "Overlay"]
+	var values := [str(aspects[LauncherSettings.ASPECTS.find(LauncherSettings.aspect)]),
+		("Display (%d Hz)" % LauncherSettings.display_fps()) if LauncherSettings.frame_rate == 0 else str(LauncherSettings.frame_rate),
+		"Normal" if LauncherSettings.simulation_speed == 1.0 else "2×",
+		("Activado" if LauncherSettings.fast_play else "Desactivado") if spanish else ("On" if LauncherSettings.fast_play else "Off"),
+		("Mejoradas (ES)" if spanish else "Enhanced (ES)") if LauncherSettings.improved_card_texts else ("Originales" if spanish else "Original")]
+	for row in 5:
+		var rect := _option_rect(row)
+		_label(names[row], Vector2(r.position.x + 34, rect.get_center().y + 6))
+		draw_rect(rect, GOLD if _focused_row == row + 1 or _hover == ["aspect", "fps", "speed", "fast_play", "translations"][row] else GOLD_DARK)
+		draw_rect(rect.grow(-1), STONE)
+		_label(values[row] + "  >", rect.position + Vector2(8, 22))
+	if _mobile_controls():
+		_label("Control táctil" if spanish else "Touch controls", r.position + Vector2(34, 392))
+		for mode in ["hold", "menu"]:
+			var rect := _mode_rect(mode)
+			draw_rect(rect, GOLD if pointer_mode == mode else GOLD_DARK)
+			draw_rect(rect.grow(-1), STONE)
+			_label(("Mantener" if spanish else "Hold") if mode == "hold" else ("Menú" if spanish else "Menu"), rect.position + Vector2(8,22))
+	if _focused_row == 0: draw_rect(_slider_rect().grow(12), Color(GOLD, 0.6), false, 1.0)
+	var status: String = CardTranslations.status_text(spanish) if LauncherSettings.improved_card_texts else ("Solo nombres y descripciones de cartas" if spanish else "Card names and descriptions only")
+	draw_string(_font, Vector2(r.position.x + 34, r.end.y - 20), status, HORIZONTAL_ALIGNMENT_LEFT, 450, 13, GOLD_LIGHT)
 	_medallion(_close_center(), 14.0, "close", _hover == "close")
-
-func _draw_pointer_options(r: Rect2) -> void:
-	_label("Tipo de manejo táctil", r.position + Vector2(34, 224))
-	for mode in ["hold", "menu"]:
-		var rect := _mode_rect(mode)
-		draw_rect(rect, GOLD_DARK if pointer_mode == mode else STONE)
-		draw_rect(rect, GOLD_LIGHT if pointer_mode == mode else BRONZE, false, 2)
-		var text := "Mantener oprimido" if mode == "hold" else "Con menú"
-		var width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17).x
-		_label(text, rect.get_center() + Vector2(-width / 2, 6))
-	var hint := "1 toque: ver · 2: actuar · Mantener: derecho" if pointer_mode == "hold" else "1 toque: ver · 2: actuar · Mantener: derecho"
-	_label(hint, r.position + Vector2(34, 330))
 
 
 func _draw_slider() -> void:
@@ -320,16 +378,6 @@ func _draw_slider() -> void:
 	draw_circle(knob, (9 if hot else 8) - 1.5, GOLD_LIGHT if hot else GOLD)
 	draw_circle(knob, 3, GOLD_DARK)
 	_label("%d%%" % roundi(volume * 100), Vector2(t.end.x + 16, t.get_center().y + 6))
-
-
-func _draw_checkbox() -> void:
-	var b := _mute_rect()
-	var hot := _hover == "mute"
-	draw_rect(b.grow(1), GOLD_DARK)
-	draw_rect(b, GOLD_LIGHT if hot else GOLD)
-	draw_rect(b.grow(-2), STONE)
-	if muted:
-		_draw_icon("check", b.get_center(), 18, GOLD_LIGHT)
 
 
 func _label(text: String, pos: Vector2) -> void:

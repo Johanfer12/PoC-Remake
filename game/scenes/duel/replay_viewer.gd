@@ -51,10 +51,14 @@ var _visual_event_pos := 0
 var _preview := Sprite2D.new()
 ## Texto del panel de detalle (FUN_00412410): nombre, [tipo] y descripcion con sus colores.
 var _description := RichTextLabel.new()
+var _detail_reveal := preload("res://core/card_detail_reveal.gd").new()
 ## "ATK/%4d DEF/%4d" de los monstruos, aparte y abajo a la derecha (0x412410, tamano 0xd).
 var _detail_stats := Label.new()
 var _detail_icons: Node2D
 var _preview_card_id := -1
+var _preview_hover_point := Vector2(-9999, -9999)
+var _preview_hover_ticks := 0
+var _oriented_hand_textures := {}
 var _hover_card: Dictionary = {}
 var _hit_cards: Array[Dictionary] = []
 var _hand_positions: Dictionary = {}
@@ -106,6 +110,8 @@ func _native_card_position(p: int, loc: int, i: int) -> Vector2:
 	if loc == 11:
 		if i >= count: return Vector2(525,600 if p == 0 else 0)
 		return _hand_positions.get(p * 256 + i, DuelGeometry.hand(p,i,count))
+	if loc in [12, 13, 14] and _visual != null:
+		return _visual.pile_object_position(p, loc, i)
 	return DuelGeometry.location(p,loc,i,count)
 
 func _collect_visual_events() -> bool:
@@ -117,17 +123,8 @@ func _collect_visual_events() -> bool:
 		if _tutorial != null and event.get("kind", "") == "tutorial_bubble": _log.hide()
 		_visual.enqueue(event, _duel)
 		if _cursor_visual != null: _cursor_visual.event(event, _duel)
-		if event.get("card", -1) >= 0 and _event_card_public(event):
-			_set_preview(event["card"])
 		_visual_event_pos += 1
 	return _visual.busy() or (_tutorial != null and _tutorial.busy())
-
-func _event_card_public(event: Dictionary) -> bool:
-	if event.get("p", 0) == 0 or not _visual.hidden_hand: return true
-	var kind: String = event.get("kind", "")
-	if kind == "special_summon": return (int(event.get("a", 0)) & 256) != 0
-	if kind == "monster_appear": return (_duel.m.u8(DuelMem.zone(1, clampi(int(event.get("zone", 0)), 0, 10)) + 6) & 2) != 0
-	return kind in ["card_effect", "reaction_destroy"]
 
 func _advance_visual(delta: float) -> bool:
 	if _cursor_visual != null: _cursor_visual.advance(delta)
@@ -168,6 +165,7 @@ func _setup_cursor() -> void:
 	_cursor_visual = preload("res://scenes/duel/duel_cursor_visual.gd").new()
 	add_child(_cursor_visual)
 	_pointer_pos = get_viewport().get_mouse_position()
+	_pointer_pos = Debug.replay_pointer_position(_pointer_pos)
 	_refresh_cursor(true)
 
 func _cursor_action() -> int:
@@ -194,7 +192,8 @@ func _setup_detail() -> void:
 	detail.centered = false
 	add_child(detail)
 	_preview.centered = false
-	_preview.position = DuelGeometry.PREVIEW_RECT.position
+	#41c6d0 blit directo(2,74) Joey; Kaiba412130/Yugi412280 usan(5,72).
+	_preview.position = Vector2(2,74) if game == "joey" else DuelGeometry.PREVIEW_RECT.position
 	_preview.texture = Assets.texture("common/card/card_ura.png")
 	if _preview.texture: _preview.scale = DuelGeometry.PREVIEW_RECT.size / _preview.texture.get_size()
 	add_child(_preview)
@@ -203,10 +202,16 @@ func _setup_detail() -> void:
 	# La ultima linea queda para "ATK/%4d DEF/%4d" (se dibuja aparte).
 	description_scroll.size = Vector2(184, 161 - 18)
 	description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	add_child(description_scroll)
+	var native_scroll := preload("res://scenes/duel/duel_detail_scroll.gd").new()
+	native_scroll.setup(game, description_scroll)
+	add_child(native_scroll)
 	_description.custom_minimum_size.x = 174
 	_description.fit_content = true
 	_description.bbcode_enabled = true
+	# Componer el parrafo completo evita que las palabras cambien de linea al revelarse.
+	_description.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
 	_description.scroll_active = false
 	_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_description.add_theme_font_size_override("normal_font_size", 12)
@@ -235,6 +240,10 @@ func _set_preview(id: int) -> void:
 	var card := CardDB.by_id(id)
 	if _detail_icons != null: _detail_icons.show_card(card if id >= 0 else {})
 	_description.text = _detail_text(card) if id >= 0 and not card.is_empty() else ""
+	_detail_reveal.reset(_description.get_parsed_text(), Assets.lang == "j")
+	_description.visible_characters = 0
+	if _description.get_parent() is ScrollContainer:
+		_description.get_parent().scroll_vertical = 0
 	_detail_stats.text = ""
 	if id >= 0 and card.get("category", "") == "monster":
 		_detail_stats.text = "ATK/%4d DEF/%4d" % [int(card.get("atk", 0)), int(card.get("defense", 0))]
@@ -329,6 +338,8 @@ func _advance_hands(delta: float) -> bool:
 	_hand_clock += NativeClock.ticks(delta)
 	while _hand_clock >= 1:
 		_hand_clock -= 1
+		_description.visible_characters = _detail_reveal.step()
+		_tick_preview_hover()
 		_hand_blend.tick()
 		for p in 2:
 			var count: int = _hand_cards[p].size()
@@ -341,6 +352,18 @@ func _advance_hands(delta: float) -> bool:
 				changed = changed or previous != next
 				_hand_positions[key] = next
 	return changed
+
+##Jo44dbc0/Ka437e50/Yu4378a0: cuatro consultas inmoviles; el reparto no selecciona.
+func _tick_preview_hover() -> void:
+	if _visual != null and (_visual._shade_on or _visual._shade_c != 0): return
+	if _pointer_pos != _preview_hover_point:
+		_preview_hover_point = _pointer_pos
+		_preview_hover_ticks = 0
+	else:
+		_preview_hover_ticks += 1
+	if _preview_hover_ticks != 4: return
+	var hover := _hit_card(_pointer_pos)
+	if not hover.is_empty(): _set_preview(int(hover.id) if hover.known else -1)
 
 func _hit_card(point: Vector2) -> Dictionary:
 	for i in range(_hit_cards.size() - 1, -1, -1):
@@ -360,12 +383,11 @@ func _input(event: InputEvent) -> void:
 		_pointer_pos = event.position
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			_pointer_pressed = event.pressed
-			if event.pressed and _cursor_visual != null: _cursor_visual.click(_pointer_pos)
+			if event.pressed and _cursor_visual != null: _cursor_visual.click(_pointer_pos, true)
 	if event is InputEventMouseMotion and _duel != null:
 		var hover := _hit_card(event.position)
 		if hover != _hover_card:
 			_hover_card = hover
-			if not hover.is_empty(): _set_preview(hover["id"] if hover["known"] else -1)
 			_redraw()
 	if event is InputEventMouseMotion or event is InputEventMouseButton: _refresh_cursor(true)
 
@@ -482,7 +504,11 @@ func _shown_lp() -> Array:
 	var out := []
 	for p in 2:
 		var value := _duel.m.u16(DuelMem.pl(p))
-		if _visual != null and _visual.active.get("mode", "") == "lp_total" and _visual.active.get("p", -1) == p:
+		# Inicio Kaiba: op14 precede a op10. El objeto45fa40 ya tiene8000,
+		# pero el motor aun conserva cero. Tras op10 vuelven a mandar sus LP,
+		# incluidos los escenarios que escriben el valor sin evento visual.
+		var initial_kaiba := game == "kaiba" and value == 0 and _duel.executed <= 1 and (_duel.cmd_op() & 0xfff) != 0x10
+		if _visual != null and (initial_kaiba or (_visual.active.get("mode", "") == "lp_total" and _visual.active.get("p", -1) == p)):
 			value = _visual.displayed_lp[p]
 		out.append(value)
 	return out
@@ -647,7 +673,9 @@ func _redraw() -> void:
 		var fusion: Dictionary = table.piles[p][DuelMem.LOC_FUSION]
 		if int(fusion["count"]) > 0:
 			# Jo44c3e0 ->43c550(p,12,0): existe desde la construccion de la mesa.
-			_card(0, _pile_position(p, DuelMem.LOC_FUSION, int(fusion["count"])), CARD_SIZE, false, false, p == 1)
+			var fusion_top := _pile_position(p, DuelMem.LOC_FUSION, int(fusion["count"]))
+			_card(0, fusion_top, CARD_SIZE, false, false, p == 1)
+			_register_card(fusion_top, CARD_SIZE, p, 12, int(fusion["count"]) - 1, int(fusion["top"]), p == 0)
 		var deck: Dictionary = table.piles[p][DuelMem.LOC_DECK]
 		if int(deck["count"]) > 0:
 			_card(0, _pile_position(p, DuelMem.LOC_DECK, int(deck["count"])), CARD_SIZE, false, false, p == 1)
@@ -694,9 +722,9 @@ func _label_on_board(pos: Vector2, font_size: int) -> Label:
 ## duel_fonts (cuadro 0 de duel/font/number.txt: 11 glifos de 6 x 8) de derecha a izquierda con
 ## paso 7, desde x = centro + 7 y con la parte de arriba en el borde inferior de la carta.
 func _pile_position(p: int, loc: int, count: int) -> Vector2:
-	if game != "joey": return DuelGeometry.location(p, loc)
-	var textures := [Assets.texture("joey/duel/card/deck.png"), Assets.texture("joey/duel/card/deck_shadow.png"), Assets.texture("joey/duel/card/grave.png")]
-	return preload("res://scenes/duel/joey_pile.gd").draw(_board, textures, p, loc, count)
+	var textures := [Assets.texture("%s/duel/card/deck.png" % game), Assets.texture("%s/duel/card/deck_shadow.png" % game), Assets.texture("%s/duel/card/grave.png" % game)]
+	if game == "joey": return preload("res://scenes/duel/joey_pile.gd").draw(_board, textures, p, loc, count)
+	return preload("res://scenes/duel/classic_pile.gd").draw(_board, textures, p, loc, count)
 
 func _count(center: Vector2, n: int, centered := false) -> void:
 	var font := Assets.texture("%s/duel/font/duel_fonts.png" % game)
@@ -754,16 +782,31 @@ func _register_card(pos: Vector2, size: Vector2, p: int, loc: int, i: int, id: i
 func _card(card_id: int, center: Vector2, size: Vector2, face_up: bool, sideways: bool,
 		flipped: bool) -> Sprite2D:
 	if _visual != null and _visual.hides(center): return null
-	var mini := size == CARD_SIZE
-	var tex: Texture2D = CardDB.card_texture(card_id, mini) if face_up and card_id >= 0 \
-			else Assets.texture("common/mini/card_ura.png" if mini else "common/card/card_ura.png")
+	# Conservar el arte completo hasta el raster final: las minis y la cache de
+	# mano reducida descartan detalle antes de ampliar la ventana del duelo.
+	var tex: Texture2D = CardDB.card_texture(card_id) if face_up and card_id >= 0 \
+			else Assets.texture("common/card/card_ura.png")
 	if tex == null:
 		return null
 	var s := Sprite2D.new()
 	s.texture = tex
+	s.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	s.scale = size / tex.get_size()
 	s.position = center
 	s.rotation = (PI / 2 if sideways else 0.0) + (PI if flipped else 0.0)
+	if size == HAND_SIZE and not sideways:
+		# Mantener la orientacion y el anclaje nativos, sin reducir la imagen.
+		if flipped:
+			var key := tex.get_instance_id()
+			if not _oriented_hand_textures.has(key):
+				var image: Image = tex.get_image().duplicate()
+				image.flip_x()
+				image.flip_y()
+				_oriented_hand_textures[key] = ImageTexture.create_from_image(image)
+			s.texture = _oriented_hand_textures[key]
+		s.rotation = 0
+		s.centered = false
+		s.offset = Vector2(-50,-72) / s.scale
 	_board.add_child(s)
 	return s
 

@@ -1,32 +1,77 @@
-# Yu-Gi-Oh! Power of Chaos Remake · Android sources
+# Yu-Gi-Oh! Power of Chaos Remake · Android
 
 **English** | [Español](README.es.md) | [Windows launcher](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main)
 
-The Windows launcher offers **Extract for PC** and **Create APK**. It includes the Android sources and prepares the tools automatically, without installing Python or configuring SDK/JDK separately. APKs retain touch controls, scrolling, dragging and native tribute selection, with the same icon as PC. All three games have their own widescreen duel backgrounds.
+## Contents
 
-Everything stays in **`PoC Data/android/`**: reusable tools, signing key, build logs and APKs. Joey connections have been tested between **PC and PC**, and between **PC and Android**. This is still an alpha; feedback and bug reports are welcome.
+- [Why use it?](#why-use-it)
+- [Play options](#play-options)
+- [First installation](#first-installation)
+- [Updates and existing installations](#updates-and-existing-installations)
+- [Build from source](#build-from-source)
+- [Validation and notices](#validation-and-notices)
 
-This branch contains sources, without original game resources or private signing keys.
+## Why use it?
 
-## Use with the Windows launcher
+- **All three games in one Android app.** Use your own compatible Yugi, Kaiba and Joey resources, starting with whichever games you own.
+- **Import once, keep playing after updates.** Your private resource pack and saved games remain in app storage while compatible public APKs update the engine.
+- **Prepare everything from Windows.** **Create APK** produces the public APK and your private PCK together, without an account, SDK/JDK installation or personal signing key.
+- **Current PC play settings on Android.** Aspect, FPS, simulation speed, quick play and improved Spanish card text accompany the existing touch controls.
+- **Touch controls built for duels.** Scrolling, dragging and native selection of one or two tribute monsters are retained, with menu and press-and-hold control modes.
+- **Joey LAN play.** Connections have previously been tested PC↔PC and PC↔Android; current device testing remains separate.
 
-Download the EXE from [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases), select your games or reuse your prepared library, then click **Create APK**. On first use accept the SDK license; the launcher downloads and verifies the official tools. Cloning this branch is not required.
+The public APK contains the engine, without original game resources. Your private PCK is prepared locally and is not uploaded. This branch publishes sources without original assets or private signing keys.
 
-The APK appears in `PoC Data/android/apks/`. Keep and back up `PoC Data`, including your local signing key, to update your APKs. See [Build your Android APK](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/tree/main#build-your-android-apk).
+## Play options
 
-## Direct build
+Open the launcher's gear to adjust:
 
-Run from this checkout after preparing compact data from your games:
+| Setting | Options |
+|---|---|
+| Aspect | Stretched, original 4:3 without a background, or each game's decorative overlay. |
+| FPS | 30, 60 or the display refresh rate. |
+| Simulation | Normal or 2× speed. |
+| Quick play | Optional skipping of character scenes, voices and wipes in all three games; music and sound effects remain enabled. |
+| Improved card translations | Optional reviewed Spanish names and descriptions for all 771 cards, preserving the original effects. First preparation downloads approximately 110 MB; the pack then works offline. |
+| Touch controls | Menu or press-and-hold, with scrolling, dragging and tribute selection. |
 
-```powershell
-python tools/android/build_apk.py --godot <godot_console.exe> --sdk <Android-SDK> --debug-keystore <your-debug.keystore> --first-build --data <compact-data> --work <new-work-directory> --output <new.apk>
-```
+Preferences are saved. Quick play and improved translations start disabled; translations affect card text, not menus or game rules.
 
-For an update replace `--first-build` with `--previous-apk <your-previous.apk>`.
-The builder checks bundled game startup, signature, certificate, ZIP integrity,
-PCK hash and 16 KB alignment. It writes its receipt and logs to the work directory.
-Game code is in `game/`; generated export projects are not source code.
+## First installation
 
-These are unofficial experimental sources derived in part through reverse
-engineering. Fidelity, hardware support and project-wide licensing remain under
-review. See [third-party notices](THIRD_PARTY_NOTICES.md).
+1. Download the Windows EXE from [Releases](https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases). Select your ISO images or installed game folders, or reuse your prepared PC library.
+2. Click **Create APK**. The launcher verifies the public APK and prepares a private resource pack. No SDK, JDK or signing-key setup is needed for this normal flow.
+3. Copy both files from **PoC Data/android/apks/** to your Android device: the **.apk** and its **-resources.pck**.
+4. Install and open the APK. Tap **Select .pck resource pack** and select your PCK. The app checks and copies it into its own storage.
+
+Import the pack once. You do not need to select it again after reopening the app or installing compatible updates. The PC launcher retains tools, validation receipts and logs under **PoC Data/android/**. Back up that folder with the EXE.
+
+## Updates and existing installations
+
+The Android update button checks GitHub releases and opens the public APK download when a compatible update is available. Download the APK and confirm the update in Android's installer. Android may ask permission to install from your browser or file manager. **Do not uninstall the app first:** an in-place update preserves resources, preferences and saved games.
+
+The public APK maintains a stable signing certificate. The updater checks release metadata and certificate compatibility before offering it.
+
+**Switching from an older installation:** prepare your PCK from PC first. If the old app uses a different signing key, Android cannot replace it with the public APK as an update. If you accept losing the old app's data, uninstall it, install the public APK and import your PCK once. Future compatible public updates preserve that imported pack and your saves.
+
+Advanced users who need to keep a differently signed installation can retain their original key and optional **android-builder.json** configuration to create matching updates instead. The public updater reports the signing mismatch; it does not delete the app, personal keys or previous builds.
+
+## Build from source
+
+Cloning this branch is unnecessary for normal **Create APK** use. Developers can build a resource-free APK with their own tools and signing key:
+
+    python tools/android/build_apk.py --engine-only --godot <godot_console.exe> --sdk <Android-SDK> --debug-keystore <your-debug.keystore> --first-build --work <new-work-directory> --output <new.apk>
+
+For a matching update to a custom installation, replace `--first-build` with `--previous-apk <your-previous.apk>` and use its original signing key. Normal users receive the official public APK through **Create APK**.
+
+To prepare only a private resource pack, Godot is sufficient:
+
+    python tools/android/build_apk.py --content-only --godot <godot_console.exe> --data <your-compact-data> --work <new-work-directory> --content-output <private-resources.pck>
+
+Game code is in **game/**; generated export projects are not the editable source. Do not publish your resource pack or private signing key.
+
+## Validation and notices
+
+Build checks cover the signing certificate, APK integrity, 16 KB alignment and the appropriate first-run or bundled-resource startup path. Resource imports, persistence, update metadata and touch regressions have been checked on the build computer. **The new import/update flow has not yet been verified on a physical Android device.**
+
+These are unofficial experimental sources derived in part through reverse engineering. Fidelity, hardware support and project-wide licensing remain under review. See [third-party notices](THIRD_PARTY_NOTICES.md).

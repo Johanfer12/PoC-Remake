@@ -26,7 +26,7 @@ class WindowShortcuts:
 var _window_shortcuts := WindowShortcuts.new()
 var _mobile_pointer: CanvasLayer
 
-const DUEL_VIEWER = preload("res://scenes/duel/replay_viewer.gd")
+const DUEL_VIEWER_PATH := "res://scenes/duel/replay_viewer.gd"
 
 var current_game := ""
 ## Mazo del rival elegido al entrar al duelo desde el menu (0x437c60), "" = el de demo1.
@@ -89,8 +89,8 @@ func reset_native_tick() -> void:
 func _ready() -> void:
 	var language := Paths.cmdline_value("lang")
 	if language == "":
-		language = str(SaveData.data.get("settings", {}).get("language", "s"))
-	Assets.set_language(language if language in ["s", "e"] else "s")
+		language = Assets.preferred_language()
+	Assets.set_language(language)
 	if OS.has_feature("mobile") or Paths.cmdline_value("mobile-controls") == "true":
 		_mobile_pointer = preload("res://core/mobile_pointer.gd").new()
 		get_tree().root.add_child.call_deferred(_mobile_pointer)
@@ -123,9 +123,9 @@ func goto(screen: Node) -> void:
 	var effect := _scene_wipe_mode(_screen, screen)
 	var old_frame: Texture2D
 	# El launcher es propio del port; el primer arranque no tiene snapshot previo.
-	if current_game != "" and DisplayServer.get_name() != "headless" \
+	if not LauncherSettings.fast_play and current_game != "" and DisplayServer.get_name() != "headless" \
 			and is_instance_valid(_screen) and _screen.is_inside_tree() \
-			and _screen.get_script().resource_path.get_file() != "launcher.gd":
+			and _screen.get_script().resource_path.get_file() not in ["launcher.gd", "content_setup.gd"]:
 		var old_image := _screen.get_viewport().get_texture().get_image()
 		if old_image != null and not old_image.is_empty():
 			old_frame = ImageTexture.create_from_image(old_image)
@@ -135,8 +135,10 @@ func goto(screen: Node) -> void:
 	elif is_instance_valid(_screen):
 		_screen.queue_free()
 	_screen = screen
-	if screen is DUEL_VIEWER and screen.game in ["yugi", "kaiba", "joey"]:
-		_screen_host = preload("res://scenes/duel/duel_margins.gd").new(screen)
+	get_tree().root.content_scale_aspect = LauncherSettings.gameplay_aspect()
+	Engine.time_scale = LauncherSettings.simulation_speed if current_game != "" else 1.0
+	if LauncherSettings.aspect == "overlay" and _is_duel_viewer(screen) and screen.game in ["yugi", "kaiba", "joey"]:
+		_screen_host = load("res://scenes/duel/duel_margins.gd").new(screen)
 		get_tree().root.add_child.call_deferred(_screen_host)
 	else:
 		get_tree().root.add_child.call_deferred(screen)
@@ -156,7 +158,7 @@ func _scene_wipe_mode(previous: Node, following: Node) -> int:
 	var source := script.resource_path.get_file()
 	var target: Script = following.get_script()
 	var target_name := target.resource_path.get_file() if target != null else ""
-	if source in ["bust_up_scene.gd", "bust_up_rival.gd", "launcher.gd"]:
+	if source in ["bust_up_scene.gd", "bust_up_rival.gd", "launcher.gd", "content_setup.gd"]:
 		return 0x4b
 	if source in ["tutorial_menu.gd", "tutorial_menu_kaiba.gd"] and target_name == "title_screen.gd":
 		return 0x4b
@@ -197,14 +199,17 @@ func _start_scene_wipe(old_frame: Texture2D, screen: Node, effect := 0x13) -> vo
 
 func open_launcher() -> void:
 	current_game = ""
-	goto(preload("res://scenes/launcher/launcher.gd").new())
+	goto(load("res://scenes/launcher/launcher.gd").new() if Paths.has_data() else load("res://scenes/launcher/android_content_setup.gd").new())
 
 
 ## Al volver de otra pantalla (`focus` = opcion de la que se viene) no se repite la portada
 ## de Yugi y el cursor queda en esa opcion.
 func open_title(game: String, focus := "", launcher_cover: CanvasLayer = null) -> void:
+	if not Paths.has_game(game):
+		open_launcher()
+		return
 	current_game = game
-	goto(preload("res://scenes/title/title_screen.gd").new(game, focus))
+	goto(load("res://scenes/title/title_screen.gd").new(game, focus))
 	if launcher_cover != null:
 		# Cambiar EXPAND a KEEP bajo negro y descubrir solo el primer dibujo del titulo.
 		await get_tree().process_frame
@@ -216,23 +221,23 @@ func open_title(game: String, focus := "", launcher_cover: CanvasLayer = null) -
 ## No se inventa una condición de desbloqueo en el menú comercial.
 func open_ending(game: String, mode := "credits") -> void:
 	current_game = game
-	var scene := preload("res://scenes/ending/ending_scene.gd").new(game, mode)
+	var scene: Node2D = load("res://scenes/ending/ending_scene.gd").new(game, mode)
 	scene.finished.connect(open_title.bind(game), CONNECT_ONE_SHOT)
 	goto(scene)
 
 
 func open_deck_editor(game: String) -> void:
 	current_game = game
-	goto(preload("res://scenes/deck_editor/deck_editor.gd").new(game))
+	goto(load("res://scenes/deck_editor/deck_editor.gd").new(game))
 
 
 ## Visor de repeticiones del duelo: `what` = "demo" (Repeticion) o "tutorial".
 func open_duel_replay(game: String, what: String) -> void:
 	current_game = game
 	if game in ["yugi", "kaiba"] and what.begins_with("lesson:"):
-		goto(preload("res://scenes/duel/tutorial_lesson.gd").new(game, what))
+		goto(load("res://scenes/duel/tutorial_lesson.gd").new(game, what))
 	else:
-		goto(preload("res://scenes/duel/replay_viewer.gd").new(game, what))
+		goto(load("res://scenes/duel/replay_viewer.gd").new(game, what))
 
 
 func open_tutorial(game: String) -> void:
@@ -240,9 +245,9 @@ func open_tutorial(game: String) -> void:
 	# Yugi469550, Kaiba46b730, Joey48dd80.
 	reset_native_tick()
 	if game == "yugi":
-		goto(preload("res://scenes/duel/tutorial_menu.gd").new())
+		goto(load("res://scenes/duel/tutorial_menu.gd").new())
 	elif game == "kaiba":
-		goto(preload("res://scenes/duel/tutorial_menu_kaiba.gd").new())
+		goto(load("res://scenes/duel/tutorial_menu_kaiba.gd").new())
 	else:
 		open_duel_replay(game, "tutorial")
 
@@ -250,9 +255,9 @@ func open_tutorial(game: String) -> void:
 func open_normal_duel(game: String, start_options := -1) -> void:
 	current_game = game
 	if game == "joey":
-		goto(preload("res://scenes/duel/joey_native_normal.gd").new(start_options))
+		goto(load("res://scenes/duel/joey_native_normal.gd").new(start_options))
 	else:
-		goto(preload("res://scenes/duel/normal_duel.gd").new(game, start_options))
+		goto(load("res://scenes/duel/normal_duel.gd").new(game, start_options))
 
 
 ## Duelo desde el menu: en Yugi pasa antes por la entrada de Yugi (escena 6, DAT_005af6f8 = 0).
@@ -268,7 +273,10 @@ func start_normal_duel(game: String, mode := 0) -> void:
 	match_outcome = 0
 	rival_deck = choose_rival_deck(game)
 	current_game = game
-	var script: GDScript = preload("res://scenes/duel/bust_up_scene.gd") if game == "yugi" else preload("res://scenes/duel/bust_up_rival.gd")
+	if LauncherSettings.fast_play:
+		open_janken(game)
+		return
+	var script: GDScript = load("res://scenes/duel/bust_up_scene.gd") if game == "yugi" else load("res://scenes/duel/bust_up_rival.gd")
 	var scene: Node2D = script.new(game)
 	scene.finished.connect(open_janken.bind(game), CONNECT_ONE_SHOT)
 	goto(scene)
@@ -276,7 +284,7 @@ func start_normal_duel(game: String, mode := 0) -> void:
 
 func open_janken(game: String) -> void:
 	current_game = game
-	var script: GDScript = {"yugi": preload("res://scenes/duel/janken_scene.gd"), "kaiba": preload("res://scenes/duel/janken_kaiba.gd"), "joey": preload("res://scenes/duel/janken_joey.gd")}[game]
+	var script: GDScript = load({"yugi": "res://scenes/duel/janken_scene.gd", "kaiba": "res://scenes/duel/janken_kaiba.gd", "joey": "res://scenes/duel/janken_joey.gd"}[game])
 	var scene: Node2D = script.new()
 	# Joey 44b980: el janken va por red en el modo 3 (duelo LAN).
 	scene.lan = duel_mode == 3 and Lan.active()
@@ -294,7 +302,7 @@ var lan_seed := -1
 ## titulo en la opcion (escena 2); conectada, janken (escena 7); sin sesion, titulo (escena 4).
 func open_lan(game: String) -> void:
 	current_game = game
-	var scene: Node2D = preload("res://scenes/lan/lan_connect.gd").new(game)
+	var scene: Node2D = load("res://scenes/lan/lan_connect.gd").new(game)
 	scene.finished.connect(func(next: String) -> void:
 		if next == "janken":
 			match_duel = 1
@@ -345,7 +353,7 @@ func record_duel_result(result: int) -> void:
 ## Side, deck_editor.gd con "swap").
 func continue_match(game: String) -> void:
 	current_game = game
-	goto(preload("res://scenes/deck_editor/deck_editor.gd").new(game, "swap"))
+	goto(load("res://scenes/deck_editor/deck_editor.gd").new(game, "swap"))
 
 
 ## Salida valida de la escena 10 (0x459c10): 0x437f40(2) (siguiente duelo del match) y
@@ -430,7 +438,10 @@ func finish_normal_duel(game: String, winner: int) -> void:
 		Audio.stop_music()
 		open_title(game, "duel")
 		return
-	var script: GDScript = preload("res://scenes/duel/bust_up_scene.gd") if game == "yugi" else preload("res://scenes/duel/bust_up_rival.gd")
+	if LauncherSettings.fast_play:
+		open_title(game, "duel")
+		return
+	var script: GDScript = load("res://scenes/duel/bust_up_scene.gd") if game == "yugi" else load("res://scenes/duel/bust_up_rival.gd")
 	var scene: Node2D = script.new(game, winner)
 	scene.finished.connect(open_title.bind(game, "duel"), CONNECT_ONE_SHOT)
 	goto(scene)
@@ -438,4 +449,14 @@ func finish_normal_duel(game: String, winner: int) -> void:
 
 func open_card_list(game: String) -> void:
 	current_game = game
-	goto(preload("res://scenes/card_list/card_list.gd").new(game))
+	goto(load("res://scenes/card_list/card_list.gd").new(game))
+
+
+## Reconoce también las subclases sin cargar todo el duelo al arrancar.
+func _is_duel_viewer(screen: Node) -> bool:
+	var script: Script = screen.get_script()
+	while script != null:
+		if script.resource_path == DUEL_VIEWER_PATH:
+			return true
+		script = script.get_base_script()
+	return false

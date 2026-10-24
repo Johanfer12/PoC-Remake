@@ -33,6 +33,8 @@ var departed: Array = [{}, {}]
 ## cuantas cartas llegaron antes que su escritura. El descanso no las deshace.
 var arrivals: Array = [{}, {}]
 var ahead: Array = [{}, {}]
+## Salidas visuales anteriores a su escritura lógica; no reconstruirlas durante una espera.
+var behind: Array = [{}, {}]
 ## Diferencias con la memoria que `follow_memory` corrigio (para localizar eventos que faltan).
 var corrections: Array = []
 ## Sube con cada cambio de la tabla (la mesa se redibuja cuando cambia).
@@ -55,6 +57,7 @@ func clear() -> void:
 		departed[p] = {}
 		arrivals[p] = {}
 		ahead[p] = {}
+		behind[p] = {}
 	corrections.clear()
 
 
@@ -148,6 +151,12 @@ func follow_memory(duel: Duel, rest: bool, retained: Dictionary = {}) -> void:
 			hand[p] = mem_hand
 		for loc in PILES:
 			var mem_pile := memory_pile(duel, p, loc)
+			var removed := int(behind[p].get(loc, 0))
+			if removed > 0:
+				var table_count := int(piles[p][loc]["count"])
+				if int(mem_pile["count"]) <= table_count: behind[p].erase(loc)
+				elif int(mem_pile["count"]) <= table_count + removed: continue
+				else: behind[p].erase(loc)
 			var lag := int(ahead[p].get(loc, 0))
 			if lag > 0:
 				var table_count := int(piles[p][loc]["count"])
@@ -193,6 +202,10 @@ func take(duel: Duel, p: int, loc: int, i: int) -> Dictionary:
 		var obj := {"card": int(pile["top"]), "face": loc != DuelMem.LOC_DECK, "defense": false, "owner": p}
 		var mem := memory_pile(duel, p, loc)
 		pile["count"] = maxi(0, int(pile["count"]) - 1)
+		# Si la memoria aún conserva la carta, el descanso no puede reinsertarla.
+		if int(mem["count"]) > int(pile["count"]):
+			behind[p][loc] = int(mem["count"]) - int(pile["count"])
+		else: behind[p].erase(loc)
 		pile["top"] = mem["top"] if int(mem["count"]) == int(pile["count"]) else _pile_top_below(duel, p, loc, int(pile["count"]))
 		return obj
 	return {}

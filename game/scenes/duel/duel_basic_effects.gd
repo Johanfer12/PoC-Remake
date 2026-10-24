@@ -503,6 +503,16 @@ static func _damage_number(owner: Node2D, amount: int, center: Vector2, progress
 static func _banner(owner: Node2D, event: Dictionary, frame: int) -> void:
 	var start: bool = int(event.get("op", 0)) == 0x14
 	var counter := frame * (8 if start else 4)
+	if start and event.get("game", "yugi") == "kaiba":
+		var sprite := _asset(owner, event.get("asset", "duel_start_?"), Vector2(400,300))
+		if sprite != null:
+			var plan := kaiba_start_banner(counter, Vector2i(sprite.texture.get_size()))
+			sprite.centered = false
+			sprite.position = Vector2(plan.x, plan.y)
+			sprite.scale = Vector2(plan.width, plan.height) / sprite.texture.get_size()
+			sprite.modulate.a = clampi(plan.alpha, 0, 256) / 256.0
+			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		return
 	var scale := 65536
 	var alpha := 255
 	if start:
@@ -517,6 +527,18 @@ static func _banner(owner: Node2D, event: Dictionary, frame: int) -> void:
 		# 0x439bd0: aparece en 0x80 y se queda opaco (el contador no pasa de 0x200).
 		if counter < 128: alpha = Math.cos_fx(counter - 128) >> 8
 	_asset(owner, event.get("asset", "duel_start_?"), Vector2(400, 300), scale, alpha)
+
+##43a1b0 ASM43a1f0..43a2df: zoom inicial, dimensiones truncadas y ancla entera.
+## El decompilado omite este calculo; kaiba_start_banner_oracle.py ejecuta el PE.
+static func kaiba_start_banner(counter: int, source: Vector2i) -> Dictionary:
+	var scale := 256
+	if counter < 64: scale += Math.trunc_div(Math.trunc_div(Math.cos_fx(counter * 2), 256), 2)
+	var width := Math.trunc_div(source.x * scale, 256)
+	var height := Math.trunc_div(source.y * scale, 256)
+	var alpha := 256
+	if counter < 64: alpha = Math.cos_fx(counter * 2 - 128) >> 8
+	elif counter > 256: alpha = Math.cos_fx(counter * 2) >> 8
+	return {"x":400-width/2, "y":300-height/2, "width":width, "height":height, "alpha":alpha}
 
 static func _special(owner: Node2D, event: Dictionary, counter: int) -> void:
 	var center: Vector2 = event["center"]

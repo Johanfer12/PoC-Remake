@@ -40,6 +40,8 @@ var _halo: Sprite2D
 var _time := 0.0
 var _font := ThemeDB.fallback_font
 var _screen := DESIGN                    # pantalla visible
+var _language := OptionButton.new()
+var _release_footer := preload("res://scenes/launcher/release_footer.gd").new()
 var _origin := Vector2.ZERO              # esquina de la composicion DESIGN centrada en ella
 
 
@@ -48,7 +50,8 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	_music.stop()
+	_music.stream = null
 
 
 func _ready() -> void:
@@ -75,6 +78,23 @@ func _ready() -> void:
 	_halo.position = _logos[_selected].position
 	_apply()
 	add_child(_controls)
+	_controls.exit_requested.connect(func() -> void: get_tree().quit())
+	_controls.update_requested.connect(func() -> void: _release_footer.open_update())
+	add_child(_release_footer)
+	Updates.changed.connect(func() -> void: _controls.update_available = Updates.state == "available")
+	_controls.update_available = Updates.state == "available"
+	for code in ["s", "e"]:
+		_language.add_item(Assets.LANGUAGES[code])
+	_language.item_selected.connect(func(index: int) -> void:
+		Assets.remember_language(["s", "e"][index])
+		_release_footer.refresh()
+		queue_redraw())
+	_language.select(0 if Assets.lang == "s" else 1)
+	_language.tooltip_text = "Idioma / Language"
+	_language.add_theme_font_size_override("font_size", 16)
+	add_child(_language)
+	_layout()
+
 	Audio.stop_music()
 	_music.stream = MUSIC
 	_music.finished.connect(_start_music)
@@ -92,6 +112,8 @@ func _layout() -> void:
 		x += SLOT.x + SLOT_GAP
 	if not _logos.is_empty() and _halo != null:
 		_halo.position = _logos[_selected].position
+	_language.position = Vector2(_screen.x - 170, 24)
+	_language.size = Vector2(146, 38)
 	queue_redraw()
 
 
