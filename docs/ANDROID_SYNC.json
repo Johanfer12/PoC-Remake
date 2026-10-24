@@ -1,14 +1,14 @@
 {
   "format": 1,
-  "pc_gameplay_base": "95849af",
-  "android_private_commit": "2982745e9f617d37f1fb754cab50c2fa9b4abe6d",
-  "android_public_commit": "bc946af0804e4149ddfdfd1c13a6466956231a98",
+  "pc_gameplay_base": "efde62675d6b7b66bfc022fcf0b380525cd7dcf0",
+  "android_private_commit": "04e975ce137e61509d21bd647b276618ece39ea7",
+  "android_public_commit": "b30e6c23e13b7f3593359a2459411c50251277b2",
   "policy": "Shared PC changes require a reviewed Android port before publication. Release-number-only changes are ignored. Desktop-only files remain separate.",
   "files": {
     "game/export_presets.cfg": {
       "review": "android-adapted",
       "pc_sha256": "ab9cd53b84dd7aafdb93fe97500e2444f4ad763677ad43fff059aaf56ca18a91",
-      "android_sha256": "5b7a8d467a0d7cf03fd5b539c1d97ed8d30d1b4660dc4b080e96e79ff5d0b4a0"
+      "android_sha256": "0e5173fa1b0844d54ddba21c78f295f79a87c483c6616edc0a37bfe66dd87b26"
     },
     "game/project.godot": {
       "review": "android-adapted",
@@ -57,8 +57,8 @@
     },
     "game/autoload/paths.gd": {
       "review": "android-adapted",
-      "pc_sha256": "e8de86015112a9d7f5bcdd1d7ae5e91ac9b1cf3cf4c326e60c60af71e06d3653",
-      "android_sha256": "1dd41be3f2a1289d8c18d047ca048637e73ed8c41760e08f5a6f19ee8a0f5cad"
+      "pc_sha256": "4efe5d90364b7b8457a38c02c125274cc8e0eca54e5765b001259962adb9e3f0",
+      "android_sha256": "67d44108c37899446bd5015588e8f28a730d43e7b483aff60361beca0f5cb868"
     },
     "game/autoload/platform_input.gd": {
       "review": "android-adapted",
@@ -67,8 +67,8 @@
     },
     "game/autoload/save_data.gd": {
       "review": "shared",
-      "pc_sha256": "7f600967538d9b553cd0e5f015b3909e9803b6e0e889a9f5a0a673d0efb8ebf0",
-      "android_sha256": "7f600967538d9b553cd0e5f015b3909e9803b6e0e889a9f5a0a673d0efb8ebf0"
+      "pc_sha256": "7021f14fe4eb661889b05d91f751029ee7933c17fdcfe1152e969674a40c76c3",
+      "android_sha256": "7021f14fe4eb661889b05d91f751029ee7933c17fdcfe1152e969674a40c76c3"
     },
     "game/autoload/updates.gd": {
       "review": "android-adapted",
@@ -537,18 +537,18 @@
     },
     "game/scenes/launcher/content_setup.gd": {
       "review": "desktop-only",
-      "pc_sha256": "1137db7a25b0037e790b14ad5bcaa37ef352e2c18d88465745bc5559c829c564",
+      "pc_sha256": "d4df697f29f345d53030dd81eab509aacdeb8418c95a8ea6725b15583f59ec4d",
       "android_sha256": null
     },
     "game/scenes/launcher/launcher.gd": {
       "review": "android-adapted",
-      "pc_sha256": "5276332e27fb72a3b143829a8b2b6ab9d1ba7473e72fd529525e246d7bf7b415",
+      "pc_sha256": "913438e3ebf3f928aa6de177d975511508326a7dcdea4187f900698a9b94e792",
       "android_sha256": "12ce7cd2544df6774691b828bf616c8905f2201f030b53f0982792ab4d6678f3"
     },
     "game/scenes/launcher/launcher_controls.gd": {
       "review": "android-adapted",
-      "pc_sha256": "23786394c2396faa2f11bf3e522f044502bcc39f811497747cd5a8b1e639abc5",
-      "android_sha256": "f6d2f3a4d4f670222ee9375f749baad052d689e529e59dfac94e49709d6b81e3"
+      "pc_sha256": "9313c2fc5b8e2b9b4a51fc1dcf5bdb0b8f2e337fa51dd515387f76fa28d4e947",
+      "android_sha256": "c56820746b288e7a9ded2782ce409476cc7c9c8f582ae088ee64c37b260cccd9"
     },
     "game/scenes/launcher/logo_contours.gd": {
       "review": "desktop-only",
@@ -556,8 +556,8 @@
       "android_sha256": null
     },
     "game/scenes/launcher/logo_outline.gdshader": {
-      "review": "shared",
-      "pc_sha256": "b6e03f970673ae7d4db6e30aa190162c03d9e88d029fb8437c13d10377d6fbd0",
+      "review": "desktop-only",
+      "pc_sha256": "6b6a814d6866523acf9191026c7a06c67dda6201b1a0ab5dc765f2d6ac753893",
       "android_sha256": "b6e03f970673ae7d4db6e30aa190162c03d9e88d029fb8437c13d10377d6fbd0"
     },
     "game/scenes/launcher/release_footer.gd": {
@@ -979,6 +979,17 @@
       "review": "shared",
       "pc_sha256": "8669480f7e32a260e5a2eaadf361c5a8d5e04be1a4e9e4612fb27a07138b1045",
       "android_sha256": "8669480f7e32a260e5a2eaadf361c5a8d5e04be1a4e9e4612fb27a07138b1045"
+    },
+    "game/core/game_reset.gd": {
+      "pc_sha256": "e4467dc0863dbc95afa09397b965ab9ec38ed5ff6efe88c6ccc6ebac4b857c2a",
+      "android_sha256": "e4467dc0863dbc95afa09397b965ab9ec38ed5ff6efe88c6ccc6ebac4b857c2a",
+      "review": "shared"
     }
+  },
+  "review_notes": {
+    "starter_reset": "Shared save_data, paths guard and game_reset are ported; Android preserves app PCK storage. Android22 tests cover compiled APK scripts, both touch modes, import and persistence after reset.",
+    "launcher_controls": "Android includes the current settings layout with a separate persisted Hold/Menu row and confirmed reset.",
+    "launcher_and_outline": "PC library/import UI and its logo-outline shader remain desktop presentation. Android retains its dedicated installed-game library and native PCK importer; it does not use the PC logo-outline shader.",
+    "desktop_content_setup": "Windows local converter and APK/PCK output remain desktop-only."
   }
 }

@@ -12,14 +12,14 @@ import urllib.request
 import zipfile
 
 VERSION = "4.7.2"
-SOURCE_COMMIT = "bc946af0804e4149ddfdfd1c13a6466956231a98"
-SOURCE_MANIFEST_SHA256 = "f6db2cc8b2587412e0875a9522261f7a143f8d1907093dea26c1f4a19b942f5c"
+SOURCE_COMMIT = "b30e6c23e13b7f3593359a2459411c50251277b2"
+SOURCE_MANIFEST_SHA256 = "e23c088b8c1cdbf824f76a0b88158e15f7b02c3736ff2438b7295896916ea3dc"
 SDK_LICENSE_URL = "https://developer.android.com/studio/terms"
-PUBLIC_APK_VERSION = "v0.1.0-alpha.17"
+PUBLIC_APK_VERSION = "v0.1.0-alpha.18"
 PUBLIC_APK_URL = ("https://github.com/Johanfer12/Yu-Gi-Oh-Power-of-Chaos-Remake/releases/download/"
-                  + "android-v21/PowerOfChaos-Android.apk")
+                  + "android-v22/PowerOfChaos-Android.apk")
 # Filled from the independently verified engine-only APK before releasing the launcher.
-PUBLIC_APK_SHA256 = "c583db6ba6d24d3a3789336f04fd0bd3893d7fba920f65466587336cf43c5c2c"
+PUBLIC_APK_SHA256 = "9c06bb78941084d55d7f91cb4307359f78abc2d1d9a5dc67525e4288eb3df09d"
 GODOT_BASE = f"https://github.com/godotengine/godot-builds/releases/download/{VERSION}-stable/"
 PACKAGES = {
     "godot": (GODOT_BASE + f"Godot_v{VERSION}-stable_win64.exe.zip",

@@ -18,7 +18,7 @@ const GOLD_DARK := Color(0.42, 0.27, 0.06)
 const BRONZE := Color(0.62, 0.43, 0.12)
 const STONE := Color(0.07, 0.05, 0.04)
 const OUTLINE := Color(0.35, 0.08, 0.02)
-const PANEL_SIZE := Vector2(540, 440)
+const PANEL_SIZE := Vector2(540, 490)
 const ROW_TOP := 92.0             # primera fila bajo la cabecera del panel
 const ROW_PITCH := 50.0
 const CONTROL_X := 220.0          # columna de valores, alineada en todas las filas
@@ -44,10 +44,15 @@ var _dragging := false
 var _focused_row := 0
 var _time := 0.0
 var _font := ThemeDB.fallback_font
+var _reset_dialog := ConfirmationDialog.new()
+var _reset_result := AcceptDialog.new()
 
 
 func _ready() -> void:
 	z_index = 10
+	add_child(_reset_dialog)
+	add_child(_reset_result)
+	_reset_dialog.confirmed.connect(_confirm_reset)
 	# Los iconos se rasterizan grandes y se dibujan reducidos: con mipmaps no se ven dentados.
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	var saved: Dictionary = SaveData.data.get("launcher", {})
@@ -125,6 +130,8 @@ func _option_rect(row: int) -> Rect2:
 
 func _hit(pos: Vector2) -> String:
 	if panel_open:
+		if _control_rect(6).has_point(pos):
+			return "reset"
 		if pos.distance_to(_close_center()) <= 16:
 			return "close"
 		if _slider_rect().grow_individual(8, 12, 8, 12).has_point(pos):
@@ -149,6 +156,8 @@ func _hit(pos: Vector2) -> String:
 ## _input: va antes que el _unhandled_input del selector, que asi no mueve la seleccion
 ## ni abre un juego mientras se usan estos botones o el panel.
 func _input(event: InputEvent) -> void:
+	if _reset_dialog.visible or _reset_result.visible:
+		return
 	var local_pos := Vector2.ZERO
 	if event is InputEventMouse:
 		local_pos = get_global_transform_with_canvas().affine_inverse() * event.position
@@ -176,6 +185,9 @@ func _input(event: InputEvent) -> void:
 				exit_requested.emit()
 			"update":
 				update_requested.emit()
+			"reset":
+				_focused_row = 6
+				_request_reset()
 			"close", "outside":
 				_open_panel(false)
 			"slider":
@@ -197,19 +209,50 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_open_panel(false)
 	elif event.is_action_pressed("ui_up"):
-		_focused_row = wrapi(_focused_row - 1, 0, 6)
+		_focused_row = wrapi(_focused_row - 1, 0, 7)
 	elif event.is_action_pressed("ui_down"):
-		_focused_row = wrapi(_focused_row + 1, 0, 6)
+		_focused_row = wrapi(_focused_row + 1, 0, 7)
 	elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
 		var step := -1 if event.is_action_pressed("ui_left") else 1
 		if _focused_row == 0:
 			_set_volume(volume + KEY_STEP * step)
 			_save()
-		else:
+		elif _focused_row < 6:
 			_cycle_option(_focused_row - 1, step)
 	elif event.is_action_pressed("ui_accept"):
-		if _focused_row >= 1: _cycle_option(_focused_row - 1, 1)
+		if _focused_row == 6:
+			_request_reset()
+		elif _focused_row >= 1:
+			_cycle_option(_focused_row - 1, 1)
 	get_viewport().set_input_as_handled()
+
+
+func _request_reset() -> void:
+	var spanish := Assets.lang == "s"
+	_reset_dialog.title = "Reiniciar juego" if spanish else "Reset game"
+	_reset_dialog.dialog_text = ("¿Volver al estado inicial?\nSe reiniciarán cartas, barajas, resultados, progreso, repeticiones y ajustes.\nLas tres barajas iniciales quedarán listas. Tus recursos importados se conservan.\nSe guardará una copia de seguridad del estado anterior."
+		if spanish else "Return to the initial state?\nCards, decks, results, progress, replays and settings will be reset.\nAll three starter decks will be ready. Imported resources are preserved.\nA backup of the previous state will be kept.")
+	_reset_dialog.ok_button_text = "Reiniciar" if spanish else "Reset"
+	_reset_dialog.cancel_button_text = "Cancelar" if spanish else "Cancel"
+	_reset_dialog.popup_centered()
+	_reset_dialog.get_cancel_button().grab_focus()
+
+
+func _confirm_reset() -> void:
+	var spanish := Assets.lang == "s"
+	var result := SaveData.reset_game()
+	if result.error == "":
+		LauncherSettings.reload_preferences()
+		LauncherSettings.apply_timing()
+		Assets.set_language(Assets.preferred_language())
+		volume = DEFAULT_VOLUME
+		muted = false
+		_dragging = false
+		_focused_row = 0
+		changed.emit()
+	_reset_result.title = ("Juego reiniciado" if spanish else "Game reset") if result.error == "" else ("Error al reiniciar" if spanish else "Reset failed")
+	_reset_result.dialog_text = (("Estado inicial restaurado.\nCopia de seguridad: " if spanish else "Initial state restored.\nBackup: ") + result.backup) if result.error == "" else str(result.error)
+	_reset_result.popup_centered()
 
 
 func _cycle_option(row: int, step: int) -> void:
@@ -358,6 +401,11 @@ func _draw_panel() -> void:
 			_draw_slider()
 		else:
 			_draw_selector(box, values[row - 1], hot)
+	var reset_box := _control_rect(6)
+	var reset_hot := _hover == "reset" or _focused_row == 6
+	_label_mid("Partida" if spanish else "Save data", Vector2(r.position.x + 36, reset_box.get_center().y), 17, GOLD_LIGHT)
+	_round_rect(reset_box, Color(0.20, 0.035, 0.03), 7, GOLD if reset_hot else Color(GOLD, 0.35))
+	_label_mid("Reiniciar juego…" if spanish else "Reset game…", reset_box.position + Vector2(16, 17), 16, GOLD_LIGHT)
 	var foot := r.end.y - 34
 	draw_line(Vector2(r.position.x + 36, foot - 16), Vector2(r.end.x - 36, foot - 16), Color(GOLD, 0.18), 1.0, true)
 	var status: String = CardTranslations.status_text(spanish) if LauncherSettings.improved_card_texts else ("Traducciones: solo nombres y descripciones de cartas" if spanish else "Translations: card names and descriptions only")
