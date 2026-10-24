@@ -1,19 +1,19 @@
 {
   "format": 1,
   "pc_gameplay_base": "95849af",
-  "android_private_commit": "5d3aff4",
-  "android_public_commit": "46218c975e8432e24e4c3ecac658cdc4145d510e",
+  "android_private_commit": "2982745e9f617d37f1fb754cab50c2fa9b4abe6d",
+  "android_public_commit": "bc946af0804e4149ddfdfd1c13a6466956231a98",
   "policy": "Shared PC changes require a reviewed Android port before publication. Release-number-only changes are ignored. Desktop-only files remain separate.",
   "files": {
     "game/export_presets.cfg": {
       "review": "android-adapted",
       "pc_sha256": "ab9cd53b84dd7aafdb93fe97500e2444f4ad763677ad43fff059aaf56ca18a91",
-      "android_sha256": "8101dab2db61e30db4b99b5034b4e11773fa1fbb0730439473e776ced22cd84d"
+      "android_sha256": "5b7a8d467a0d7cf03fd5b539c1d97ed8d30d1b4660dc4b080e96e79ff5d0b4a0"
     },
     "game/project.godot": {
       "review": "android-adapted",
       "pc_sha256": "bba03d279efc03f57bb8054d7480105e4c036f327655d853a7d1726b9b33522f",
-      "android_sha256": "8b595b139715591b336bca68a1fa8feb9768cb997195de6e658d2671f258f998"
+      "android_sha256": "105e1ed41d339a3f1a92bb81c83ec4b7690c22a81596518674c22a547524655d"
     },
     "game/autoload/assets.gd": {
       "review": "android-adapted",
@@ -228,7 +228,7 @@
     "game/scenes/boot/boot.gd": {
       "review": "android-adapted",
       "pc_sha256": "5c7d5aef1aa1e8f95471c6742e95007bae91fb11556206c7351a71273b46ef62",
-      "android_sha256": "fe7c6691976a05595ba68256c5bcf18db07a1a770e183f98462567660fa73647"
+      "android_sha256": "96b2fc8fa66e2d2c51f2b1887b5bf31ab7072c6b114116e1c4527a952dd7451f"
     },
     "game/scenes/boot/boot.tscn": {
       "review": "shared",

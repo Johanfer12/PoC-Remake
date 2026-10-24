@@ -20,6 +20,8 @@ Repacking an APK would invalidate its signature.
    the previous APK for certificate comparison. Keep signing keys outside Git/GitHub.
 3. Verify signature, certificate continuity, 16 KB alignment, ZIP integrity and absence
    of original resources. Run touch, content import/persistence and native regressions.
+   On an empty profile, launch the configured main scene and verify it reaches the
+   import button. Instantiating the importer directly does not test the boot route.
    Publish the signed APK, checksum and ANDROID_RELEASE.json under its Android tag.
 4. Update the Windows builder's source commit/manifest hash and public APK URL/hash.
    The EXE embeds that exact APK; end users neither modify nor sign it. No SDK/JDK or
@@ -49,9 +51,13 @@ review rather than assuming every old PCK is compatible.
 
 ## Validation scope
 
-Android20 and PC alpha.16 pass first import with the real three-game PCK, second
-startup without another import, native game regressions, 25 standard and 25 animated
-replays, touch 1x/2x and tribute selection. APK signature and alignment are verified.
+Android20's direct importer checks passed with the real three-game PCK, including
+second startup, but missed the actual empty-profile boot route: boot displayed an
+old missing-data message before the importer could open. A user device screenshot
+identified this gap. Android21 routes that startup to the PCK selector and adds a
+regression through the configured main scene. Existing resource PCKs remain compatible.
+The earlier native regressions, 25 standard and 25 animated replays, touch 1x/2x and
+tribute selection remain the baseline; this boot fix requires focused import checks.
 The whole workflow has not been tested on a physical Android device. Older tests
 retain documented ObjectDB exit warnings and a historical WebP/PNG comparison limit;
 these are not presented as clean passes. Sources and reports remain in the private
