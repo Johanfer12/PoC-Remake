@@ -18,8 +18,10 @@ const GOLD_DARK := Color(0.42, 0.27, 0.06)
 const BRONZE := Color(0.62, 0.43, 0.12)
 const STONE := Color(0.07, 0.05, 0.04)
 const OUTLINE := Color(0.35, 0.08, 0.02)
-const PANEL_SIZE := Vector2(520, 394)
-const SLIDER_W := 200.0
+const PANEL_SIZE := Vector2(540, 490)
+const ROW_TOP := 92.0             # primera fila bajo la cabecera del panel
+const ROW_PITCH := 50.0
+const CONTROL_X := 220.0          # columna de valores, alineada en todas las filas
 const KEY_STEP := 0.05
 
 # Iconos de linea estilo Feather (viewBox 24), trazo blanco para tintarlos al dibujar.
@@ -43,10 +45,17 @@ var _dragging := false
 var _focused_row := 0
 var _time := 0.0
 var _font := ThemeDB.fallback_font
+var _reset_dialog := ConfirmationDialog.new()
+var _reset_result := AcceptDialog.new()
 
 
 func _ready() -> void:
 	z_index = 10
+	add_child(_reset_dialog)
+	add_child(_reset_result)
+	_reset_dialog.confirmed.connect(_confirm_reset)
+	# Los iconos se rasterizan grandes y se dibujan reducidos: con mipmaps no se ven dentados.
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	var saved: Dictionary = SaveData.data.get("launcher", {})
 	volume = clampf(float(saved.get("music_volume", DEFAULT_VOLUME)), 0.0, 1.0)
 	muted = bool(saved.get("music_muted", false))
@@ -91,7 +100,7 @@ func _settings_center() -> Vector2:
 
 
 func _panel_rect() -> Rect2:
-	var panel_size := Vector2(520, 446) if _mobile_controls() else PANEL_SIZE
+	var panel_size := Vector2(540, 540) if _mobile_controls() else PANEL_SIZE
 	return Rect2((_screen() - panel_size) / 2.0, panel_size)
 
 
@@ -100,32 +109,54 @@ func _mobile_controls() -> bool:
 
 
 func _mode_rect(mode: String) -> Rect2:
-	return Rect2(_panel_rect().position + Vector2(215 + (136 if mode == "menu" else 0), 370), Vector2(132, 32))
+	var box := _control_rect(6)
+	var width := (box.size.x - 8.0) / 2.0
+	return Rect2(box.position + Vector2(width + 8.0 if mode == "menu" else 0.0, 0), Vector2(width, box.size.y))
+
+
+func _reset_row() -> int:
+	return 7 if _mobile_controls() else 6
 
 
 func _close_center() -> Vector2:
 	var r := _panel_rect()
-	return Vector2(r.end.x - 22, r.position.y + 22)
+	return Vector2(r.end.x - 34, r.position.y + 36)
+
+
+## Fila completa del panel: 0 = musica, 1..5 = selectores.
+func _row_rect(row: int) -> Rect2:
+	var r := _panel_rect()
+	return Rect2(r.position.x + 18, r.position.y + ROW_TOP + row * ROW_PITCH, r.size.x - 36, ROW_PITCH - 6)
+
+
+## Caja de valor de una fila, con la misma columna y anchura para musica y selectores.
+func _control_rect(row: int) -> Rect2:
+	var line := _row_rect(row)
+	var x := _panel_rect().position.x + CONTROL_X
+	return Rect2(x, line.get_center().y - 17, line.end.x - 14 - x, 34)
 
 
 func _slider_rect() -> Rect2:
-	var r := _panel_rect()
-	return Rect2(r.position.x + 215, r.position.y + 92, SLIDER_W, 8)
+	var box := _control_rect(0)
+	return Rect2(box.position.x + 14, box.get_center().y - 4, box.size.x - 86, 8)
 
 
 func _option_rect(row: int) -> Rect2:
-	return Rect2(_panel_rect().position + Vector2(215, 130 + row * 48), Vector2(270, 32))
+	return _control_rect(row + 1)
 
 
 func _hit(pos: Vector2) -> String:
 	if panel_open:
+		if _control_rect(_reset_row()).has_point(pos):
+			return "reset"
+		if _mobile_controls():
+			for mode in ["hold", "menu"]:
+				if _mode_rect(mode).has_point(pos):
+					return mode
 		if pos.distance_to(_close_center()) <= 16:
 			return "close"
 		if _slider_rect().grow_individual(8, 12, 8, 12).has_point(pos):
 			return "slider"
-		if _mobile_controls():
-			for mode in ["hold", "menu"]:
-				if _mode_rect(mode).has_point(pos): return mode
 		for row in 5:
 			if _option_rect(row).has_point(pos):
 				return ["aspect", "fps", "speed", "fast_play", "translations"][row]
@@ -146,6 +177,8 @@ func _hit(pos: Vector2) -> String:
 ## _input: va antes que el _unhandled_input del selector, que asi no mueve la seleccion
 ## ni abre un juego mientras se usan estos botones o el panel.
 func _input(event: InputEvent) -> void:
+	if _reset_dialog.visible or _reset_result.visible:
+		return
 	var local_pos := Vector2.ZERO
 	if event is InputEventMouse:
 		local_pos = get_global_transform_with_canvas().affine_inverse() * event.position
@@ -173,6 +206,13 @@ func _input(event: InputEvent) -> void:
 				exit_requested.emit()
 			"update":
 				update_requested.emit()
+			"reset":
+				_focused_row = _reset_row()
+				_request_reset()
+			"hold", "menu":
+				pointer_mode = _hit(local_pos)
+				_focused_row = 6
+				_save()
 			"close", "outside":
 				_open_panel(false)
 			"slider":
@@ -182,10 +222,6 @@ func _input(event: InputEvent) -> void:
 			"aspect", "fps", "speed", "fast_play", "translations":
 				_focused_row = ["aspect", "fps", "speed", "fast_play", "translations"].find(_hit(local_pos)) + 1
 				_cycle_option(_focused_row - 1, 1)
-			"hold", "menu":
-				pointer_mode = _hit(local_pos)
-				_focused_row = 6
-				_save()
 			"panel":
 				pass
 			_:
@@ -198,19 +234,53 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_open_panel(false)
 	elif event.is_action_pressed("ui_up"):
-		_focused_row = wrapi(_focused_row - 1, 0, 7 if _mobile_controls() else 6)
+		_focused_row = wrapi(_focused_row - 1, 0, _reset_row() + 1)
 	elif event.is_action_pressed("ui_down"):
-		_focused_row = wrapi(_focused_row + 1, 0, 7 if _mobile_controls() else 6)
+		_focused_row = wrapi(_focused_row + 1, 0, _reset_row() + 1)
 	elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right"):
 		var step := -1 if event.is_action_pressed("ui_left") else 1
 		if _focused_row == 0:
 			_set_volume(volume + KEY_STEP * step)
 			_save()
-		else:
+		elif _focused_row < _reset_row():
 			_cycle_option(_focused_row - 1, step)
 	elif event.is_action_pressed("ui_accept"):
-		if _focused_row >= 1: _cycle_option(_focused_row - 1, 1)
+		if _focused_row == _reset_row():
+			_request_reset()
+		elif _focused_row >= 1:
+			_cycle_option(_focused_row - 1, 1)
 	get_viewport().set_input_as_handled()
+
+
+func _request_reset() -> void:
+	var spanish := Assets.lang == "s"
+	_reset_dialog.title = "Reiniciar juego" if spanish else "Reset game"
+	_reset_dialog.dialog_text = ("¿Volver al estado inicial?\nSe reiniciarán cartas, barajas, resultados, progreso, repeticiones y ajustes.\nLas tres barajas iniciales quedarán listas. Tus recursos importados se conservan.\nSe guardará una copia de seguridad del estado anterior."
+		if spanish else "Return to the initial state?\nCards, decks, results, progress, replays and settings will be reset.\nAll three starter decks will be ready. Imported resources are preserved.\nA backup of the previous state will be kept.")
+	_reset_dialog.ok_button_text = "Reiniciar" if spanish else "Reset"
+	_reset_dialog.cancel_button_text = "Cancelar" if spanish else "Cancel"
+	_reset_dialog.popup_centered()
+	_reset_dialog.get_cancel_button().grab_focus()
+
+
+func _confirm_reset() -> void:
+	var spanish := Assets.lang == "s"
+	var result := SaveData.reset_game()
+	if result.error == "":
+		LauncherSettings.reload_preferences()
+		LauncherSettings.apply_timing()
+		Assets.set_language(Assets.preferred_language())
+		volume = DEFAULT_VOLUME
+		muted = false
+		pointer_mode = "menu"
+		if is_instance_valid(Game._mobile_pointer):
+			Game._mobile_pointer.cancel()
+		_dragging = false
+		_focused_row = 0
+		changed.emit()
+	_reset_result.title = ("Juego reiniciado" if spanish else "Game reset") if result.error == "" else ("Error al reiniciar" if spanish else "Reset failed")
+	_reset_result.dialog_text = (("Estado inicial restaurado.\nCopia de seguridad: " if spanish else "Initial state restored.\nBackup: ") + result.backup) if result.error == "" else str(result.error)
+	_reset_result.popup_centered()
 
 
 func _cycle_option(row: int, step: int) -> void:
@@ -301,12 +371,12 @@ func _medallion(c: Vector2, r: float, icon: String, hot: bool) -> void:
 	var s := r * (1.08 if hot else 1.0)
 	if hot:
 		for k in 4:
-			draw_circle(c, s + 10 - k * 2.5, Color(GOLD, 0.06 + k * 0.04))
-	draw_circle(c + Vector2(2, 3), s, Color(0, 0, 0, 0.55))
-	draw_circle(c, s, GOLD_DARK)
-	draw_circle(c, s - 1.5, GOLD if hot else BRONZE.lerp(GOLD, 0.6))
-	draw_circle(c, s - 4.5, GOLD_DARK)
-	draw_circle(c, s - 6.0, STONE)
+			draw_circle(c, s + 10 - k * 2.5, Color(GOLD, 0.06 + k * 0.04), true, -1.0, true)
+	draw_circle(c + Vector2(1.5, 2.5), s + 0.5, Color(0, 0, 0, 0.5), true, -1.0, true)
+	draw_circle(c, s, GOLD_DARK, true, -1.0, true)
+	draw_circle(c, s - 1.5, GOLD if hot else BRONZE.lerp(GOLD, 0.6), true, -1.0, true)
+	draw_circle(c, s - 4.5, GOLD_DARK, true, -1.0, true)
+	draw_circle(c, s - 6.0, STONE, true, -1.0, true)
 	draw_arc(c, s - 3.0, PI * 1.15, PI * 1.85, 16, Color(GOLD_LIGHT, 0.85), 1.5, true)
 	draw_arc(c, s - 8.5, PI * 0.15, PI * 0.85, 16, Color(GOLD, 0.18), 3.0, true)
 	_draw_icon(icon, c, ICON_SIZE * (1.08 if hot else 1.0), GOLD_LIGHT if hot else GOLD)
@@ -321,68 +391,133 @@ func _draw_icon(name: String, center: Vector2, size: float, color: Color) -> voi
 
 
 func _draw_panel() -> void:
-	draw_rect(Rect2(Vector2.ZERO, _screen()), Color(0, 0, 0, 0.55))
+	draw_rect(Rect2(Vector2.ZERO, _screen()), Color(0.01, 0.0, 0.02, 0.72))
 	var r := _panel_rect()
-	draw_rect(Rect2(r.position + Vector2(4, 6), r.size), Color(0, 0, 0, 0.5))
-	draw_rect(r, GOLD_DARK)
-	draw_rect(r.grow(-2), GOLD)
-	draw_rect(r.grow(-4), GOLD_DARK)
-	draw_rect(r.grow(-5), STONE)
-	draw_rect(r.grow(-10), Color(GOLD, 0.25), false, 1.0)
-	for corner in [r.position + Vector2(10, 10), Vector2(r.end.x - 10, r.position.y + 10),
-			Vector2(r.position.x + 10, r.end.y - 10), r.end - Vector2(10, 10)]:
-		_diamond(corner, 4.0, GOLD)
-	_title_text(Assets.port_label(1), Vector2(r.get_center().x, r.position.y + 44), 24)
-	var line_y := r.position.y + 58
-	draw_line(Vector2(r.position.x + 40, line_y), Vector2(r.end.x - 40, line_y), Color(GOLD, 0.5), 1.0)
-	_label(Assets.port_label(2), Vector2(r.position.x + 34, _slider_rect().get_center().y + 6))
-	_draw_slider()
+	var frame := StyleBoxFlat.new()
+	frame.bg_color = Color(0.075, 0.05, 0.06)
+	frame.border_color = GOLD.darkened(0.15)
+	frame.set_border_width_all(2)
+	frame.set_corner_radius_all(14)
+	frame.shadow_color = Color(0, 0, 0, 0.6)
+	frame.shadow_size = 18
+	frame.shadow_offset = Vector2(0, 6)
+	draw_style_box(frame, r)
+	var inner := StyleBoxFlat.new()
+	inner.draw_center = false
+	inner.border_color = Color(GOLD, 0.22)
+	inner.set_border_width_all(1)
+	inner.set_corner_radius_all(9)
+	draw_style_box(inner, r.grow(-7))
+	# Cabecera: titulo y filete con rombo, igual que el titulo de la biblioteca.
+	_title_text(Assets.port_label(1), Vector2(r.get_center().x, r.position.y + 48), 24)
+	_rule(r.get_center().x, r.position.y + 68, r.size.x / 2.0 - 40)
+	_medallion(_close_center(), 15.0, "close", _hover == "close")
 	var spanish := Assets.lang == "s"
-	var names := ["Aspecto", "FPS", "Simulación", "Juego rápido", "Traducciones"] if spanish else ["Aspect", "FPS", "Simulation", "Quick play", "Translations"]
+	var names := [Assets.port_label(2)]
+	names.append_array(["Aspecto", "FPS", "Simulación", "Juego rápido", "Traducciones"] if spanish else ["Aspect", "FPS", "Simulation", "Quick play", "Translations"])
 	var aspects := ["Estirado", "Original sin fondo", "Overlay"] if spanish else ["Stretched", "Original, no background", "Overlay"]
 	var values := [str(aspects[LauncherSettings.ASPECTS.find(LauncherSettings.aspect)]),
 		("Display (%d Hz)" % LauncherSettings.display_fps()) if LauncherSettings.frame_rate == 0 else str(LauncherSettings.frame_rate),
 		"Normal" if LauncherSettings.simulation_speed == 1.0 else "2×",
 		("Activado" if LauncherSettings.fast_play else "Desactivado") if spanish else ("On" if LauncherSettings.fast_play else "Off"),
 		("Mejoradas (ES)" if spanish else "Enhanced (ES)") if LauncherSettings.improved_card_texts else ("Originales" if spanish else "Original")]
-	for row in 5:
-		var rect := _option_rect(row)
-		_label(names[row], Vector2(r.position.x + 34, rect.get_center().y + 6))
-		draw_rect(rect, GOLD if _focused_row == row + 1 or _hover == ["aspect", "fps", "speed", "fast_play", "translations"][row] else GOLD_DARK)
-		draw_rect(rect.grow(-1), STONE)
-		_label(values[row] + "  >", rect.position + Vector2(8, 22))
+	var keys := ["slider", "aspect", "fps", "speed", "fast_play", "translations"]
+	for row in 6:
+		var line := _row_rect(row)
+		var hot: bool = _focused_row == row or _hover == keys[row] or (row == 0 and _dragging)
+		if _focused_row == row:
+			_round_rect(line, Color(GOLD, 0.07), 8)
+		_label_mid(names[row], Vector2(r.position.x + 36, line.get_center().y), 17, GOLD_LIGHT)
+		var box := _control_rect(row)
+		_round_rect(box, Color(0.035, 0.025, 0.03), 7, GOLD if hot else Color(GOLD, 0.35))
+		if row == 0:
+			_draw_slider()
+		else:
+			_draw_selector(box, values[row - 1], hot)
 	if _mobile_controls():
-		_label("Control táctil" if spanish else "Touch controls", r.position + Vector2(34, 392))
+		_label_mid("Control táctil" if spanish else "Touch controls", Vector2(r.position.x + 36, _control_rect(6).get_center().y), 17, GOLD_LIGHT)
 		for mode in ["hold", "menu"]:
-			var rect := _mode_rect(mode)
-			draw_rect(rect, GOLD if pointer_mode == mode else GOLD_DARK)
-			draw_rect(rect.grow(-1), STONE)
-			_label(("Mantener" if spanish else "Hold") if mode == "hold" else ("Menú" if spanish else "Menu"), rect.position + Vector2(8,22))
-	if _focused_row == 0: draw_rect(_slider_rect().grow(12), Color(GOLD, 0.6), false, 1.0)
-	var status: String = CardTranslations.status_text(spanish) if LauncherSettings.improved_card_texts else ("Solo nombres y descripciones de cartas" if spanish else "Card names and descriptions only")
-	draw_string(_font, Vector2(r.position.x + 34, r.end.y - 20), status, HORIZONTAL_ALIGNMENT_LEFT, 450, 13, GOLD_LIGHT)
-	_medallion(_close_center(), 14.0, "close", _hover == "close")
+			var box := _mode_rect(mode)
+			var selected: bool = pointer_mode == mode
+			_round_rect(box, Color(GOLD, 0.16) if selected else STONE, 7, GOLD if selected else Color(GOLD, 0.35))
+			var label := ("Mantener" if spanish else "Hold") if mode == "hold" else ("Menú" if spanish else "Menu")
+			var width := _font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+			_label_mid(label, box.get_center() - Vector2(width / 2.0, 0), 16, GOLD_LIGHT if selected else GOLD)
+	var reset_box := _control_rect(_reset_row())
+	var reset_hot := _hover == "reset" or _focused_row == _reset_row()
+	_label_mid("Partida" if spanish else "Save data", Vector2(r.position.x + 36, reset_box.get_center().y), 17, GOLD_LIGHT)
+	_round_rect(reset_box, Color(0.20, 0.035, 0.03), 7, GOLD if reset_hot else Color(GOLD, 0.35))
+	_label_mid("Reiniciar juego…" if spanish else "Reset game…", reset_box.position + Vector2(16, 17), 16, GOLD_LIGHT)
+	var foot := r.end.y - 34
+	draw_line(Vector2(r.position.x + 36, foot - 16), Vector2(r.end.x - 36, foot - 16), Color(GOLD, 0.18), 1.0, true)
+	var status: String = CardTranslations.status_text(spanish) if LauncherSettings.improved_card_texts else ("Traducciones: solo nombres y descripciones de cartas" if spanish else "Translations: card names and descriptions only")
+	var width := minf(_font.get_string_size(status, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x, r.size.x - 72)
+	draw_string(_font, Vector2(r.get_center().x - width / 2.0, foot + _baseline(13)), status,
+			HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 72, 13, Color(GOLD_LIGHT, 0.6))
+
+
+## Selector: valor centrado entre dos chevrones que indican que se puede cambiar.
+func _draw_selector(box: Rect2, value: String, hot: bool) -> void:
+	var color := GOLD_LIGHT if hot else GOLD
+	var y := box.get_center().y
+	for side: float in [-1.0, 1.0]:
+		var x := box.get_center().x + side * (box.size.x / 2.0 - 16)
+		draw_polyline(PackedVector2Array([Vector2(x - side * 3.5, y - 6), Vector2(x + side * 2.5, y), Vector2(x - side * 3.5, y + 6)]),
+				Color(color, 0.9 if hot else 0.55), 2.0, true)
+	var width := _font.get_string_size(value, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+	_label_mid(value, Vector2(box.get_center().x - width / 2.0, y), 16, Color.WHITE if hot else GOLD_LIGHT)
 
 
 func _draw_slider() -> void:
 	var t := _slider_rect()
 	var on := not muted
-	draw_rect(t.grow(1), GOLD_DARK)
-	draw_rect(t, Color(0.02, 0.015, 0.01))
-	var fill := Rect2(t.position, Vector2(t.size.x * volume, t.size.y))
-	draw_rect(fill, GOLD if on else Color(0.4, 0.35, 0.3))
+	_round_rect(t, Color(0.0, 0.0, 0.0, 0.6), 4, Color(GOLD, 0.3))
+	if volume > 0.0:
+		_round_rect(Rect2(t.position, Vector2(maxf(t.size.x * volume, 8.0), t.size.y)), GOLD if on else Color(0.4, 0.35, 0.3), 4)
 	var knob := Vector2(t.position.x + t.size.x * volume, t.get_center().y)
 	var hot := _hover == "slider" or _dragging
-	draw_circle(knob + Vector2(1, 2), 9, Color(0, 0, 0, 0.5))
-	draw_circle(knob, 9 if hot else 8, GOLD_DARK)
-	draw_circle(knob, (9 if hot else 8) - 1.5, GOLD_LIGHT if hot else GOLD)
-	draw_circle(knob, 3, GOLD_DARK)
-	_label("%d%%" % roundi(volume * 100), Vector2(t.end.x + 16, t.get_center().y + 6))
+	var radius := 9.0 if hot else 8.0
+	draw_circle(knob + Vector2(1, 2), radius, Color(0, 0, 0, 0.5), true, -1.0, true)
+	draw_circle(knob, radius, GOLD_DARK, true, -1.0, true)
+	draw_circle(knob, radius - 1.5, GOLD_LIGHT if hot else GOLD, true, -1.0, true)
+	draw_circle(knob, 3, GOLD_DARK, true, -1.0, true)
+	var text := "%d%%" % roundi(volume * 100)
+	var width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+	_label_mid(text, Vector2(_control_rect(0).end.x - 16 - width, t.get_center().y), 16, GOLD_LIGHT)
 
 
 func _label(text: String, pos: Vector2) -> void:
 	draw_string_outline(_font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, 4, Color(0, 0, 0, 0.8))
 	draw_string(_font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, GOLD_LIGHT)
+
+
+## Texto centrado verticalmente en `left_mid.y` (por altura de letra, no por linea base).
+func _label_mid(text: String, left_mid: Vector2, size: int, color: Color) -> void:
+	var pos := Vector2(left_mid.x, left_mid.y + _baseline(size))
+	draw_string_outline(_font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, size, 4, Color(0, 0, 0, 0.7))
+	draw_string(_font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, size, color)
+
+
+func _baseline(size: int) -> float:
+	return (_font.get_ascent(size) - _font.get_descent(size)) / 2.0
+
+
+func _round_rect(rect: Rect2, fill: Color, radius: int, border := Color.TRANSPARENT) -> void:
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.set_corner_radius_all(radius)
+	if border.a > 0.0:
+		box.border_color = border
+		box.set_border_width_all(1)
+	draw_style_box(box, rect)
+
+
+## Filete: dos lineas que se desvanecen hacia fuera y un rombo en el centro.
+func _rule(mid: float, y: float, half: float) -> void:
+	for dir: float in [-1.0, 1.0]:
+		draw_polyline_colors(PackedVector2Array([Vector2(mid + dir * 10.0, y), Vector2(mid + dir * half, y)]),
+				PackedColorArray([Color(GOLD, 0.8), Color(GOLD, 0.0)]), 1.5, true)
+	_diamond(Vector2(mid, y), 5.0, GOLD_LIGHT)
 
 
 func _title_text(text: String, center: Vector2, size: int) -> void:

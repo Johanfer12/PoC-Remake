@@ -357,27 +357,37 @@ func _new_game(initial_game := "") -> Dictionary:
 	var fresh := {"version": VERSION, "collection": {}, "decks": {}, "stats": {}, "seen": {}}
 	for game in GAMES:
 		fresh["stats"][game] = {"wins": 0, "losses": 0, "draws": 0}
-	# Solo el primer juego elegido aporta su mazo a la coleccion (53f8b0).
-	# Los demas mazos se validan al entrar en su juego, como los Deck.ydc originales.
+	# En el primer inicio del launcher todos los mazos deben poder jugarse.
+	# initial_game permite modelar por separado un arranque del original.
 	for game in GAMES:
 		var starter: Variant = Assets.read_json("%s/file/starter_deck.json" % game)
 		if starter == null:
 			continue
 		fresh["decks"][game] = starter
 		fresh["stats"][game] = {"wins": 0, "losses": 0, "draws": 0}
-		if game != initial_game:
+		if initial_game != "" and game != initial_game:
 			continue
 		for part in ["main", "fusion", "side"]:
 			for id in starter[part]:
 				var key := str(int(id))
 				fresh["collection"][key] = maxi(int(fresh["collection"].get(key, 0)),
 						_copies_in(starter, int(id)))
-	if initial_game == "":
-		fresh["starter_pending"] = true
 	# las cartas iniciales no cuentan como nuevas
 	for key in fresh["collection"]:
 		fresh["seen"][key] = true
 	return fresh
+
+
+## Reinicio explicito desde el launcher; el estado anterior queda fuera de saves/.
+func reset_game() -> Dictionary:
+	if Paths.storage_error or not Paths.has_data():
+		return {"error": "No hay recursos o almacenamiento disponible.", "backup": ""}
+	var result := preload("res://core/game_reset.gd").reset(Paths.save_dir, Paths.settings_path(), _new_game())
+	if result.error == "":
+		data = result.data
+		persistence_error = ""
+		_startup_checked.clear()
+	return result
 
 
 func ensure_game(game: String, validate_startup := true) -> void:

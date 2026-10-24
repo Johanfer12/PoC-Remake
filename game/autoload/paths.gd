@@ -104,6 +104,8 @@ func _allow_legacy() -> bool:
 
 
 func _migrate_preferences_and_saves() -> void:
+	if FileAccess.file_exists(storage_dir.path_join("saves/.reset-complete")):
+		return
 	if OS.has_feature("editor") and cmdline_value("storage") == "" and cmdline_value("data") == "" and cmdline_value("save") == "":
 		if not _copy_missing(_base_dir().path_join("saves"), storage_dir.path_join("saves")):
 			storage_error = true
