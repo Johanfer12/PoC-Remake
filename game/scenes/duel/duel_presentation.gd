@@ -365,8 +365,8 @@ func enqueue(e: Dictionary, duel: Duel) -> void:
 			d["from_pos"] = d["center"]
 			var owner := (duel.m.u16(DuelMem.MOVING_CARD) >> 12) & 1
 			d["to_pos"] = DuelGeometry.GRAVE[owner]
-			if kind == "field_to_hand": d["to_pos"] = hand(p, duel.m.u8(DuelMem.pl(p) + 2), duel.m.u8(DuelMem.pl(p) + 2) + 1)
-			if kind == "field_to_deck": d["to_pos"] = DuelGeometry.DECK[p]
+			if kind == "field_to_hand": d["to_pos"] = hand(owner, duel.m.u8(DuelMem.pl(owner) + 2), duel.m.u8(DuelMem.pl(owner) + 2) + 1)
+			if kind == "field_to_deck": d["to_pos"] = DuelGeometry.DECK[owner]
 			if kind.contains("banish"): d["to_pos"] = DuelGeometry.location(p, 15)
 			if kind == "zone_to" and e.get("b", 0) != 0: d["to_pos"] = DuelGeometry.location(p, 15)
 			if kind == "zone_lift":
@@ -381,10 +381,10 @@ func enqueue(e: Dictionary, duel: Duel) -> void:
 			var dst_p := owner
 			var dst_loc := DuelMem.LOC_GRAVE
 			if kind == "field_to_hand":
-				dst_p = p
+				dst_p = owner
 				dst_loc = DuelMem.LOC_HAND
 			elif kind == "field_to_deck":
-				dst_p = p
+				dst_p = owner
 				dst_loc = DuelMem.LOC_DECK
 			elif kind.contains("banish") or (kind == "zone_to" and e.get("b", 0) != 0):
 				dst_p = p
